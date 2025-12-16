@@ -52,10 +52,12 @@ def index():
 @app.route('/health')
 def health():
     """Health check for monitoring"""
+    # Note: In a production environment, you would check actual connectivity
+    # to PostgreSQL and Redis here
     return jsonify({
         'status': 'healthy',
-        'database': 'connected',
-        'redis': 'connected'
+        'message': 'Backend is running',
+        'timestamp': os.getenv('BACKEND_PORT', '5000')
     })
 
 

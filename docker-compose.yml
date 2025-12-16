@@ -29,7 +29,7 @@ services:
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD:-change_me_in_production}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -76,7 +76,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: cimeika-celery-worker
-    command: celery -A app.celery_app worker --loglevel=info
+    command: celery -A celery_app worker --loglevel=info
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
