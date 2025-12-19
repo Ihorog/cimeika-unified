@@ -1,57 +1,32 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import HomePage from './pages/HomePage';
+import CiView from './modules/Ci/views/CiView';
+import KazkarView from './modules/Kazkar/views/KazkarView';
+import PodijaView from './modules/Podija/views/PodijaView';
+import NastrijView from './modules/Nastrij/views/NastrijView';
+import MalyaView from './modules/Malya/views/MalyaView';
+import CalendarView from './modules/Calendar/views/CalendarView';
+import GalleryView from './modules/Gallery/views/GalleryView';
+import './App.css';
 
 function App() {
-  const [modules, setModules] = useState([])
-  const [status, setStatus] = useState('loading')
-
-  useEffect(() => {
-    // Fetch modules from backend
-    fetch(import.meta.env.VITE_API_URL + '/api/v1/modules')
-      .then(res => res.json())
-      .then(data => {
-        setModules(data.modules)
-        setStatus('success')
-      })
-      .catch(err => {
-        console.error('Failed to fetch modules:', err)
-        setStatus('error')
-      })
-  }, [])
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>CIMEIKA — Сімейка</h1>
-        <p>Центральна екосистема проєкту Cimeika</p>
-      </header>
-
-      <main>
-        <section className="modules-section">
-          <h2>7 Модулів</h2>
-          {status === 'loading' && <p>Завантаження...</p>}
-          {status === 'error' && (
-            <p className="error">Помилка завантаження. Перевірте backend.</p>
-          )}
-          {status === 'success' && (
-            <div className="modules-grid">
-              {modules.map(module => (
-                <div key={module.id} className="module-card">
-                  <h3>{module.name}</h3>
-                  <p>{module.description}</p>
-                  <span className="status">🟡 В розробці</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-      </main>
-
-      <footer>
-        <p>Створено з ❤️ для організації життя</p>
-      </footer>
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="ci" element={<CiView />} />
+          <Route path="kazkar" element={<KazkarView />} />
+          <Route path="podija" element={<PodijaView />} />
+          <Route path="nastrij" element={<NastrijView />} />
+          <Route path="malya" element={<MalyaView />} />
+          <Route path="calendar" element={<CalendarView />} />
+          <Route path="gallery" element={<GalleryView />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
