@@ -9,9 +9,14 @@ export const useCi = () => {
   const { status, setStatus } = useCiStore();
 
   useEffect(() => {
-    ciService.getStatus().then((data) => {
-      setStatus(data.status);
-    });
+    ciService.getStatus()
+      .then((data) => {
+        setStatus(data.status);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch Ci status:', error);
+        setStatus('error');
+      });
   }, [setStatus]);
 
   return { status };
