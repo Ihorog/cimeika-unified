@@ -113,6 +113,76 @@ Module/
 
 The core orchestrator maintains a registry of all modules. Modules communicate through this registry, not directly.
 
+### Interface-Based Architecture
+
+All modules must implement the `ModuleInterface` to ensure consistent behavior:
+
+**Backend (Python):**
+```python
+from app.core.interfaces import ModuleInterface, ServiceInterface
+
+class MyModuleService(ModuleInterface, ServiceInterface):
+    def get_name(self) -> str:
+        return "my_module"
+    
+    def get_status(self) -> Dict[str, Any]:
+        return {"status": "active", "name": self.get_name()}
+    
+    def initialize(self) -> bool:
+        # Initialize module
+        return True
+    
+    def process(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        # Process data
+        return {"status": "success", "data": data}
+```
+
+**Frontend (TypeScript):**
+```typescript
+import type { ServiceInterface, ApiResponse } from '../../types';
+
+export const myModuleService: ServiceInterface = {
+  async getStatus(): Promise<ApiResponse> {
+    // Implementation
+  },
+  
+  async process(data: any): Promise<ApiResponse> {
+    // Implementation
+  },
+  
+  validate(data: any): boolean {
+    // Implementation
+  }
+};
+```
+
+### Module Registration
+
+Modules are registered with the core orchestrator:
+
+```python
+from app.core import registry
+from app.modules.my_module.service import MyModuleService
+
+# Create and register module
+my_module = MyModuleService()
+registry.register("my_module", my_module)
+
+# Initialize all modules
+registry.initialize_all()
+
+# Get module status
+status = registry.get_all_statuses()
+```
+
+### Interface Benefits
+
+1. **Type Safety**: Compile-time checks ensure modules implement required methods
+2. **Consistency**: All modules follow the same contract
+3. **Testability**: Easy to mock and test module interactions
+4. **Maintainability**: Clear separation of concerns
+5. **Extensibility**: New modules can be added without changing core code
+
 ---
 
 For detailed instructions, see `.github/copilot-instructions.md`

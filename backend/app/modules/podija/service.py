@@ -2,14 +2,59 @@
 Podija module service layer
 Business logic goes here
 """
+from typing import Dict, Any
+from app.core.interfaces import ModuleInterface, ServiceInterface
 
 
-class PodijaService:
-    """Service for Podija module operations"""
+class PodijaService(ModuleInterface, ServiceInterface):
+    """Service for Podija module operations - implements core interfaces"""
     
     def __init__(self):
-        pass
+        self._initialized = False
+        self._name = "podija"
     
-    def get_status(self):
+    def get_name(self) -> str:
+        """Get the module name"""
+        return self._name
+    
+    def get_status(self) -> Dict[str, Any]:
         """Get module status"""
-        return {"status": "active"}
+        return {
+            "status": "active" if self._initialized else "inactive",
+            "name": self._name,
+            "initialized": self._initialized
+        }
+    
+    def initialize(self) -> bool:
+        """Initialize the Podija module"""
+        self._initialized = True
+        return True
+    
+    def shutdown(self) -> bool:
+        """Shutdown the Podija module"""
+        self._initialized = False
+        return True
+    
+    def process(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Process data through the Podija module
+        
+        Args:
+            data: Input data to process
+            
+        Returns:
+            Dict: Processed result
+        """
+        if not self._initialized:
+            return {"error": "Module not initialized"}
+        
+        return {
+            "status": "success",
+            "module": self._name,
+            "processed": True,
+            "data": data
+        }
+    
+    def validate(self, data: Dict[str, Any]) -> bool:
+        """Validate input data"""
+        return isinstance(data, dict)
