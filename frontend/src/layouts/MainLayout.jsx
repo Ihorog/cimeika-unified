@@ -2,7 +2,6 @@
  * Main Layout Component
  * Provides navigation and structure for all pages
  */
-import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import './MainLayout.css';
 
