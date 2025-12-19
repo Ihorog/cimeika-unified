@@ -1,0 +1,79 @@
+/* Shared styles for module views */
+.module-view {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.module-view-header {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.module-view-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  color: #333;
+  font-weight: 700;
+}
+
+.module-view-header .subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0 0 1rem 0;
+}
+
+.module-view-status {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #fff3cd;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #856404;
+  font-weight: 500;
+}
+
+.module-view-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.module-view-content h2 {
+  margin-top: 0;
+  color: #667eea;
+  font-size: 1.8rem;
+}
+
+.module-view-content p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.features-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #555;
+}
+
+.features-list li:last-child {
+  border-bottom: none;
+}
+
+.features-list li::before {
+  content: '✓';
+  color: #667eea;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
