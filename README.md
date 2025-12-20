@@ -125,6 +125,23 @@ vercel
 docker-compose up -d
 ```
 
+### Перевірка Розгортання
+
+Після розгортання перевірте стан системи:
+
+```bash
+# Автоматична перевірка
+./scripts/verify-deployment.sh
+
+# Або вручну
+curl http://localhost:5000/health
+curl http://localhost:3000
+```
+
+**Документація:**
+- [Повна інструкція з перевірки](docs/DEPLOYMENT_VERIFICATION.md)
+- [Швидкий довідник](DEPLOYMENT_QUICKREF.md)
+
 ---
 
 ## 🔧 Технології
@@ -167,11 +184,12 @@ docker-compose up -d
 
 **Наступні етапи:**
 1. ✅ Структура monorepo
-2. 🟡 База даних schema
-3. 🟡 API endpoints
-4. ⚪ AI integration
-5. ⚪ Frontend модулі
-6. ⚪ Production deployment
+2. ✅ Deployment verification
+3. 🟡 База даних schema
+4. 🟡 API endpoints
+5. ⚪ AI integration
+6. ⚪ Frontend модулі
+7. ⚪ Production deployment
 
 ---
 
