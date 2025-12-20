@@ -1,0 +1,69 @@
+# cimeika_seo_matrix.yaml
+# STAGE 2/4 — SEO META CANON + HREFLANG BINDINGS
+
+seo:
+  canonical_lang: en
+  hreflang:
+    en: "/en/{state}/{intent}"
+    uk: "/uk/{state}/{intent}"
+  rules:
+    title_max: 60
+    description_max: 155
+
+meta_entries:
+  fatigue:
+    understand: { title: "Understand your fatigue", description: "Clarify fatigue. One step, clear result." }
+    capture:    { title: "Capture your fatigue",    description: "Capture fatigue. One step, clear result." }
+    calm:       { title: "Calm your fatigue",       description: "Calm fatigue. One step, clear result." }
+    check:      { title: "Check your fatigue",      description: "Check fatigue. One step, clear result." }
+    preserve:   { title: "Preserve your fatigue",   description: "Preserve fatigue. One step, clear result." }
+    connect:    { title: "Connect your fatigue",    description: "Connect fatigue. One step, clear result." }
+    prepare:    { title: "Prepare for fatigue",     description: "Prepare for fatigue. One step, clear result." }
+  tension:
+    understand: { title: "Understand your tension", description: "Clarify tension. One step, clear result." }
+    capture:    { title: "Capture your tension",    description: "Capture tension. One step, clear result." }
+    calm:       { title: "Calm your tension",       description: "Calm tension. One step, clear result." }
+    check:      { title: "Check your tension",      description: "Check tension. One step, clear result." }
+    preserve:   { title: "Preserve your tension",   description: "Preserve tension. One step, clear result." }
+    connect:    { title: "Connect your tension",    description: "Connect tension. One step, clear result." }
+    prepare:    { title: "Prepare for tension",     description: "Prepare for tension. One step, clear result." }
+  anxiety:
+    understand: { title: "Understand your anxiety", description: "Clarify anxiety. One step, clear result." }
+    capture:    { title: "Capture your anxiety",    description: "Capture anxiety. One step, clear result." }
+    calm:       { title: "Calm your anxiety",       description: "Calm anxiety. One step, clear result." }
+    check:      { title: "Check your anxiety",      description: "Check anxiety. One step, clear result." }
+    preserve:   { title: "Preserve your anxiety",   description: "Preserve anxiety. One step, clear result." }
+    connect:    { title: "Connect your anxiety",    description: "Connect anxiety. One step, clear result." }
+    prepare:    { title: "Prepare for anxiety",     description: "Prepare for anxiety. One step, clear result." }
+  joy:
+    understand: { title: "Understand your joy", description: "Clarify joy. One step, clear result." }
+    capture:    { title: "Capture your joy",    description: "Capture joy. One step, clear result." }
+    calm:       { title: "Calm your joy",       description: "Calm joy. One step, clear result." }
+    check:      { title: "Check your joy",      description: "Check joy. One step, clear result." }
+    preserve:   { title: "Preserve your joy",   description: "Preserve joy. One step, clear result." }
+    connect:    { title: "Connect your joy",    description: "Connect joy. One step, clear result." }
+    prepare:    { title: "Prepare for joy",     description: "Prepare for joy. One step, clear result." }
+  loss:
+    understand: { title: "Understand your loss", description: "Clarify loss. One step, clear result." }
+    capture:    { title: "Capture your loss",    description: "Capture loss. One step, clear result." }
+    calm:       { title: "Calm your loss",       description: "Calm loss. One step, clear result." }
+    check:      { title: "Check your loss",      description: "Check loss. One step, clear result." }
+    preserve:   { title: "Preserve your loss",   description: "Preserve loss. One step, clear result." }
+    connect:    { title: "Connect your loss",    description: "Connect loss. One step, clear result." }
+    prepare:    { title: "Prepare for loss",     description: "Prepare for loss. One step, clear result." }
+  anticipation:
+    understand: { title: "Understand anticipation", description: "Clarify anticipation. One step, clear result." }
+    capture:    { title: "Capture anticipation",    description: "Capture anticipation. One step, clear result." }
+    calm:       { title: "Calm anticipation",       description: "Calm anticipation. One step, clear result." }
+    check:      { title: "Check anticipation",      description: "Check anticipation. One step, clear result." }
+    preserve:   { title: "Preserve anticipation",   description: "Preserve anticipation. One step, clear result." }
+    connect:    { title: "Connect anticipation",    description: "Connect anticipation. One step, clear result." }
+    prepare:    { title: "Prepare for anticipation", description: "Prepare for anticipation. One step, clear result." }
+  change:
+    understand: { title: "Understand change", description: "Clarify change. One step, clear result." }
+    capture:    { title: "Capture change",    description: "Capture change. One step, clear result." }
+    calm:       { title: "Calm change",       description: "Calm change. One step, clear result." }
+    check:      { title: "Check change",      description: "Check change. One step, clear result." }
+    preserve:   { title: "Preserve change",   description: "Preserve change. One step, clear result." }
+    connect:    { title: "Connect change",    description: "Connect change. One step, clear result." }
+    prepare:    { title: "Prepare for change", description: "Prepare for change. One step, clear result." }
