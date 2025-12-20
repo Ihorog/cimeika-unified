@@ -2,12 +2,50 @@
  * Ci module main view
  * UI orchestration without business logic
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCi } from '../hooks/useCi';
+import { CANON_BUNDLE_ID } from '../../../app/canon';
 import '../../../styles/moduleView.css';
+
+interface HealthStatus {
+  status?: string;
+  canon_bundle_id?: string;
+  message?: string;
+}
 
 const CiView: React.FC = () => {
   const { status } = useCi();
+  const [healthStatus, setHealthStatus] = useState<HealthStatus | null>(null);
+  const [modulesStatus, setModulesStatus] = useState<any>(null);
+
+  useEffect(() => {
+    // Fetch health status
+    const fetchHealth = async () => {
+      try {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const response = await fetch(`${API_BASE}/health`);
+        const data = await response.json();
+        setHealthStatus(data);
+      } catch (error) {
+        console.error('Failed to fetch health status:', error);
+      }
+    };
+
+    // Fetch modules status
+    const fetchModules = async () => {
+      try {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const response = await fetch(`${API_BASE}/api/v1/modules`);
+        const data = await response.json();
+        setModulesStatus(data);
+      } catch (error) {
+        console.error('Failed to fetch modules status:', error);
+      }
+    };
+
+    fetchHealth();
+    fetchModules();
+  }, []);
 
   return (
     <div className="module-view ci-view">
@@ -33,7 +71,44 @@ const CiView: React.FC = () => {
           <li>Моніторинг стану системи</li>
         </ul>
 
-        <p><strong>Поточний статус:</strong> {status}</p>
+        <h2>Статус системи</h2>
+        {healthStatus ? (
+          <div style={{ background: '#f0f9ff', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
+            <p><strong>Статус:</strong> {healthStatus.status === 'healthy' ? '✅ Система працює' : '❌ Помилка'}</p>
+            <p><strong>Canon Bundle ID:</strong> <code>{healthStatus.canon_bundle_id || CANON_BUNDLE_ID}</code></p>
+            {healthStatus.message && <p><strong>Повідомлення:</strong> {healthStatus.message}</p>}
+          </div>
+        ) : (
+          <p>Завантаження статусу системи...</p>
+        )}
+
+        <h2>Модулі системи</h2>
+        {modulesStatus ? (
+          <div>
+            <p style={{ marginBottom: '1rem' }}>
+              <strong>Canon Bundle:</strong> <code>{modulesStatus.canon_bundle_id}</code>
+            </p>
+            <div style={{ display: 'grid', gap: '0.5rem' }}>
+              {modulesStatus.modules?.map((module: any) => (
+                <div key={module.id} style={{ 
+                  background: '#f8f9fa', 
+                  padding: '0.75rem', 
+                  borderRadius: '6px',
+                  borderLeft: '3px solid #667eea'
+                }}>
+                  <strong>{module.name}</strong> — {module.description}
+                  <span style={{ marginLeft: '1rem', color: '#666', fontSize: '0.9rem' }}>
+                    ({module.status})
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p>Завантаження інформації про модулі...</p>
+        )}
+
+        <p style={{ marginTop: '2rem' }}><strong>Поточний статус модуля:</strong> {status}</p>
       </div>
     </div>
   );

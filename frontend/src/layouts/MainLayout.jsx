@@ -3,6 +3,7 @@
  * Provides navigation and structure for all pages
  */
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import CiFAB from '../components/CiFAB';
 import './MainLayout.css';
 
 const MainLayout = () => {
@@ -49,6 +50,9 @@ const MainLayout = () => {
       <footer className="main-footer">
         <p>Створено з ❤️ для організації життя</p>
       </footer>
+
+      {/* Global Ci FAB - always accessible */}
+      <CiFAB />
     </div>
   );
 };
