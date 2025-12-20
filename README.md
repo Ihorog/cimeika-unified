@@ -184,11 +184,12 @@ curl http://localhost:3000
 
 **Наступні етапи:**
 1. ✅ Структура monorepo
-2. 🟡 База даних schema
-3. 🟡 API endpoints
-4. ⚪ AI integration
-5. ⚪ Frontend модулі
-6. ⚪ Production deployment
+2. ✅ Deployment verification
+3. 🟡 База даних schema
+4. 🟡 API endpoints
+5. ⚪ AI integration
+6. ⚪ Frontend модулі
+7. ⚪ Production deployment
 
 ---
 
