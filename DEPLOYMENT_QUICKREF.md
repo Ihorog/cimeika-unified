@@ -43,6 +43,7 @@ docker compose ps
 | Service | Local URL | Production URL |
 |---------|-----------|----------------|
 | Frontend | http://localhost:3000 | https://your-app.vercel.app |
+| Frontend Health | http://localhost:3000/health | https://your-app.vercel.app/health |
 | Backend | http://localhost:5000 | Your backend deployment |
 | Backend Health | http://localhost:5000/health | - |
 | Backend API | http://localhost:5000/api/v1/modules | - |
@@ -50,6 +51,18 @@ docker compose ps
 ---
 
 ## ✅ Health Check Endpoints
+
+### Frontend Health UI
+Open in browser:
+```
+http://localhost:3000/health
+```
+**Visual dashboard showing:**
+- Overall system status
+- Frontend status and configuration
+- Backend connectivity
+- All 7 modules status
+- Auto-refresh every 30 seconds
 
 ### Backend Root
 ```bash

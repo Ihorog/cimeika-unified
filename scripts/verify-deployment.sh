@@ -152,6 +152,10 @@ if check_url "$LOCAL_FRONTEND_URL" "Frontend homepage" 200; then
     ((FRONTEND_SUCCESS++))
 fi
 
+if check_url "$LOCAL_FRONTEND_URL/health" "Frontend health page" 200; then
+    ((FRONTEND_SUCCESS++))
+fi
+
 echo ""
 echo -e "${BLUE}[5/6] Checking configuration files...${NC}"
 echo ""
@@ -189,13 +193,14 @@ echo -e "${BLUE}[6/6] Deployment Summary${NC}"
 echo ""
 echo "==========================================="
 echo -e "Backend Health:    $([ $BACKEND_SUCCESS -ge 2 ] && echo "${GREEN}✅ HEALTHY${NC}" || echo "${RED}❌ UNHEALTHY${NC}") ($BACKEND_SUCCESS/3 checks passed)"
-echo -e "Frontend Health:   $([ $FRONTEND_SUCCESS -ge 1 ] && echo "${GREEN}✅ HEALTHY${NC}" || echo "${RED}❌ UNHEALTHY${NC}") ($FRONTEND_SUCCESS/1 checks passed)"
+echo -e "Frontend Health:   $([ $FRONTEND_SUCCESS -ge 1 ] && echo "${GREEN}✅ HEALTHY${NC}" || echo "${RED}❌ UNHEALTHY${NC}") ($FRONTEND_SUCCESS/2 checks passed)"
 echo "==========================================="
 echo ""
 
 # Overall status
 TOTAL_SUCCESS=$((BACKEND_SUCCESS + FRONTEND_SUCCESS))
-if [ $TOTAL_SUCCESS -ge 3 ]; then
+TOTAL_CHECKS=5
+if [ $TOTAL_SUCCESS -ge 4 ]; then
     echo -e "${GREEN}✅ Deployment verification PASSED${NC}"
     echo ""
     echo "Your CIMEIKA ecosystem is running correctly!"
@@ -203,6 +208,7 @@ if [ $TOTAL_SUCCESS -ge 3 ]; then
     echo "Access points:"
     echo "  • Frontend:  $LOCAL_FRONTEND_URL"
     echo "  • Backend:   $LOCAL_BACKEND_URL"
+    echo "  • Health UI: $LOCAL_FRONTEND_URL/health"
     echo "  • API Docs:  $LOCAL_BACKEND_URL/api/v1/modules"
     echo ""
     exit 0
