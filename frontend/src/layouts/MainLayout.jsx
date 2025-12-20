@@ -4,6 +4,7 @@
  */
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import CiFAB from '../components/CiFAB';
+import CimeikaLogo from '../assets/logo-cimeika.svg';
 import './MainLayout.css';
 
 const MainLayout = () => {
@@ -25,8 +26,7 @@ const MainLayout = () => {
       <header className="main-header">
         <div className="header-content">
           <Link to="/" className="logo">
-            <h1>CIMEIKA</h1>
-            <span className="subtitle">Сімейка</span>
+            <img src={CimeikaLogo} alt="CIMEIKA" className="logo-image" />
           </Link>
           <nav className="main-nav">
             {modules.slice(1).map(module => (

@@ -65,12 +65,16 @@
 }
 
 .ci-fab-icon {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.05em;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 36px;
+  height: 36px;
   z-index: 1;
+  transition: all var(--transition-base);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.ci-fab:hover .ci-fab-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
 /* Overlay with modern glassmorphism */
@@ -346,7 +350,8 @@
   }
   
   .ci-fab-icon {
-    font-size: 1.3rem;
+    width: 32px;
+    height: 32px;
   }
 
   .ci-overlay-content {

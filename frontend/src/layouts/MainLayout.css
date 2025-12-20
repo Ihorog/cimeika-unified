@@ -43,6 +43,17 @@
   transform: scale(1.02);
 }
 
+.logo-image {
+  height: 50px;
+  width: auto;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+  transition: all var(--transition-base);
+}
+
+.logo:hover .logo-image {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
 .logo h1 {
   margin: 0;
   font-size: 2rem;
@@ -148,6 +159,10 @@
     transform: none;
   }
 
+  .logo-image {
+    height: 45px;
+  }
+  
   .logo h1 {
     font-size: 1.75rem;
   }
