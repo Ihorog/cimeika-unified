@@ -73,3 +73,7 @@ redis_data/
 tmp/
 temp/
 *.tmp
+
+# Vercel
+.vercel
+.vercel.json
