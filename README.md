@@ -95,7 +95,17 @@ cimeika-unified/
 
 ### Vercel (Frontend)
 
-Фронтенд можна легко розгорнути на Vercel:
+#### Автоматичне розгортання (CI/CD)
+
+Проєкт налаштовано для автоматичного розгортання через GitHub Actions:
+- Push у `main` → Production deployment
+- Pull Request → Preview deployment
+
+**Інструкція налаштування:** [docs/GITHUB_ACTIONS_VERCEL.md](docs/GITHUB_ACTIONS_VERCEL.md)
+
+#### Ручне розгортання
+
+Фронтенд можна також розгорнути вручну:
 
 ```bash
 # Використовуючи Vercel CLI

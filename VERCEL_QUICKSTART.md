@@ -1,6 +1,12 @@
 # 🚀 Швидке розгортання на Vercel
 
-## Один клік:
+## Автоматичне розгортання (GitHub Actions):
+
+Проєкт вже налаштовано для CI/CD! Просто налаштуйте секрети:
+
+➡️ [docs/GITHUB_ACTIONS_VERCEL.md](docs/GITHUB_ACTIONS_VERCEL.md)
+
+## Один клік (Vercel Dashboard):
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Ihorog/cimeika-unified)
 
 ## Або через CLI:
