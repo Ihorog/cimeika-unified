@@ -44,7 +44,7 @@ export const healthService = {
     } catch (error) {
       return {
         status: 'unhealthy',
-        error: error.message,
+        error: error.response?.data?.message || error.message || 'Backend connection failed',
         timestamp: new Date().toISOString(),
       };
     }
@@ -64,7 +64,7 @@ export const healthService = {
     } catch (error) {
       return {
         status: 'error',
-        error: error.message,
+        error: error.response?.data?.message || error.message || 'Failed to fetch modules',
         timestamp: new Date().toISOString(),
       };
     }

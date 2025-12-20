@@ -78,8 +78,8 @@ check_docker_container() {
         status=$(docker inspect --format='{{.State.Status}}' "$container_name" 2>/dev/null)
         health=$(docker inspect --format='{{.State.Health.Status}}' "$container_name" 2>/dev/null || echo "none")
         
-        if [ "$status" == "running" ]; then
-            if [ "$health" == "healthy" ] || [ "$health" == "none" ]; then
+        if [ "$status" = "running" ]; then
+            if [ "$health" = "healthy" ] || [ "$health" = "none" ]; then
                 echo -e "${GREEN}✅ Running${NC}"
                 return 0
             else
