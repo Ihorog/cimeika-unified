@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage';
 import HealthCheckPage from './pages/HealthCheckPage';
+import SeoDemo from './pages/SeoDemo';
 import CiView from './modules/Ci/views/CiView';
 import KazkarView from './modules/Kazkar/views/KazkarView';
 import PodijaView from './modules/Podija/views/PodijaView';
@@ -17,6 +18,9 @@ function App() {
       <Routes>
         {/* Health check route - standalone without layout */}
         <Route path="/health" element={<HealthCheckPage />} />
+        
+        {/* SEO Demo page - standalone */}
+        <Route path="/seo-demo" element={<SeoDemo />} />
         
         {/* Main application routes */}
         <Route path="/" element={<MainLayout />}>
