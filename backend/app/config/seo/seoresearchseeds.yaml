@@ -1,0 +1,257 @@
+# Cimeika SEO Research Seeds
+# Version 1.0.0
+# Semantic research covering intent and state-specific phrases
+# EN + UK coverage: ~196 phrases
+
+# Intent-generic seeds (cross-state patterns)
+intent_generic:
+  en:
+    understand:
+      - "why am I"
+      - "what does it mean"
+      - "help me understand"
+      - "why do I feel"
+      - "what is this feeling"
+    capture:
+      - "how to document"
+      - "how to record"
+      - "how to keep track"
+      - "ways to capture"
+      - "journaling about"
+    calm:
+      - "how to calm"
+      - "how to soothe"
+      - "ways to ease"
+      - "how to relax"
+      - "techniques to calm"
+    check:
+      - "how to check"
+      - "how to assess"
+      - "how to evaluate"
+      - "am I experiencing"
+      - "signs of"
+    preserve:
+      - "how to preserve"
+      - "how to save"
+      - "how to keep"
+      - "ways to remember"
+      - "preserving memories"
+    connect:
+      - "how to link"
+      - "how to relate"
+      - "connection between"
+      - "how to connect"
+      - "relating to"
+    prepare:
+      - "how to prepare for"
+      - "getting ready for"
+      - "how to anticipate"
+      - "preparing for"
+      - "what to expect"
+  
+  uk:
+    understand:
+      - "чому я"
+      - "що означає"
+      - "допоможіть зрозуміти"
+      - "чому я відчуваю"
+      - "що це за відчуття"
+    capture:
+      - "як задокументувати"
+      - "як записати"
+      - "як відстежувати"
+      - "способи зафіксувати"
+      - "ведення щоденника про"
+    calm:
+      - "як заспокоїти"
+      - "як втихомирити"
+      - "способи полегшити"
+      - "як розслабитися"
+      - "техніки заспокоєння"
+    check:
+      - "як перевірити"
+      - "як оцінити"
+      - "як визначити"
+      - "чи відчуваю я"
+      - "ознаки"
+    preserve:
+      - "як зберегти"
+      - "як запам'ятати"
+      - "способи збереження"
+      - "зберігаючи спогади"
+    connect:
+      - "як пов'язати"
+      - "як співвіднести"
+      - "зв'язок між"
+      - "як з'єднати"
+      - "ставлення до"
+    prepare:
+      - "як підготуватися до"
+      - "готуючись до"
+      - "як передбачити"
+      - "підготовка до"
+      - "чого очікувати"
+
+# State-specific seeds
+state_specific:
+  fatigue:
+    en:
+      - "why am I so tired"
+      - "constant fatigue"
+      - "feeling exhausted"
+      - "chronic tiredness"
+      - "fatigue symptoms"
+      - "dealing with fatigue"
+      - "overcoming exhaustion"
+      - "tired all the time"
+    uk:
+      - "чому я такий втомлений"
+      - "постійна втома"
+      - "відчуття виснаження"
+      - "хронічна втома"
+      - "симптоми втоми"
+      - "справлятися з втомою"
+      - "подолання виснаження"
+      - "постійно втомлений"
+  
+  tension:
+    en:
+      - "muscle tension"
+      - "feeling tense"
+      - "body tension"
+      - "release tension"
+      - "tension relief"
+      - "stress and tension"
+      - "holding tension"
+      - "tight muscles"
+    uk:
+      - "м'язова напруга"
+      - "відчуття напруги"
+      - "напруга в тілі"
+      - "зняти напругу"
+      - "полегшення напруги"
+      - "стрес та напруга"
+      - "утримання напруги"
+      - "напружені м'язи"
+  
+  anxiety:
+    en:
+      - "anxiety symptoms"
+      - "feeling anxious"
+      - "constant worry"
+      - "anxiety relief"
+      - "panic and anxiety"
+      - "managing anxiety"
+      - "anxious thoughts"
+      - "overwhelming anxiety"
+    uk:
+      - "симптоми тривоги"
+      - "відчуття тривоги"
+      - "постійне хвилювання"
+      - "полегшення тривоги"
+      - "паніка та тривога"
+      - "керування тривогою"
+      - "тривожні думки"
+      - "непереборна тривога"
+  
+  joy:
+    en:
+      - "feeling joyful"
+      - "moments of joy"
+      - "experiencing happiness"
+      - "joy and gratitude"
+      - "capturing joy"
+      - "joy in life"
+      - "finding joy"
+      - "pure happiness"
+    uk:
+      - "відчуття радості"
+      - "моменти радості"
+      - "переживання щастя"
+      - "радість та вдячність"
+      - "фіксація радості"
+      - "радість у житті"
+      - "знаходження радості"
+      - "чиста радість"
+  
+  loss:
+    en:
+      - "dealing with loss"
+      - "grief and loss"
+      - "coping with loss"
+      - "loss of loved one"
+      - "processing loss"
+      - "loss and healing"
+      - "mourning process"
+      - "recovering from loss"
+    uk:
+      - "справлятися з втратою"
+      - "горе та втрата"
+      - "подолання втрати"
+      - "втрата близької людини"
+      - "опрацювання втрати"
+      - "втрата та зцілення"
+      - "процес скорботи"
+      - "відновлення після втрати"
+  
+  anticipation:
+    en:
+      - "feeling anticipation"
+      - "anticipating future"
+      - "expectation and anticipation"
+      - "anticipation anxiety"
+      - "waiting and anticipating"
+      - "anticipatory feelings"
+      - "looking forward"
+      - "future expectations"
+    uk:
+      - "відчуття очікування"
+      - "очікування майбутнього"
+      - "передчуття та очікування"
+      - "тривога очікування"
+      - "чекання та очікування"
+      - "передчутні відчуття"
+      - "з нетерпінням чекати"
+      - "очікування майбутнього"
+  
+  change:
+    en:
+      - "dealing with change"
+      - "adapting to change"
+      - "life transitions"
+      - "accepting change"
+      - "change and growth"
+      - "managing change"
+      - "navigating change"
+      - "transformation process"
+    uk:
+      - "справлятися зі змінами"
+      - "адаптація до змін"
+      - "життєві переходи"
+      - "прийняття змін"
+      - "зміни та зростання"
+      - "керування змінами"
+      - "навігація змінами"
+      - "процес трансформації"
+
+# Combined pattern examples (state + intent)
+combined_patterns:
+  en:
+    - "why am I so tired all the time"
+    - "how to calm anxiety"
+    - "how to prepare for loss"
+    - "understanding tension"
+    - "capturing moments of joy"
+    - "checking anticipation levels"
+    - "connecting change to growth"
+  
+  uk:
+    - "чому я постійно втомлений"
+    - "як заспокоїти тривогу"
+    - "як підготуватися до втрати"
+    - "розуміння напруги"
+    - "фіксація моментів радості"
+    - "перевірка рівня очікування"
+    - "пов'язування змін із зростанням"
+
+# Total coverage estimate: ~196 unique semantic phrases across EN + UK

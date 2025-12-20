@@ -1,0 +1,452 @@
+# Cimeika SEO Matrix — Canonical 7×7 Emotional-Intent Matrix
+# Version 1.0.0
+# EN titles are canonical; UK titles are recommended equivalents
+
+matrix:
+  # Fatigue entries
+  - state: fatigue
+    intent: understand
+    en:
+      title: "Understand your fatigue"
+      description: "Explore and understand the nature of your fatigue"
+    uk:
+      title: "Зрозуміти свою втому"
+      description: "Дослідити та зрозуміти природу своєї втоми"
+  
+  - state: fatigue
+    intent: capture
+    en:
+      title: "Capture your fatigue"
+      description: "Document and capture your experience of fatigue"
+    uk:
+      title: "Зафіксувати свою втому"
+      description: "Задокументувати та зафіксувати досвід втоми"
+  
+  - state: fatigue
+    intent: calm
+    en:
+      title: "Calm your fatigue"
+      description: "Find ways to calm and ease your fatigue"
+    uk:
+      title: "Заспокоїти втому"
+      description: "Знайти способи заспокоїти та полегшити втому"
+  
+  - state: fatigue
+    intent: check
+    en:
+      title: "Check your fatigue"
+      description: "Assess and check the state of your fatigue"
+    uk:
+      title: "Перевірити втому"
+      description: "Оцінити та перевірити стан втоми"
+  
+  - state: fatigue
+    intent: preserve
+    en:
+      title: "Preserve your fatigue"
+      description: "Keep a record and preserve insights about your fatigue"
+    uk:
+      title: "Зберегти стан втоми"
+      description: "Зберегти запис та інсайти про втому"
+  
+  - state: fatigue
+    intent: connect
+    en:
+      title: "Connect your fatigue"
+      description: "Link and connect your fatigue with other experiences"
+    uk:
+      title: "Пов'язати свою втому"
+      description: "Пов'язати втому з іншими переживаннями"
+  
+  - state: fatigue
+    intent: prepare
+    en:
+      title: "Prepare for fatigue"
+      description: "Anticipate and prepare for upcoming fatigue"
+    uk:
+      title: "Підготуватися до втоми"
+      description: "Передбачити та підготуватися до майбутньої втоми"
+
+  # Tension entries
+  - state: tension
+    intent: understand
+    en:
+      title: "Understand your tension"
+      description: "Explore and understand the nature of your tension"
+    uk:
+      title: "Зрозуміти свою напругу"
+      description: "Дослідити та зрозуміти природу своєї напруги"
+  
+  - state: tension
+    intent: capture
+    en:
+      title: "Capture your tension"
+      description: "Document and capture your experience of tension"
+    uk:
+      title: "Зафіксувати свою напругу"
+      description: "Задокументувати та зафіксувати досвід напруги"
+  
+  - state: tension
+    intent: calm
+    en:
+      title: "Calm your tension"
+      description: "Find ways to calm and release your tension"
+    uk:
+      title: "Заспокоїти напругу"
+      description: "Знайти способи заспокоїти та зняти напругу"
+  
+  - state: tension
+    intent: check
+    en:
+      title: "Check your tension"
+      description: "Assess and check the state of your tension"
+    uk:
+      title: "Перевірити напругу"
+      description: "Оцінити та перевірити стан напруги"
+  
+  - state: tension
+    intent: preserve
+    en:
+      title: "Preserve your tension"
+      description: "Keep a record and preserve insights about your tension"
+    uk:
+      title: "Зберегти стан напруги"
+      description: "Зберегти запис та інсайти про напругу"
+  
+  - state: tension
+    intent: connect
+    en:
+      title: "Connect your tension"
+      description: "Link and connect your tension with other experiences"
+    uk:
+      title: "Пов'язати свою напругу"
+      description: "Пов'язати напругу з іншими переживаннями"
+  
+  - state: tension
+    intent: prepare
+    en:
+      title: "Prepare for tension"
+      description: "Anticipate and prepare for upcoming tension"
+    uk:
+      title: "Підготуватися до напруги"
+      description: "Передбачити та підготуватися до майбутньої напруги"
+
+  # Anxiety entries
+  - state: anxiety
+    intent: understand
+    en:
+      title: "Understand your anxiety"
+      description: "Explore and understand the nature of your anxiety"
+    uk:
+      title: "Зрозуміти свою тривогу"
+      description: "Дослідити та зрозуміти природу своєї тривоги"
+  
+  - state: anxiety
+    intent: capture
+    en:
+      title: "Capture your anxiety"
+      description: "Document and capture your experience of anxiety"
+    uk:
+      title: "Зафіксувати свою тривогу"
+      description: "Задокументувати та зафіксувати досвід тривоги"
+  
+  - state: anxiety
+    intent: calm
+    en:
+      title: "Calm your anxiety"
+      description: "Find ways to calm and ease your anxiety"
+    uk:
+      title: "Заспокоїти тривогу"
+      description: "Знайти способи заспокоїти та полегшити тривогу"
+  
+  - state: anxiety
+    intent: check
+    en:
+      title: "Check your anxiety"
+      description: "Assess and check the state of your anxiety"
+    uk:
+      title: "Перевірити тривогу"
+      description: "Оцінити та перевірити стан тривоги"
+  
+  - state: anxiety
+    intent: preserve
+    en:
+      title: "Preserve your anxiety"
+      description: "Keep a record and preserve insights about your anxiety"
+    uk:
+      title: "Зберегти стан тривоги"
+      description: "Зберегти запис та інсайти про тривогу"
+  
+  - state: anxiety
+    intent: connect
+    en:
+      title: "Connect your anxiety"
+      description: "Link and connect your anxiety with other experiences"
+    uk:
+      title: "Пов'язати свою тривогу"
+      description: "Пов'язати тривогу з іншими переживаннями"
+  
+  - state: anxiety
+    intent: prepare
+    en:
+      title: "Prepare for anxiety"
+      description: "Anticipate and prepare for upcoming anxiety"
+    uk:
+      title: "Підготуватися до тривоги"
+      description: "Передбачити та підготуватися до майбутньої тривоги"
+
+  # Joy entries
+  - state: joy
+    intent: understand
+    en:
+      title: "Understand your joy"
+      description: "Explore and understand the nature of your joy"
+    uk:
+      title: "Зрозуміти свою радість"
+      description: "Дослідити та зрозуміти природу своєї радості"
+  
+  - state: joy
+    intent: capture
+    en:
+      title: "Capture your joy"
+      description: "Document and capture your experience of joy"
+    uk:
+      title: "Зафіксувати свою радість"
+      description: "Задокументувати та зафіксувати досвід радості"
+  
+  - state: joy
+    intent: calm
+    en:
+      title: "Calm your joy"
+      description: "Find ways to settle and reflect on your joy"
+    uk:
+      title: "Заспокоїти радість"
+      description: "Знайти способи осмислити та зрозуміти радість"
+  
+  - state: joy
+    intent: check
+    en:
+      title: "Check your joy"
+      description: "Assess and check the state of your joy"
+    uk:
+      title: "Перевірити радість"
+      description: "Оцінити та перевірити стан радості"
+  
+  - state: joy
+    intent: preserve
+    en:
+      title: "Preserve your joy"
+      description: "Keep a record and preserve memories of your joy"
+    uk:
+      title: "Зберегти стан радості"
+      description: "Зберегти запис та спогади про радість"
+  
+  - state: joy
+    intent: connect
+    en:
+      title: "Connect your joy"
+      description: "Link and connect your joy with other experiences"
+    uk:
+      title: "Пов'язати свою радість"
+      description: "Пов'язати радість з іншими переживаннями"
+  
+  - state: joy
+    intent: prepare
+    en:
+      title: "Prepare for joy"
+      description: "Anticipate and prepare for upcoming joy"
+    uk:
+      title: "Підготуватися до радості"
+      description: "Передбачити та підготуватися до майбутньої радості"
+
+  # Loss entries
+  - state: loss
+    intent: understand
+    en:
+      title: "Understand your loss"
+      description: "Explore and understand the nature of your loss"
+    uk:
+      title: "Зрозуміти свою втрату"
+      description: "Дослідити та зрозуміти природу своєї втрати"
+  
+  - state: loss
+    intent: capture
+    en:
+      title: "Capture your loss"
+      description: "Document and capture your experience of loss"
+    uk:
+      title: "Зафіксувати свою втрату"
+      description: "Задокументувати та зафіксувати досвід втрати"
+  
+  - state: loss
+    intent: calm
+    en:
+      title: "Calm your loss"
+      description: "Find ways to ease and process your loss"
+    uk:
+      title: "Заспокоїти втрату"
+      description: "Знайти способи полегшити та опрацювати втрату"
+  
+  - state: loss
+    intent: check
+    en:
+      title: "Check your loss"
+      description: "Assess and check how you're processing loss"
+    uk:
+      title: "Перевірити втрату"
+      description: "Оцінити та перевірити процес переживання втрати"
+  
+  - state: loss
+    intent: preserve
+    en:
+      title: "Preserve your loss"
+      description: "Keep a record and preserve memories around your loss"
+    uk:
+      title: "Зберегти стан втрати"
+      description: "Зберегти запис та спогади про втрату"
+  
+  - state: loss
+    intent: connect
+    en:
+      title: "Connect your loss"
+      description: "Link and connect your loss with other experiences"
+    uk:
+      title: "Пов'язати свою втрату"
+      description: "Пов'язати втрату з іншими переживаннями"
+  
+  - state: loss
+    intent: prepare
+    en:
+      title: "Prepare for loss"
+      description: "Anticipate and prepare for potential loss"
+    uk:
+      title: "Підготуватися до втрати"
+      description: "Передбачити та підготуватися до можливої втрати"
+
+  # Anticipation entries
+  - state: anticipation
+    intent: understand
+    en:
+      title: "Understand your anticipation"
+      description: "Explore and understand the nature of your anticipation"
+    uk:
+      title: "Зрозуміти своє очікування"
+      description: "Дослідити та зрозуміти природу свого очікування"
+  
+  - state: anticipation
+    intent: capture
+    en:
+      title: "Capture your anticipation"
+      description: "Document and capture your experience of anticipation"
+    uk:
+      title: "Зафіксувати своє очікування"
+      description: "Задокументувати та зафіксувати досвід очікування"
+  
+  - state: anticipation
+    intent: calm
+    en:
+      title: "Calm your anticipation"
+      description: "Find ways to settle and manage your anticipation"
+    uk:
+      title: "Заспокоїти очікування"
+      description: "Знайти способи осмислити та керувати очікуванням"
+  
+  - state: anticipation
+    intent: check
+    en:
+      title: "Check your anticipation"
+      description: "Assess and check the state of your anticipation"
+    uk:
+      title: "Перевірити очікування"
+      description: "Оцінити та перевірити стан очікування"
+  
+  - state: anticipation
+    intent: preserve
+    en:
+      title: "Preserve your anticipation"
+      description: "Keep a record and preserve insights about your anticipation"
+    uk:
+      title: "Зберегти стан очікування"
+      description: "Зберегти запис та інсайти про очікування"
+  
+  - state: anticipation
+    intent: connect
+    en:
+      title: "Connect your anticipation"
+      description: "Link and connect your anticipation with other experiences"
+    uk:
+      title: "Пов'язати своє очікування"
+      description: "Пов'язати очікування з іншими переживаннями"
+  
+  - state: anticipation
+    intent: prepare
+    en:
+      title: "Prepare for anticipation"
+      description: "Get ready for what you anticipate"
+    uk:
+      title: "Підготуватися до очікування"
+      description: "Підготуватися до того, що очікується"
+
+  # Change entries
+  - state: change
+    intent: understand
+    en:
+      title: "Understand your change"
+      description: "Explore and understand the nature of change you're experiencing"
+    uk:
+      title: "Зрозуміти свою зміну"
+      description: "Дослідити та зрозуміти природу змін, які відбуваються"
+  
+  - state: change
+    intent: capture
+    en:
+      title: "Capture your change"
+      description: "Document and capture your experience of change"
+    uk:
+      title: "Зафіксувати свою зміну"
+      description: "Задокументувати та зафіксувати досвід змін"
+  
+  - state: change
+    intent: calm
+    en:
+      title: "Calm your change"
+      description: "Find ways to ease and adapt to change"
+    uk:
+      title: "Заспокоїти зміну"
+      description: "Знайти способи полегшити та адаптуватися до змін"
+  
+  - state: change
+    intent: check
+    en:
+      title: "Check your change"
+      description: "Assess and check how you're processing change"
+    uk:
+      title: "Перевірити зміну"
+      description: "Оцінити та перевірити процес адаптації до змін"
+  
+  - state: change
+    intent: preserve
+    en:
+      title: "Preserve your change"
+      description: "Keep a record and preserve insights about your change"
+    uk:
+      title: "Зберегти стан зміни"
+      description: "Зберегти запис та інсайти про зміни"
+  
+  - state: change
+    intent: connect
+    en:
+      title: "Connect your change"
+      description: "Link and connect your change with other experiences"
+    uk:
+      title: "Пов'язати свою зміну"
+      description: "Пов'язати зміни з іншими переживаннями"
+  
+  - state: change
+    intent: prepare
+    en:
+      title: "Prepare for change"
+      description: "Anticipate and prepare for upcoming change"
+    uk:
+      title: "Підготуватися до зміни"
+      description: "Передбачити та підготуватися до майбутніх змін"

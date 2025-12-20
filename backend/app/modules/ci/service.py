@@ -4,6 +4,7 @@ Business logic goes here
 """
 from typing import Dict, Any
 from app.core.interfaces import ModuleInterface, ServiceInterface
+from app.config.seo import seo_service
 
 
 class CiService(ModuleInterface, ServiceInterface):
@@ -12,6 +13,7 @@ class CiService(ModuleInterface, ServiceInterface):
     def __init__(self):
         self._initialized = False
         self._name = "ci"
+        self._seo_service = seo_service
     
     def get_name(self) -> str:
         """Get the module name"""
@@ -22,7 +24,8 @@ class CiService(ModuleInterface, ServiceInterface):
         return {
             "status": "active" if self._initialized else "inactive",
             "name": self._name,
-            "initialized": self._initialized
+            "initialized": self._initialized,
+            "seo_enabled": True
         }
     
     def initialize(self) -> bool:
@@ -58,3 +61,44 @@ class CiService(ModuleInterface, ServiceInterface):
     def validate(self, data: Dict[str, Any]) -> bool:
         """Validate input data"""
         return isinstance(data, dict)
+    
+    def resolve_seo_entry(self, lang: str, state: str, intent: str) -> Dict[str, Any]:
+        """
+        Resolve SEO entry for given parameters
+        
+        Args:
+            lang: Language code
+            state: Emotional state
+            intent: User intent
+            
+        Returns:
+            Complete SEO entry or error
+        """
+        entry = self._seo_service.get_entry(lang, state, intent)
+        if not entry:
+            return {
+                "error": "SEO entry not found",
+                "lang": lang,
+                "state": state,
+                "intent": intent
+            }
+        return entry
+    
+    def get_module_mapping(self, state: str) -> Dict[str, Any]:
+        """
+        Get module mapping for a state
+        
+        Args:
+            state: Emotional state
+            
+        Returns:
+            Module and writes policy information
+        """
+        module = self._seo_service.get_module(state)
+        writes_policy = self._seo_service.get_writes_policy(module)
+        
+        return {
+            "state": state,
+            "module": module,
+            "writes_policy": writes_policy
+        }
