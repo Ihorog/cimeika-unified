@@ -92,3 +92,37 @@ export interface ApiResponse<T = any> {
   error?: string;
   message?: string;
 }
+
+/**
+ * Base entity interface implementing minimal contract
+ * Required fields according to UI specification:
+ * - id: unique identifier
+ * - module: module name
+ * - time: timestamp
+ * - tags: list of tags
+ * - source_trace: source tracking information
+ * - canon_bundle_id: canonical bundle identifier
+ */
+export interface BaseEntity {
+  id: number;
+  module: string;
+  time: string | Date;
+  tags: string[];
+  source_trace?: string;
+  canon_bundle_id: string;
+}
+
+/**
+ * Entity status interface
+ * Minimal implementation without simulation of full audit system
+ */
+export interface EntityStatus {
+  status: 'draft' | 'confirmed';
+}
+
+/**
+ * Entity with status
+ */
+export interface EntityWithStatus extends BaseEntity {
+  entity_status: EntityStatus;
+}

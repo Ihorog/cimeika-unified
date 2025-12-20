@@ -6,6 +6,7 @@ import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from app.config.canon import CANON_BUNDLE_ID, CANON_MANIFEST
 
 # Load environment variables
 load_dotenv()
@@ -37,6 +38,7 @@ def index():
         'status': 'success',
         'message': 'CIMEIKA Backend API is running',
         'version': '0.1.0',
+        'canon_bundle_id': CANON_BUNDLE_ID,
         'modules': [
             'Ci - Центральне ядро',
             'Казкар - Пам\'ять',
@@ -57,6 +59,7 @@ def health():
     return jsonify({
         'status': 'healthy',
         'message': 'Backend is running',
+        'canon_bundle_id': CANON_BUNDLE_ID,
         'timestamp': os.getenv('BACKEND_PORT', '5000')
     })
 
@@ -65,6 +68,7 @@ def health():
 def modules():
     """Get list of available modules"""
     return jsonify({
+        'canon_bundle_id': CANON_BUNDLE_ID,
         'modules': [
             {
                 'id': 'ci',
