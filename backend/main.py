@@ -3,10 +3,11 @@ CIMEIKA Backend Main Entry Point
 Flask + FastAPI integration
 """
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 from app.config.canon import CANON_BUNDLE_ID, CANON_MANIFEST
+from app.utils.seo_matrix import get_seo_matrix
 
 # Load environment variables
 load_dotenv()
@@ -114,6 +115,87 @@ def modules():
             }
         ]
     })
+
+
+@app.route('/api/v1/seo/states')
+def seo_states():
+    """Get all available emotional states"""
+    try:
+        seo_matrix = get_seo_matrix()
+        states = seo_matrix.get_all_states()
+        return jsonify({
+            'status': 'success',
+            'states': states
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/intents/<state>')
+def seo_intents(state):
+    """Get all available intents for a state"""
+    try:
+        seo_matrix = get_seo_matrix()
+        intents = seo_matrix.get_all_intents(state)
+        return jsonify({
+            'status': 'success',
+            'state': state,
+            'intents': intents
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/meta/<state>/<intent>')
+def seo_meta(state, intent):
+    """Get SEO metadata for a specific state and intent"""
+    try:
+        seo_matrix = get_seo_matrix()
+        data = seo_matrix.get_full_seo_data(state, intent)
+        
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': f'No SEO data found for state={state}, intent={intent}'
+            }), 404
+        
+        return jsonify({
+            'status': 'success',
+            'state': state,
+            'intent': intent,
+            'data': data
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/config')
+def seo_config():
+    """Get SEO configuration"""
+    try:
+        seo_matrix = get_seo_matrix()
+        return jsonify({
+            'status': 'success',
+            'config': {
+                'canonical_lang': seo_matrix.canonical_lang,
+                'hreflang_patterns': seo_matrix.hreflang_patterns,
+                'rules': seo_matrix.rules
+            }
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
 
 
 if __name__ == '__main__':
