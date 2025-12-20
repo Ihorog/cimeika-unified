@@ -1,0 +1,336 @@
+/**
+ * Cimeika Modern Volumetric Design System
+ * 
+ * Deep spatial interface with volumetric components
+ * Glassmorphism, depth layers, and 3D effects
+ */
+
+:root {
+  /* Primary Color Palette - Deep Purple Gradient */
+  --color-primary: #667eea;
+  --color-primary-dark: #5568d3;
+  --color-primary-light: #7c90f5;
+  --color-secondary: #764ba2;
+  --color-secondary-dark: #5f3c85;
+  --color-secondary-light: #8d5cb8;
+  
+  /* Neutral Palette */
+  --color-background: #f8f9fc;
+  --color-surface: #ffffff;
+  --color-surface-variant: #f3f4f8;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #4a4a6a;
+  --color-text-tertiary: #7a7a9a;
+  --color-border: #e4e6ec;
+  --color-border-light: #f0f1f5;
+  
+  /* Depth System - Shadows for volumetric effect */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
+  --shadow-2xl: 0 24px 48px rgba(0, 0, 0, 0.15), 0 12px 24px rgba(0, 0, 0, 0.08);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  
+  /* Colored Shadows for depth */
+  --shadow-primary: 0 8px 24px rgba(102, 126, 234, 0.25), 0 4px 12px rgba(102, 126, 234, 0.15);
+  --shadow-primary-lg: 0 16px 48px rgba(102, 126, 234, 0.3), 0 8px 24px rgba(102, 126, 234, 0.2);
+  --shadow-secondary: 0 8px 24px rgba(118, 75, 162, 0.25), 0 4px 12px rgba(118, 75, 162, 0.15);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: blur(12px);
+  --glass-blur-strong: blur(20px);
+  
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+  /* Border Radius - Soft, modern curves */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Z-index layers */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-overlay: 2000;
+  --z-modal: 3000;
+  --z-tooltip: 4000;
+  
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+/* Volumetric Utility Classes */
+
+/* Depth Cards - Various elevation levels */
+.depth-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.depth-card-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.depth-card-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.depth-card-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Hover effects for volumetric cards */
+.depth-card-hover:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-xl);
+}
+
+.depth-card-hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-2xl);
+}
+
+/* Glassmorphism Effects */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.glass-card-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur-strong);
+  -webkit-backdrop-filter: var(--glass-blur-strong);
+}
+
+/* Neumorphism soft shadows */
+.neuro-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: 
+    8px 8px 16px rgba(0, 0, 0, 0.08),
+    -8px -8px 16px rgba(255, 255, 255, 0.8);
+}
+
+.neuro-inset {
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.06),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.6);
+}
+
+/* Gradient Backgrounds */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+.gradient-primary-soft {
+  background: linear-gradient(135deg, 
+    rgba(102, 126, 234, 0.1) 0%, 
+    rgba(118, 75, 162, 0.1) 100%);
+}
+
+.gradient-primary-vivid {
+  background: linear-gradient(135deg, 
+    var(--color-primary-light) 0%, 
+    var(--color-secondary-light) 50%,
+    var(--color-primary) 100%);
+}
+
+/* Spatial Layers - 3D effect */
+.spatial-layer {
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.spatial-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  transform: translateZ(-10px);
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+/* Interactive 3D transforms */
+.transform-3d {
+  transform-style: preserve-3d;
+  transition: transform var(--transition-base);
+}
+
+.transform-3d:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(2deg);
+}
+
+/* Floating animation for depth */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: var(--shadow-primary);
+  }
+  50% {
+    box-shadow: var(--shadow-primary-lg);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Shimmer effect for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 0%,
+    var(--color-surface-variant) 50%,
+    var(--color-surface) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Tile System - Grid-based volumetric tiles */
+.tile {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  border: 1px solid var(--color-border-light);
+}
+
+.tile:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--color-primary-light);
+}
+
+.tile-active {
+  box-shadow: var(--shadow-primary);
+  border-color: var(--color-primary);
+}
+
+/* Volumetric button base */
+.btn-volumetric {
+  position: relative;
+  padding: var(--space-md) var(--space-xl);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-md);
+  transform-style: preserve-3d;
+}
+
+.btn-volumetric:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-volumetric:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Primary volumetric button */
+.btn-volumetric-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: white;
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-volumetric-primary:hover {
+  box-shadow: var(--shadow-primary-lg);
+  filter: brightness(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --space-xl: 1.5rem;
+    --space-2xl: 2rem;
+    --space-3xl: 2.5rem;
+  }
+  
+  .depth-card-hover:hover {
+    transform: translateY(-2px) scale(1.005);
+  }
+  
+  .transform-3d:hover {
+    transform: none; /* Disable 3D transforms on mobile */
+  }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #1a1a2e;
+    --color-surface: #252540;
+    --color-surface-variant: #2d2d4a;
+    --color-text-primary: #f8f9fc;
+    --color-text-secondary: #c8c9d8;
+    --color-text-tertiary: #9a9aaa;
+    --color-border: #3a3a54;
+    --color-border-light: #32324c;
+    
+    --glass-bg: rgba(37, 37, 64, 0.7);
+    --glass-bg-strong: rgba(37, 37, 64, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+}
