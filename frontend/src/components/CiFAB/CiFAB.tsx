@@ -3,6 +3,7 @@
  * Provides access to Ci overlay without changing navigation context
  */
 import React, { useState } from 'react';
+import CiIcon from '../../assets/icon-ci.svg';
 import './CiFAB.css';
 
 interface CiFABProps {
@@ -29,7 +30,7 @@ const CiFAB: React.FC<CiFABProps> = ({ className = '' }) => {
         aria-label="Open Ci central orchestration"
         title="Ci - Центральне ядро"
       >
-        <span className="ci-fab-icon">Ci</span>
+        <img src={CiIcon} alt="Ci" className="ci-fab-icon" />
       </button>
 
       {/* Overlay */}

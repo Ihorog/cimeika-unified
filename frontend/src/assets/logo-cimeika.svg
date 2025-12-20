@@ -1,0 +1,26 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern Cimeika Logo - Full Version -->
+  <defs>
+    <linearGradient id="gradient-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Decorative circle elements representing "family/unity" -->
+  <circle cx="15" cy="30" r="8" fill="url(#gradient-primary)" opacity="0.3" filter="url(#glow)"/>
+  <circle cx="15" cy="30" r="5" fill="url(#gradient-primary)"/>
+  
+  <!-- Main text CIMEIKA -->
+  <text x="30" y="42" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="url(#gradient-primary)">CIMEIKA</text>
+  
+  <!-- Subtitle "Сімейка" -->
+  <text x="32" y="54" font-family="Arial, sans-serif" font-size="10" font-weight="normal" fill="#667eea" opacity="0.8">Сімейка</text>
+</svg>
