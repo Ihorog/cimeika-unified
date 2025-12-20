@@ -3,7 +3,7 @@
  * Provides access to Ci overlay without changing navigation context
  */
 import React, { useState } from 'react';
-import CiIcon from '../../assets/icon-ci.svg';
+import CiIcon from '../../assets/icon-ci.png';
 import './CiFAB.css';
 
 interface CiFABProps {
