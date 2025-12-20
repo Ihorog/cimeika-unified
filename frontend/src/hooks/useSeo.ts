@@ -88,7 +88,8 @@ export function useSeo({ state, intent, autoApply = true }: UseSeoOptions): UseS
         clearSeo();
       }
     };
-  }, [state, intent, autoApply]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, intent]);
 
   return {
     seoData,

@@ -58,7 +58,7 @@ meta_entries:
     check:      { title: "Check anticipation",      description: "Check anticipation. One step, clear result." }
     preserve:   { title: "Preserve anticipation",   description: "Preserve anticipation. One step, clear result." }
     connect:    { title: "Connect anticipation",    description: "Connect anticipation. One step, clear result." }
-    prepare:    { title: "Prepare for anticipation",description: "Prepare for anticipation. One step, clear result." }
+    prepare:    { title: "Prepare for anticipation", description: "Prepare for anticipation. One step, clear result." }
   change:
     understand: { title: "Understand change", description: "Clarify change. One step, clear result." }
     capture:    { title: "Capture change",    description: "Capture change. One step, clear result." }
@@ -66,4 +66,4 @@ meta_entries:
     check:      { title: "Check change",      description: "Check change. One step, clear result." }
     preserve:   { title: "Preserve change",   description: "Preserve change. One step, clear result." }
     connect:    { title: "Connect change",    description: "Connect change. One step, clear result." }
-    prepare:    { title: "Prepare for change",description: "Prepare for change. One step, clear result." }
+    prepare:    { title: "Prepare for change", description: "Prepare for change. One step, clear result." }

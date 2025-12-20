@@ -214,7 +214,7 @@ const SeoDemo = () => {
                 {Object.entries(seoData.hreflang).map(([lang, url]) => (
                   <li key={lang}>
                     <code>
-                      &lt;link rel="alternate" hreflang="{lang}" href="{url}" /&gt;
+                      &lt;link rel="alternate" hreflang="{`${lang}`}" href="{`${url}`}" /&gt;
                     </code>
                   </li>
                 ))}
