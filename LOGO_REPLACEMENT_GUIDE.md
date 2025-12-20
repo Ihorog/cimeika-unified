@@ -46,7 +46,7 @@ The original logos were provided in PR #7, comment #3677365624:
    - Save images to your computer
 
 2. **Upload to GitHub**:
-   - Go to: https://github.com/Ihorog/cimeika-unified/tree/copilot/add-inserted-logos/frontend/src/assets
+   - Navigate to `frontend/src/assets` directory in your branch on GitHub
    - For each placeholder file (`logo-cimeika.png` and `icon-ci.png`):
      - Click the filename
      - Click the trash icon to delete it

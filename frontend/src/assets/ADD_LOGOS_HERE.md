@@ -20,7 +20,7 @@ Replace these placeholder files with the actual logo images:
 
 ### Method 1: GitHub Web Interface (Easiest)
 1. Download the images from the URLs above
-2. Go to: https://github.com/Ihorog/cimeika-unified/tree/copilot/add-inserted-logos/frontend/src/assets
+2. Navigate to this directory on GitHub (frontend/src/assets)
 3. Click on `logo-cimeika.png` → Click the pencil icon (Edit) → Click "Delete this file"
 4. Click "Add file" → "Upload files" → Upload your downloaded Cimeika logo
 5. Repeat for `icon-ci.png` with the Ci icon
