@@ -5,10 +5,6 @@
   "framework": "vite",
   "installCommand": "cd frontend && npm install",
   "devCommand": "cd frontend && npm run dev",
-  "env": {
-    "VITE_API_URL": "@vite_api_url",
-    "VITE_APP_NAME": "@vite_app_name"
-  },
   "regions": ["iad1"],
   "github": {
     "enabled": true,
