@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
+import CiEntryScreen from './components/CiEntryScreen';
 import HomePage from './pages/HomePage';
 import HealthCheckPage from './pages/HealthCheckPage';
 import SeoDemo from './pages/SeoDemo';
@@ -22,9 +23,16 @@ function App() {
         {/* SEO Demo page - standalone */}
         <Route path="/seo-demo" element={<SeoDemo />} />
         
-        {/* Main application routes */}
-        <Route path="/" element={<MainLayout />}>
+        {/* CANON v1.0.0: Ci Entry Screen as default - single entry point */}
+        <Route index element={<CiEntryScreen />} />
+        
+        {/* Legacy home page - accessible via /home */}
+        <Route path="/home" element={<MainLayout />}>
           <Route index element={<HomePage />} />
+        </Route>
+        
+        {/* Main application routes - Cimeika unfolds after Ci */}
+        <Route path="/" element={<MainLayout />}>
           <Route path="ci" element={<CiView />} />
           <Route path="kazkar" element={<KazkarView />} />
           <Route path="podija" element={<PodijaView />} />

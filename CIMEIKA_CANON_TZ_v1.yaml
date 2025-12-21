@@ -1,0 +1,121 @@
+meta:
+  product: "Cimeika"
+  entry_action: "Ci"
+  version: "1.0.0"
+  language: "uk"
+  owner: "result_owner = system"
+  status: "CANON"
+
+principles:
+  - reality_first
+  - action_before_explanation
+  - one_entry_point
+  - no_psychology
+  - no_advice
+  - reaction_not_guidance
+  - minimal_surface_max_depth
+
+definitions:
+  Ci:
+    type: "action"
+    role: "instant interaction"
+    properties:
+      - stateless
+      - emits_event
+      - <=5_seconds_to_action
+  Cimeika:
+    type: "environment"
+    role: "structure that unfolds after Ci"
+    properties:
+      - stateful
+      - contextual
+      - expandable
+
+entry_screen:
+  id: "ci_entry"
+  goal: "user_action_in_<=5s"
+  ui_elements:
+    - logo:
+        text: "Ci"
+        position: "center"
+        behavior:
+          idle: "breathing_glow"
+          hover: "pulse"
+    - action:
+        trigger: "ci.capture()"
+        inputs_allowed: ["text", "voice", "image"]
+        label: "Ci"
+    - hint:
+        text: "Mark the moment"
+        visibility: "low"
+  forbidden:
+    - menus
+    - onboarding
+    - explanations
+    - login_required
+    - feature_lists
+
+ci_action_flow:
+  step_0:
+    name: "contact"
+    action: "ci.capture()"
+    output: "raw_event"
+  step_1:
+    name: "structure"
+    system_tasks:
+      - classify: ["podija", "stan", "time"]
+      - attach_context: true
+  step_2:
+    name: "reveal"
+    ui_show:
+      - event
+      - time_position
+      - related_traces
+  step_3:
+    name: "expand_optional"
+    user_options:
+      - open_calendar
+      - open_gallery
+      - add_narrative
+      - close
+
+modules_unfolding:
+  Ci: "entry_action"
+  PoDija: "event_layer"
+  Nastrij: "state_layer"
+  Calendar: "time_layer"
+  Kazkar: "narrative_layer"
+  Gallery: "visual_trace"
+  Malya: "variants_and_ideas"
+
+technical_rules:
+  frontend:
+    framework: "React / Next.js"
+    first_render_budget_ms: "<=100"
+    time_to_first_action_ms: "<=5000"
+  backend:
+    pattern: "event-based"
+    storage:
+      - immutable_events
+      - state_snapshots
+  api:
+    status: "paused"
+    note: "no external API until Ci flow stable"
+
+copilot_mandatory_rules:
+  - do_not_create_new_repo
+  - do_not_add_second_entry_point
+  - do_not_add_explanatory_texts
+  - do_not_add_psychological_language
+  - respect_single_action_entry: "Ci"
+  - any_simulation_must_be_marked: "🔧"
+  - any_hypothesis_must_be_marked: "🌀"
+
+success_criteria:
+  - user_can_act_without_reading: true
+  - ci_action_works_without_login: true
+  - cimeika_unfolds_only_after_ci: true
+  - system_reacts_not_explains: true
+
+end_state:
+  canon_phrase: "Ci is the action. Cimeika unfolds after."
