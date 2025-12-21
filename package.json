@@ -1,0 +1,13 @@
+{
+  "name": "cimeika-unified-root",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Cimeika Unified — Root package for governance scripts",
+  "private": true,
+  "scripts": {
+    "seo:health": "node scripts/seo/seo_health_report.mjs"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4"
+  }
+}
