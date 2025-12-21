@@ -1,8 +1,12 @@
 """
 Ci module API routes
+CANON v1.0.0 - ci.capture() flow implementation
 """
 from fastapi import APIRouter, HTTPException
+from datetime import datetime
 from app.config.seo import seo_service
+from app.modules.ci.schema import CiCaptureRequest, CiCaptureResponse
+import uuid
 
 router = APIRouter(prefix="/ci", tags=["ci"])
 
@@ -16,6 +20,56 @@ async def get_ci_status():
         "description": "Центральне ядро, оркестрація",
         "status": "active"
     }
+
+
+@router.post("/capture", response_model=CiCaptureResponse)
+async def ci_capture(request: CiCaptureRequest):
+    """
+    CANON v1.0.0: ci.capture() - The single entry point action
+    
+    Step 0: Contact - raw_event capture
+    Step 1: Structure - classify (podija/stan/time), attach_context
+    Step 2: Reveal - return event, time_position, related_traces
+    
+    No login required, stateless action, emits event
+    """
+    # Step 0: Receive raw event
+    raw_event = {
+        "type": request.type,
+        "content": request.content,
+        "metadata": request.metadata or {}
+    }
+    
+    # Step 1: Structure - classify and attach context
+    # 🔧 Simplified classification for initial implementation
+    event_id = str(uuid.uuid4())
+    now = datetime.now()
+    
+    classified_event = {
+        "id": event_id,
+        "content": request.content,
+        "type": request.type,
+        "captured_at": now.isoformat(),
+        "classification": {
+            "podija": "moment",  # Event layer classification
+            "stan": "neutral",    # State layer classification
+            "time": now.isoformat()
+        }
+    }
+    
+    # Step 2: Reveal - prepare response
+    time_position = f"Зафіксовано: {now.strftime('%d.%m.%Y %H:%M')}"
+    
+    # 🔧 Related traces - placeholder, will be implemented with proper DB queries
+    related_traces = []
+    
+    # Step 3 options defined in schema
+    return CiCaptureResponse(
+        event_id=event_id,
+        event=classified_event,
+        time_position=time_position,
+        related_traces=related_traces
+    )
 
 
 @router.get("/seo/states")
