@@ -17,29 +17,29 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* CANON v1.0.0: Ci Entry Screen as default - single entry point */}
+        <Route index element={<CiEntryScreen />} />
+        
         {/* Health check route - standalone without layout */}
         <Route path="/health" element={<HealthCheckPage />} />
         
         {/* SEO Demo page - standalone */}
         <Route path="/seo-demo" element={<SeoDemo />} />
         
-        {/* CANON v1.0.0: Ci Entry Screen as default - single entry point */}
-        <Route index element={<CiEntryScreen />} />
-        
-        {/* Legacy home page - accessible via /home */}
+        {/* Legacy home page - accessible via /home with layout */}
         <Route path="/home" element={<MainLayout />}>
           <Route index element={<HomePage />} />
         </Route>
         
-        {/* Main application routes - Cimeika unfolds after Ci */}
-        <Route path="/" element={<MainLayout />}>
-          <Route path="ci" element={<CiView />} />
-          <Route path="kazkar" element={<KazkarView />} />
-          <Route path="podija" element={<PodijaView />} />
-          <Route path="nastrij" element={<NastrijView />} />
-          <Route path="malya" element={<MalyaView />} />
-          <Route path="calendar" element={<CalendarView />} />
-          <Route path="gallery" element={<GalleryView />} />
+        {/* Cimeika modules - unfold after Ci action */}
+        <Route element={<MainLayout />}>
+          <Route path="/ci" element={<CiView />} />
+          <Route path="/kazkar" element={<KazkarView />} />
+          <Route path="/podija" element={<PodijaView />} />
+          <Route path="/nastrij" element={<NastrijView />} />
+          <Route path="/malya" element={<MalyaView />} />
+          <Route path="/calendar" element={<CalendarView />} />
+          <Route path="/gallery" element={<GalleryView />} />
         </Route>
       </Routes>
     </Router>

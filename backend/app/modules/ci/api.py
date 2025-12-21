@@ -63,12 +63,12 @@ async def ci_capture(request: CiCaptureRequest):
     # 🔧 Related traces - placeholder, will be implemented with proper DB queries
     related_traces = []
     
+    # Step 3 options defined in schema
     return CiCaptureResponse(
         event_id=event_id,
         event=classified_event,
         time_position=time_position,
-        related_traces=related_traces,
-        expand_options=["open_calendar", "open_gallery", "add_narrative", "close"]
+        related_traces=related_traces
     )
 
 

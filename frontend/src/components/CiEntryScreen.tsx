@@ -9,11 +9,28 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CiEntryScreen.css';
 
+interface CaptureEvent {
+  id: string;
+  content: string;
+  type: string;
+  captured_at: string;
+  classification: {
+    podija: string;
+    stan: string;
+    time: string;
+  };
+}
+
+interface RelatedTrace {
+  id?: string;
+  title: string;
+}
+
 interface CaptureResult {
   event_id: string;
-  event: any;
+  event: CaptureEvent;
   time_position: string;
-  related_traces: any[];
+  related_traces: RelatedTrace[];
 }
 
 const CiEntryScreen: React.FC = () => {
@@ -88,8 +105,8 @@ const CiEntryScreen: React.FC = () => {
 
           {captureResult.related_traces?.length > 0 && (
             <div className="ci-reveal-traces">
-              {captureResult.related_traces.map((trace: any, idx: number) => (
-                <div key={idx} className="ci-trace-item">
+              {captureResult.related_traces.map((trace: RelatedTrace, idx: number) => (
+                <div key={trace.id || `trace-${idx}`} className="ci-trace-item">
                   {trace.title}
                 </div>
               ))}

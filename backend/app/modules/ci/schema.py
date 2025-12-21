@@ -7,6 +7,14 @@ from typing import List, Optional, Any
 from pydantic import BaseModel, Field, ConfigDict
 from app.config.canon import CANON_BUNDLE_ID
 
+# CANON v1.0.0: Expand options constant
+CI_EXPAND_OPTIONS = [
+    "open_calendar",
+    "open_gallery", 
+    "add_narrative",
+    "close"
+]
+
 
 class CiEntityBase(BaseModel):
     """Base schema for Ci entity"""
@@ -63,7 +71,5 @@ class CiCaptureResponse(BaseModel):
     event: dict
     time_position: str
     related_traces: List[dict] = Field(default_factory=list)
-    expand_options: List[str] = Field(
-        default_factory=lambda: ["open_calendar", "open_gallery", "add_narrative", "close"]
-    )
+    expand_options: List[str] = Field(default_factory=lambda: CI_EXPAND_OPTIONS.copy())
 
