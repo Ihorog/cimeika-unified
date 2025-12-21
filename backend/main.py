@@ -198,6 +198,99 @@ def seo_config():
         }), 500
 
 
+# New comprehensive SEO endpoints using the enhanced SEO service
+@app.route('/api/v1/ci/seo/v2/entry/<lang>/<state>/<intent>')
+def seo_v2_entry(lang, state, intent):
+    """Get comprehensive SEO entry with module mapping and writes policy"""
+    try:
+        from app.config.seo import seo_service
+        entry = seo_service.get_entry(lang, state, intent)
+        if not entry:
+            return jsonify({
+                'status': 'error',
+                'message': f'SEO entry not found for {lang}/{state}/{intent}'
+            }), 404
+        return jsonify({
+            'status': 'success',
+            'entry': entry
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/ci/seo/v2/entries/<lang>')
+def seo_v2_all_entries(lang):
+    """Get all comprehensive SEO entries for a language"""
+    try:
+        from app.config.seo import seo_service
+        if lang not in seo_service.get_languages():
+            return jsonify({
+                'status': 'error',
+                'message': f'Unsupported language: {lang}'
+            }), 400
+        entries = seo_service.get_all_entries(lang)
+        return jsonify({
+            'status': 'success',
+            'lang': lang,
+            'entries': entries,
+            'count': len(entries)
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/ci/seo/v2/module/<state>')
+def seo_v2_module(state):
+    """Get module mapping and writes policy for a state"""
+    try:
+        from app.config.seo import seo_service
+        if state not in seo_service.get_states():
+            return jsonify({
+                'status': 'error',
+                'message': f'Invalid state: {state}'
+            }), 400
+        
+        module = seo_service.get_module(state)
+        writes_policy = seo_service.get_writes_policy(module)
+        
+        return jsonify({
+            'status': 'success',
+            'state': state,
+            'module': module,
+            'writes_policy': writes_policy
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/ci/seo/v2/sitemap')
+def seo_v2_sitemap():
+    """Generate comprehensive sitemap with hreflang alternates"""
+    try:
+        from app.config.seo import seo_service
+        base_url = request.args.get('base_url', '')
+        entries = seo_service.generate_sitemap_entries(base_url)
+        return jsonify({
+            'status': 'success',
+            'sitemap': entries,
+            'count': len(entries)
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 if __name__ == '__main__':
     port = int(os.getenv('BACKEND_PORT', 5000))
     host = os.getenv('BACKEND_HOST', '0.0.0.0')
