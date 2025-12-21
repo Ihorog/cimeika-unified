@@ -43,18 +43,18 @@ jobs:
       - name: Pull Vercel Environment Information
         run: |
           cd frontend
-          vercel pull --yes --environment=${{ github.event_name == 'push' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+          vercel pull --yes --environment=${{ github.event_name == 'push' && 'production' || 'preview' }} --token=${{ secrets.VERSEL_TOKEN }}
 
       - name: Build Project Artifacts
         run: |
           cd frontend
-          vercel build ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERSEL_TOKEN }}
 
       - name: Deploy to Vercel
         id: deploy
         run: |
           cd frontend
-          DEPLOYMENT_URL=$(vercel deploy --prebuilt ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }})
+          DEPLOYMENT_URL=$(vercel deploy --prebuilt ${{ github.event_name == 'push' && '--prod' || '' }} --token=${{ secrets.VERSEL_TOKEN }})
           echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
           echo "Deployed to: $DEPLOYMENT_URL"
 
