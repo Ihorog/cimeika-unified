@@ -2,9 +2,12 @@
 Ci module service layer
 Business logic goes here
 """
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
+from sqlalchemy.orm import Session
 from app.core.interfaces import ModuleInterface, ServiceInterface
 from app.config.seo import seo_service
+from app.modules.ci.model import CiEntity
+from app.modules.ci.schema import CiEntityCreate, CiEntityUpdate
 
 
 class CiService(ModuleInterface, ServiceInterface):
@@ -62,6 +65,48 @@ class CiService(ModuleInterface, ServiceInterface):
         """Validate input data"""
         return isinstance(data, dict)
     
+    # CRUD Operations
+    def create_entity(self, db: Session, entity_data: CiEntityCreate) -> CiEntity:
+        """Create a new Ci entity"""
+        db_entity = CiEntity(**entity_data.model_dump())
+        db.add(db_entity)
+        db.commit()
+        db.refresh(db_entity)
+        return db_entity
+    
+    def get_entity(self, db: Session, entity_id: int) -> Optional[CiEntity]:
+        """Get a Ci entity by ID"""
+        return db.query(CiEntity).filter(CiEntity.id == entity_id).first()
+    
+    def get_entities(self, db: Session, skip: int = 0, limit: int = 100) -> List[CiEntity]:
+        """Get all Ci entities with pagination"""
+        return db.query(CiEntity).offset(skip).limit(limit).all()
+    
+    def update_entity(self, db: Session, entity_id: int, entity_data: CiEntityUpdate) -> Optional[CiEntity]:
+        """Update a Ci entity"""
+        db_entity = self.get_entity(db, entity_id)
+        if not db_entity:
+            return None
+        
+        update_data = entity_data.model_dump(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(db_entity, field, value)
+        
+        db.commit()
+        db.refresh(db_entity)
+        return db_entity
+    
+    def delete_entity(self, db: Session, entity_id: int) -> bool:
+        """Delete a Ci entity"""
+        db_entity = self.get_entity(db, entity_id)
+        if not db_entity:
+            return False
+        
+        db.delete(db_entity)
+        db.commit()
+        return True
+    
+    # SEO Operations
     def resolve_seo_entry(self, lang: str, state: str, intent: str) -> Dict[str, Any]:
         """
         Resolve SEO entry for given parameters
@@ -102,3 +147,4 @@ class CiService(ModuleInterface, ServiceInterface):
             "module": module,
             "writes_policy": writes_policy
         }
+

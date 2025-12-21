@@ -2,8 +2,11 @@
 Calendar module service layer
 Business logic goes here
 """
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
+from sqlalchemy.orm import Session
 from app.core.interfaces import ModuleInterface, ServiceInterface
+from app.modules.calendar.model import CalendarEntry
+from app.modules.calendar.schema import CalendarEntryCreate, CalendarEntryUpdate
 
 
 class CalendarService(ModuleInterface, ServiceInterface):
@@ -58,3 +61,45 @@ class CalendarService(ModuleInterface, ServiceInterface):
     def validate(self, data: Dict[str, Any]) -> bool:
         """Validate input data"""
         return isinstance(data, dict)
+    
+    # CRUD Operations
+    def create_entry(self, db: Session, entry_data: CalendarEntryCreate) -> CalendarEntry:
+        """Create a new calendar entry"""
+        db_entry = CalendarEntry(**entry_data.model_dump())
+        db.add(db_entry)
+        db.commit()
+        db.refresh(db_entry)
+        return db_entry
+    
+    def get_entry(self, db: Session, entry_id: int) -> Optional[CalendarEntry]:
+        """Get a calendar entry by ID"""
+        return db.query(CalendarEntry).filter(CalendarEntry.id == entry_id).first()
+    
+    def get_entries(self, db: Session, skip: int = 0, limit: int = 100) -> List[CalendarEntry]:
+        """Get all calendar entries with pagination"""
+        return db.query(CalendarEntry).offset(skip).limit(limit).all()
+    
+    def update_entry(self, db: Session, entry_id: int, entry_data: CalendarEntryUpdate) -> Optional[CalendarEntry]:
+        """Update a calendar entry"""
+        db_entry = self.get_entry(db, entry_id)
+        if not db_entry:
+            return None
+        
+        update_data = entry_data.model_dump(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(db_entry, field, value)
+        
+        db.commit()
+        db.refresh(db_entry)
+        return db_entry
+    
+    def delete_entry(self, db: Session, entry_id: int) -> bool:
+        """Delete a calendar entry"""
+        db_entry = self.get_entry(db, entry_id)
+        if not db_entry:
+            return False
+        
+        db.delete(db_entry)
+        db.commit()
+        return True
+
