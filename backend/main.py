@@ -9,6 +9,15 @@ from dotenv import load_dotenv
 from app.config.canon import CANON_BUNDLE_ID, CANON_MANIFEST
 from app.utils.seo_matrix import get_seo_matrix
 
+# Import module blueprints
+from api.ci import ci_bp
+from api.calendar import calendar_bp
+from api.podija import podija_bp
+from api.nastrij import nastrij_bp
+from api.gallery import gallery_bp
+from api.kazkar import kazkar_bp
+from api.malya import malya_bp
+
 # Load environment variables
 load_dotenv()
 
@@ -17,6 +26,15 @@ app = Flask(__name__)
 
 # Configure CORS
 CORS(app, origins=os.getenv('CORS_ORIGINS', 'http://localhost:3000').split(','))
+
+# Register module blueprints
+app.register_blueprint(ci_bp)
+app.register_blueprint(calendar_bp)
+app.register_blueprint(podija_bp)
+app.register_blueprint(nastrij_bp)
+app.register_blueprint(gallery_bp)
+app.register_blueprint(kazkar_bp)
+app.register_blueprint(malya_bp)
 
 # Configuration
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key')
@@ -55,13 +73,15 @@ def index():
 @app.route('/health')
 def health():
     """Health check for monitoring"""
+    from datetime import datetime
     # Note: In a production environment, you would check actual connectivity
     # to PostgreSQL and Redis here
     return jsonify({
         'status': 'healthy',
         'message': 'Backend is running',
         'canon_bundle_id': CANON_BUNDLE_ID,
-        'timestamp': os.getenv('BACKEND_PORT', '5000')
+        'timestamp': datetime.utcnow().isoformat(),
+        'version': '0.1.0'
     })
 
 
