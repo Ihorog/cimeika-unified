@@ -9,6 +9,15 @@ import { KazkarEntryCard } from '../ui';
 import { LegendForm } from '../components/LegendForm';
 import '../../../styles/moduleView.css';
 
+// Type label mappings
+const TYPE_LABELS = {
+  all: 'Всі',
+  legend: '⚡ Легенди',
+  story: '📖 Історії',
+  memory: '💭 Спогади',
+  fact: '📌 Факти',
+} as const;
+
 const KazkarView: React.FC = () => {
   const [stories, setStories] = useState<KazkarEntry[]>([]);
   const [stats, setStats] = useState<KazkarStats | null>(null);
@@ -25,10 +34,14 @@ const KazkarView: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
+      const storiesPromise = filterType === 'all' 
+        ? kazkarApi.getStories() 
+        : filterType === 'legend' 
+        ? kazkarApi.getLegends() 
+        : kazkarApi.getStories(filterType);
+      
       const [storiesData, statsData] = await Promise.all([
-        filterType === 'all' ? kazkarApi.getStories() : 
-        filterType === 'legend' ? kazkarApi.getLegends() :
-        kazkarApi.getStories(filterType),
+        storiesPromise,
         kazkarApi.getStats()
       ]);
       setStories(storiesData);
@@ -89,7 +102,7 @@ const KazkarView: React.FC = () => {
           <div>
             <h2>Фільтр</h2>
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
-              {['all', 'legend', 'story', 'memory', 'fact'].map(type => (
+              {Object.entries(TYPE_LABELS).map(([type, label]) => (
                 <button
                   key={type}
                   onClick={() => setFilterType(type)}
@@ -102,11 +115,7 @@ const KazkarView: React.FC = () => {
                     cursor: 'pointer',
                   }}
                 >
-                  {type === 'all' ? 'Всі' : 
-                   type === 'legend' ? '⚡ Легенди' :
-                   type === 'story' ? '📖 Історії' :
-                   type === 'memory' ? '💭 Спогади' :
-                   '📌 Факти'}
+                  {label}
                 </button>
               ))}
             </div>
@@ -134,11 +143,7 @@ const KazkarView: React.FC = () => {
         {!loading && !error && (
           <div>
             <h2>
-              {filterType === 'legend' ? '⚡ Легенди' :
-               filterType === 'story' ? '📖 Історії' :
-               filterType === 'memory' ? '💭 Спогади' :
-               filterType === 'fact' ? '📌 Факти' :
-               'Всі записи'}
+              {TYPE_LABELS[filterType as keyof typeof TYPE_LABELS] || 'Всі записи'}
               {' '}({stories.length})
             </h2>
             {stories.length === 0 ? (

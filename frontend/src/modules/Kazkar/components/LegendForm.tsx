@@ -142,7 +142,12 @@ export const LegendForm: React.FC<LegendFormProps> = ({ onSuccess, onCancel }) =
             type="text"
             value={participantInput}
             onChange={(e) => setParticipantInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addParticipant())}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                addParticipant();
+              }
+            }}
             style={{
               flex: 1,
               padding: '0.5rem',
@@ -227,7 +232,12 @@ export const LegendForm: React.FC<LegendFormProps> = ({ onSuccess, onCancel }) =
             type="text"
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                addTag();
+              }
+            }}
             style={{
               flex: 1,
               padding: '0.5rem',

@@ -111,11 +111,16 @@ class KazkarService(ModuleInterface, ServiceInterface):
         return True
     
     def get_stories_count_by_type(self, db: Session) -> Dict[str, int]:
-        """Get count of stories by type"""
-        stories = db.query(KazkarStory).all()
+        """Get count of stories by type using SQL GROUP BY"""
+        from sqlalchemy import func
+        results = db.query(
+            KazkarStory.story_type,
+            func.count(KazkarStory.id)
+        ).group_by(KazkarStory.story_type).all()
+        
         counts = {}
-        for story in stories:
-            story_type = story.story_type or 'unknown'
-            counts[story_type] = counts.get(story_type, 0) + 1
+        for story_type, count in results:
+            type_key = story_type or 'unknown'
+            counts[type_key] = count
         return counts
 
