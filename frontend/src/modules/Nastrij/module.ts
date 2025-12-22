@@ -1,0 +1,92 @@
+/**
+ * Nastrij module - Emotional states, context
+ * Implements ModuleInterface for integration with orchestrator
+ */
+
+import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
+import { nastrijService } from '../service';
+
+/**
+ * Nastrij Module class implementing ModuleInterface
+ */
+export class NastrijModule implements ModuleInterface {
+  private initialized: boolean = false;
+  private readonly name: string = 'nastrij';
+
+  /**
+   * Get the module name
+   */
+  getName(): string {
+    return this.name;
+  }
+
+  /**
+   * Get the current status of the module
+   */
+  async getStatus(): Promise<ModuleStatus> {
+    try {
+      const result = await nastrijService.getStatus();
+      
+      if (result.status === 'success' && result.data) {
+        return {
+          status: 'active',
+          name: this.name,
+          initialized: this.initialized,
+          ...result.data
+        };
+      }
+      
+      return {
+        status: 'error',
+        name: this.name,
+        initialized: this.initialized,
+        error: result.error || 'Failed to get status'
+      };
+    } catch (error) {
+      return {
+        status: 'error',
+        name: this.name,
+        initialized: this.initialized,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Initialize the module
+   */
+  async initialize(): Promise<boolean> {
+    try {
+      const result = await nastrijService.getStatus();
+      this.initialized = result.status === 'success';
+      return this.initialized;
+    } catch (error) {
+      console.error(`Failed to initialize ${this.name}:`, error);
+      this.initialized = false;
+      return false;
+    }
+  }
+
+  /**
+   * Get module metadata
+   */
+  getMetadata(): ModuleMetadata {
+    return {
+      name: this.name,
+      version: '0.1.0',
+      description: 'Emotional states, context - tracks and manages emotional well-being and mood'
+    };
+  }
+
+  /**
+   * Check if module is initialized
+   */
+  isInitialized(): boolean {
+    return this.initialized;
+  }
+}
+
+/**
+ * Singleton instance of Nastrij module
+ */
+export const nastrijModule = new NastrijModule();
