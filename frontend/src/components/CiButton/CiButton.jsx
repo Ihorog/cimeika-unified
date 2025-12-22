@@ -14,11 +14,6 @@ const CiButton = () => {
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [isPressed, setIsPressed] = useState(false);
 
-  // Hide button on welcome page
-  if (location.pathname === '/') {
-    return null;
-  }
-
   // Handle swipe gestures
   const handleSwipe = useCallback((direction) => {
     // Show visual feedback
@@ -64,6 +59,11 @@ const CiButton = () => {
       return () => clearTimeout(timer);
     }
   }, [swipeDirection]);
+
+  // Hide button on welcome page
+  if (location.pathname === '/') {
+    return null;
+  }
 
   return (
     <div className="ci-button-container">
