@@ -103,6 +103,34 @@ class MyModuleService(ModuleInterface, ServiceInterface):
 
 ## Frontend Interfaces (TypeScript)
 
+### ModuleInterface
+
+The base interface that all frontend modules must implement:
+
+```typescript
+export interface ModuleInterface {
+  /**
+   * Get the module name
+   */
+  getName(): string;
+  
+  /**
+   * Get the current status of the module
+   */
+  getStatus(): Promise<ModuleStatus>;
+  
+  /**
+   * Initialize the module
+   */
+  initialize(): Promise<boolean>;
+  
+  /**
+   * Get module metadata
+   */
+  getMetadata(): ModuleMetadata;
+}
+```
+
 ### ServiceInterface
 
 Interface for service layer (API/data operations):
@@ -129,6 +157,8 @@ export interface ApiResponse<T = any> {
 ```
 
 ### Implementation Example
+
+Service implementation:
 
 ```typescript
 import type { ServiceInterface, ApiResponse } from '../../types';
@@ -180,6 +210,73 @@ export const myModuleService: ServiceInterface = {
 };
 ```
 
+Module implementation:
+
+```typescript
+import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../types';
+import { myModuleService } from './service';
+
+export class MyModule implements ModuleInterface {
+  private initialized: boolean = false;
+  private readonly name: string = 'my_module';
+
+  getName(): string {
+    return this.name;
+  }
+
+  async getStatus(): Promise<ModuleStatus> {
+    try {
+      const result = await myModuleService.getStatus();
+      
+      if (result.status === 'success' && result.data) {
+        return {
+          status: 'active',
+          name: this.name,
+          initialized: this.initialized,
+          ...result.data
+        };
+      }
+      
+      return {
+        status: 'error',
+        name: this.name,
+        initialized: this.initialized,
+        error: result.error || 'Failed to get status'
+      };
+    } catch (error) {
+      return {
+        status: 'error',
+        name: this.name,
+        initialized: this.initialized,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  async initialize(): Promise<boolean> {
+    try {
+      const result = await myModuleService.getStatus();
+      this.initialized = result.status === 'success';
+      return this.initialized;
+    } catch (error) {
+      console.error(`Failed to initialize ${this.name}:`, error);
+      this.initialized = false;
+      return false;
+    }
+  }
+
+  getMetadata(): ModuleMetadata {
+    return {
+      name: this.name,
+      version: '0.1.0',
+      description: 'My module description'
+    };
+  }
+}
+
+export const myModule = new MyModule();
+```
+
 ## Module Registration
 
 ### Backend
@@ -201,8 +298,34 @@ results = registry.initialize_all()
 statuses = registry.get_all_statuses()
 ```
 
+### Frontend
+
+```typescript
+import { registry } from './core';
+import { myModule } from './modules/MyModule';
+
+// Register module
+registry.register('my_module', myModule);
+
+// Initialize all modules
+const results = await registry.initializeAll();
+
+// Get all statuses
+const statuses = await registry.getAllStatuses();
+
+// Or use the convenience functions
+import { setupModules, getModulesStatus } from './app/modules';
+
+// Setup and initialize all modules at app startup
+await setupModules();
+
+// Get status later
+const status = await getModulesStatus();
+```
+
 ### Using Modules
 
+Backend:
 ```python
 # Get a specific module
 module = registry.get("my_module")
@@ -211,6 +334,18 @@ module = registry.get("my_module")
 if module:
     status = module.get_status()
     result = module.process({"key": "value"})
+```
+
+Frontend:
+```typescript
+// Get a specific module
+const module = registry.get('my_module');
+
+// Use the module
+if (module) {
+  const status = await module.getStatus();
+  const metadata = module.getMetadata();
+}
 ```
 
 ## Best Practices
@@ -281,3 +416,53 @@ describe('MyModuleService', () => {
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Overall system architecture
 - [Backend interfaces](../backend/app/core/interfaces.py) - Python interface definitions
 - [Frontend interfaces](../frontend/src/types/interfaces.ts) - TypeScript interface definitions
+- [Backend orchestrator](../backend/app/core/orchestrator.py) - Python module registry
+- [Frontend orchestrator](../frontend/src/core/orchestrator.ts) - TypeScript module registry
+
+## Frontend Orchestrator Pattern
+
+The frontend module orchestrator mirrors the backend pattern and provides centralized module management.
+
+### Key Features
+
+1. **Module Registry**: Central registry for all modules
+2. **Lifecycle Management**: Initialize and manage module states
+3. **Status Monitoring**: Query status of all modules
+4. **Metadata Access**: Get module information
+5. **Type Safety**: Full TypeScript support with interfaces
+
+### Usage in App
+
+```typescript
+// In your main.tsx or App.tsx
+import { setupModules } from './app/modules';
+
+async function initializeApp() {
+  try {
+    const results = await setupModules();
+    console.log('Modules initialized:', results);
+  } catch (error) {
+    console.error('Failed to initialize modules:', error);
+  }
+}
+
+initializeApp();
+```
+
+### Module Structure
+
+Each frontend module follows this structure:
+
+```
+Module/
+├── module.ts       # ModuleInterface implementation
+├── service.ts      # ServiceInterface implementation  
+├── store.ts        # State management
+├── api.ts          # API client
+├── types.ts        # Type definitions
+├── hooks/          # React hooks
+├── views/          # View components
+└── index.ts        # Module exports
+```
+
+The `module.ts` file implements `ModuleInterface` and coordinates with the service layer, providing a clean separation between module orchestration and business logic.

@@ -2,4 +2,5 @@
  * App-level components and configuration
  */
 
-export {};
+export * from './modules';
+export * from './canon';

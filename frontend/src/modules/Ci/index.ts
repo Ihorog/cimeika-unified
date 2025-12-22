@@ -6,3 +6,4 @@ export { default as CiView } from './views/CiView';
 export { useCi } from './hooks/useCi';
 export { ciService } from './service';
 export { useCiStore } from './store';
+export { CiModule, ciModule } from './module';
