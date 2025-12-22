@@ -4,7 +4,7 @@
  */
 
 import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
-import { ciService } from '../service';
+import { ciService } from './service';
 
 /**
  * Ci Module class implementing ModuleInterface

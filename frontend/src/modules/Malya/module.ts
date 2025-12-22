@@ -4,7 +4,7 @@
  */
 
 import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
-import { malyaService } from '../service';
+import { malyaService } from './service';
 
 /**
  * Malya Module class implementing ModuleInterface

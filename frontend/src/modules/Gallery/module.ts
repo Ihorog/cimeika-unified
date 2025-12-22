@@ -4,7 +4,7 @@
  */
 
 import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
-import { galleryService } from '../service';
+import { galleryService } from './service';
 
 /**
  * Gallery Module class implementing ModuleInterface

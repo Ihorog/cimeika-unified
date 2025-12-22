@@ -4,7 +4,7 @@
  */
 
 import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
-import { nastrijService } from '../service';
+import { nastrijService } from './service';
 
 /**
  * Nastrij Module class implementing ModuleInterface

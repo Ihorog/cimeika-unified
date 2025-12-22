@@ -4,7 +4,7 @@
  */
 
 import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
-import { calendarService } from '../service';
+import { calendarService } from './service';
 
 /**
  * Calendar Module class implementing ModuleInterface

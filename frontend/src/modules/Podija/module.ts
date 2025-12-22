@@ -4,7 +4,7 @@
  */
 
 import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
-import { podijaService } from '../service';
+import { podijaService } from './service';
 
 /**
  * Podija Module class implementing ModuleInterface

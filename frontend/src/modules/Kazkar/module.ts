@@ -4,7 +4,7 @@
  */
 
 import type { ModuleInterface, ModuleStatus, ModuleMetadata } from '../../../types';
-import { kazkarService } from '../service';
+import { kazkarService } from './service';
 
 /**
  * Kazkar Module class implementing ModuleInterface
