@@ -28,7 +28,8 @@
       "@components/*": ["./src/components/*"],
       "@stores/*": ["./src/stores/*"],
       "@services/*": ["./src/services/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@types": ["./src/types"]
     }
   },
   "include": ["src"],
