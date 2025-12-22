@@ -112,8 +112,11 @@ Each module has its own API prefix:
 
 ### Kazkar Module
 - `GET /api/kazkar/library` — Get library overview
-- `GET /api/kazkar/entries` — Get all entries
-- `POST /api/kazkar/entries` — Create entry
+- `GET /api/kazkar/stories` — Get all stories (formerly entries)
+- `GET /api/kazkar/legends` — Get all legends (including Ci legends)
+- `POST /api/kazkar/stories` — Create story or legend
+
+> **Note**: Kazkar is the official repository (аптека) for the **Ci Legends Library**. All Ci system legends are stored here with `story_type: "legend"` and tag `"ci"`. See [CI_LEGENDS_PLACEMENT.md](../CI_LEGENDS_PLACEMENT.md) for details.
 
 ### Malya Module
 - `GET /api/malya/ideas` — Get all ideas
