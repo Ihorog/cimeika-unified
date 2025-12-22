@@ -10,9 +10,13 @@ from app.modules.nastrij import api as nastrij_api
 from app.modules.malya import api as malya_api
 from app.modules.gallery import api as gallery_api
 from app.modules.calendar import api as calendar_api
+from app.api import modules as modules_api
 
 # Create main API router
 api_router = APIRouter()
+
+# Include core orchestration router
+api_router.include_router(modules_api.router, tags=["core"])
 
 # Include module routers (they already have their own prefixes)
 api_router.include_router(ci_api.router, tags=["ci"])

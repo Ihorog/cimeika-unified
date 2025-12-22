@@ -23,6 +23,11 @@ export interface ModuleInterface {
   initialize(): Promise<boolean>;
   
   /**
+   * Shutdown the module gracefully
+   */
+  shutdown?(): Promise<boolean>;
+  
+  /**
    * Get module metadata
    */
   getMetadata(): ModuleMetadata;
