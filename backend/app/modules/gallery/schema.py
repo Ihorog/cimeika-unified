@@ -16,7 +16,7 @@ class GalleryItemBase(BaseModel):
     thumbnail_url: Optional[str] = None
     file_size: Optional[int] = None
     mime_type: Optional[str] = None
-    metadata: Optional[dict] = None
+    media_metadata: Optional[dict] = None
     tags: List[str] = Field(default_factory=list)
     source_trace: Optional[str] = None
 
@@ -35,7 +35,7 @@ class GalleryItemUpdate(BaseModel):
     thumbnail_url: Optional[str] = None
     file_size: Optional[int] = None
     mime_type: Optional[str] = None
-    metadata: Optional[dict] = None
+    media_metadata: Optional[dict] = None
     tags: Optional[List[str]] = None
     source_trace: Optional[str] = None
 
@@ -48,4 +48,3 @@ class GalleryItemSchema(GalleryItemBase):
     canon_bundle_id: str = CANON_BUNDLE_ID
     
     model_config = ConfigDict(from_attributes=True)
-
