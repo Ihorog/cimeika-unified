@@ -1,7 +1,351 @@
 # cimeika_seo_matrix.yaml
-# SEO AUTOMATION + GOVERNANCE LOOP (STAGE 46/∞)
-# Source of truth for SEO monitoring, alerting, and governance cadence
+# SEO STRATEGY MATRIX — Family Memory & Planning Hub
+# Version 1.0.0
+# Source of truth for SEO strategy, content patterns, and governance
 
+version: "1.0.0"
+
+status:
+  audit_external: "+"
+  positioning_wedge: "+"
+  matrix_7x7: "+"
+  blockers:
+    brand_keyword_conflict_semeyka: "-"
+    landing_value_prop_clarity: "-"
+    international_ia_en: "-"
+    indexation_technical_seo: "-"
+
+product_strategy:
+  wedge_market: "Family Memory & Planning Hub"
+  core_promise: "Фото → Історія → Календар → Друк"
+  primary_cta: "Створити приватний сімейний простір"
+  non_goals_now:
+    - "Публічне позиціонування 'Ci' як ядра"
+    - "API-first зовні"
+
+network_matrix:
+  modules:
+    - id: ci
+      name: "Ci"
+      role: "інтерфейс + оркестрація дій"
+    - id: kazkar
+      name: "Kazkar"
+      role: "історії + сенс + легенда ci"
+    - id: podija
+      name: "PoDija"
+      role: "події + майбутнє"
+    - id: nastrij
+      name: "Nastrij"
+      role: "стан + емоційний контекст"
+    - id: malya
+      name: "Malya"
+      role: "ідеї + варіанти"
+    - id: calendar
+      name: "Calendar"
+      role: "ритм + планування"
+    - id: gallery
+      name: "Gallery"
+      role: "архів + друк + шеринґ"
+  
+  traffic_categories:
+    - id: use_cases
+      name: "Сценарії"
+    - id: how_to
+      name: "Як зробити"
+    - id: templates
+      name: "Шаблони"
+    - id: examples
+      name: "Приклади/історії"
+    - id: features
+      name: "Функції"
+    - id: problems
+      name: "Проблеми/виправлення"
+    - id: comparisons
+      name: "Порівняння"
+
+patterns_49:
+  ci:
+    use_cases:
+      intent: "action hub"
+      pages:
+        - "ci/actions"
+        - "ci/quick-panel"
+    how_to:
+      intent: "onboarding"
+      pages:
+        - "ci/how-to-start"
+        - "ci/how-to-private-space"
+    templates:
+      intent: "ui templates"
+      pages:
+        - "ci/templates/overlay"
+        - "ci/templates/radial-menu"
+    examples:
+      intent: "demo flows"
+      pages:
+        - "ci/examples/family-flow"
+        - "ci/examples/print-flow"
+    features:
+      intent: "capabilities"
+      pages:
+        - "ci/features"
+        - "ci/security"
+    problems:
+      intent: "fix"
+      pages:
+        - "ci/troubleshooting/login"
+        - "ci/troubleshooting/share"
+    comparisons:
+      intent: "evaluate"
+      pages:
+        - "ci/vs/notion"
+        - "ci/vs/google-photos"
+
+  kazkar:
+    use_cases:
+      intent: "story capture"
+      pages:
+        - "kazkar/family-stories"
+        - "kazkar/voice-notes"
+    how_to:
+      intent: "story creation"
+      pages:
+        - "kazkar/how-to/story-from-photos"
+        - "kazkar/how-to/legend-mode"
+    templates:
+      intent: "story templates"
+      pages:
+        - "kazkar/templates/birthday"
+        - "kazkar/templates/travel"
+    examples:
+      intent: "examples"
+      pages:
+        - "kazkar/examples/wedding"
+        - "kazkar/examples/winter"
+    features:
+      intent: "features"
+      pages:
+        - "kazkar/features/tts"
+        - "kazkar/features/slides"
+    problems:
+      intent: "fix"
+      pages:
+        - "kazkar/troubleshooting/audio"
+        - "kazkar/troubleshooting/export"
+    comparisons:
+      intent: "evaluate"
+      pages:
+        - "kazkar/vs/journals"
+        - "kazkar/vs/story-apps"
+
+  podija:
+    use_cases:
+      intent: "event planning"
+      pages:
+        - "podija/family-events"
+        - "podija/milestones"
+    how_to:
+      intent: "plan"
+      pages:
+        - "podija/how-to/birthday-plan"
+        - "podija/how-to/holiday-plan"
+    templates:
+      intent: "event templates"
+      pages:
+        - "podija/templates/birthday"
+        - "podija/templates/trip"
+    examples:
+      intent: "examples"
+      pages:
+        - "podija/examples/annual"
+        - "podija/examples/weekend"
+    features:
+      intent: "features"
+      pages:
+        - "podija/features/reminders"
+        - "podija/features/collab"
+    problems:
+      intent: "fix"
+      pages:
+        - "podija/troubleshooting/invites"
+        - "podija/troubleshooting/timezones"
+    comparisons:
+      intent: "evaluate"
+      pages:
+        - "podija/vs/google-calendar"
+        - "podija/vs-trello"
+
+  nastrij:
+    use_cases:
+      intent: "state tracking"
+      pages:
+        - "nastrij/family-mood"
+        - "nastrij/daily-checkin"
+    how_to:
+      intent: "use"
+      pages:
+        - "nastrij/how-to/checkin"
+        - "nastrij/how-to/trends"
+    templates:
+      intent: "tags"
+      pages:
+        - "nastrij/templates/tags"
+        - "nastrij/templates/scales"
+    examples:
+      intent: "examples"
+      pages:
+        - "nastrij/examples/family"
+        - "nastrij/examples/personal"
+    features:
+      intent: "features"
+      pages:
+        - "nastrij/features/insights"
+        - "nastrij/features/alerts"
+    problems:
+      intent: "fix"
+      pages:
+        - "nastrij/troubleshooting/privacy"
+        - "nastrij/troubleshooting/export"
+    comparisons:
+      intent: "evaluate"
+      pages:
+        - "nastrij/vs-mood-apps"
+        - "nastrij/vs-notes"
+
+  malya:
+    use_cases:
+      intent: "idea vault"
+      pages:
+        - "malya/family-ideas"
+        - "malya/gifts"
+    how_to:
+      intent: "organize"
+      pages:
+        - "malya/how-to/brainstorm"
+        - "malya/how-to/prioritize"
+    templates:
+      intent: "idea templates"
+      pages:
+        - "malya/templates/gifts"
+        - "malya/templates/trips"
+    examples:
+      intent: "examples"
+      pages:
+        - "malya/examples/summer"
+        - "malya/examples/learning"
+    features:
+      intent: "features"
+      pages:
+        - "malya/features/boards"
+        - "malya/features/share"
+    problems:
+      intent: "fix"
+      pages:
+        - "malya/troubleshooting/dup"
+        - "malya/troubleshooting/sync"
+    comparisons:
+      intent: "evaluate"
+      pages:
+        - "malya/vs-notion"
+        - "malya/vs-miro"
+
+  calendar:
+    use_cases:
+      intent: "family calendar"
+      pages:
+        - "calendar/family"
+        - "calendar/school"
+    how_to:
+      intent: "setup"
+      pages:
+        - "calendar/how-to/shared"
+        - "calendar/how-to/printing"
+    templates:
+      intent: "calendar templates"
+      pages:
+        - "calendar/templates/monthly"
+        - "calendar/templates/annual"
+    examples:
+      intent: "examples"
+      pages:
+        - "calendar/examples/birthdays"
+        - "calendar/examples/trips"
+    features:
+      intent: "features"
+      pages:
+        - "calendar/features/sync"
+        - "calendar/features/reminders"
+    problems:
+      intent: "fix"
+      pages:
+        - "calendar/troubleshooting/integrations"
+        - "calendar/troubleshooting/locale"
+    comparisons:
+      intent: "evaluate"
+      pages:
+        - "calendar/vs-google"
+        - "calendar/vs-apple"
+
+  gallery:
+    use_cases:
+      intent: "photo hub"
+      pages:
+        - "gallery/family"
+        - "gallery/albums"
+    how_to:
+      intent: "create"
+      pages:
+        - "gallery/how-to/album"
+        - "gallery/how-to/print-ready"
+    templates:
+      intent: "print templates"
+      pages:
+        - "gallery/templates/calendar"
+        - "gallery/templates/photobook"
+    examples:
+      intent: "examples"
+      pages:
+        - "gallery/examples/wedding"
+        - "gallery/examples/travel"
+    features:
+      intent: "features"
+      pages:
+        - "gallery/features/slider"
+        - "gallery/features/collab"
+    problems:
+      intent: "fix"
+      pages:
+        - "gallery/troubleshooting/uploads"
+        - "gallery/troubleshooting/quality"
+    comparisons:
+      intent: "evaluate"
+      pages:
+        - "gallery/vs-google-photos"
+        - "gallery/vs-icloud"
+
+execution_strategy_next:
+  priority_order:
+    - "+ define single landing promise + CTA + first wedge pages"
+    - "+ build IA: /en and /ua, canonical slugs латиницею"
+    - "+ technical SEO: sitemap/robots/canonicals/og/schema"
+    - "+ content factory: 49 pages skeleton (thin → expand)"
+  gates:
+    go_to_stage_2_when:
+      - "landing bounce improves"
+      - "organic impressions start growing"
+      - "first 20 pages indexed cleanly"
+
+# SEO Technical Configuration
+seo:
+  canonical_lang: en
+  hreflang:
+    en: "/en/{module}/{category}"
+    ua: "/ua/{module}/{category}"
+  rules:
+    title_max: 60
+    description_max: 155
+
+# SEO Automation Layer (preserved from previous version)
 seo_automation_layer:
   enabled: true
   response_time_minutes: 15
@@ -20,6 +364,7 @@ seo_automation_layer:
       tolerance_percent: 3
       action: auto_ticket
 
+# Governance Loop (preserved from previous version)
 seo_governance_loop:
   enabled: true
   decision_authority: seo_lead
@@ -38,5 +383,3 @@ governance_status:
   system_reactivity: high
   operational_risk: controlled
   audit_ready: true
-
-matrix_version: "46.0"
