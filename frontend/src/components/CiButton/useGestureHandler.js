@@ -4,8 +4,11 @@
  */
 import { useRef, useCallback } from 'react';
 
-const SWIPE_THRESHOLD = 50; // Minimum distance in pixels to be considered a swipe
-const SWIPE_VELOCITY_THRESHOLD = 0.3; // Minimum velocity (px/ms)
+// Gesture configuration constants
+const GESTURE_CONFIG = {
+  SWIPE_THRESHOLD: 50, // Minimum distance in pixels to be considered a swipe
+  SWIPE_VELOCITY_THRESHOLD: 0.3, // Minimum velocity (px/ms)
+};
 
 export const useGestureHandler = (onSwipe) => {
   const touchStartRef = useRef(null);
@@ -46,7 +49,7 @@ export const useGestureHandler = (onSwipe) => {
     const absY = Math.abs(deltaY);
 
     // Check if movement is significant enough
-    if (absX < SWIPE_THRESHOLD && absY < SWIPE_THRESHOLD) {
+    if (absX < GESTURE_CONFIG.SWIPE_THRESHOLD && absY < GESTURE_CONFIG.SWIPE_THRESHOLD) {
       return;
     }
 
@@ -54,7 +57,7 @@ export const useGestureHandler = (onSwipe) => {
     const velocity = Math.max(absX, absY) / deltaTime;
 
     // Ensure minimum velocity
-    if (velocity < SWIPE_VELOCITY_THRESHOLD) {
+    if (velocity < GESTURE_CONFIG.SWIPE_VELOCITY_THRESHOLD) {
       return;
     }
 

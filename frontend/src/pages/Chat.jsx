@@ -4,6 +4,11 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 
+// Configuration constants
+const CHAT_CONFIG = {
+  CONVERSATION_HISTORY_LIMIT: 10, // Number of messages to keep in context
+};
+
 export default function Chat() {
   const [messages, setMessages] = useState([
     {
@@ -54,8 +59,8 @@ export default function Chat() {
     setIsLoading(true);
 
     try {
-      // Prepare conversation history (last 10 messages for context)
-      const history = messages.slice(-10).map(msg => ({
+      // Prepare conversation history (last N messages for context)
+      const history = messages.slice(-CHAT_CONFIG.CONVERSATION_HISTORY_LIMIT).map(msg => ({
         role: msg.role,
         content: msg.content
       }));

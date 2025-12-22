@@ -3,11 +3,21 @@ OpenAI Integration Service
 Provides conversational AI capabilities using OpenAI GPT models
 """
 import os
+import logging
 from typing import List, Dict, Optional
 from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Configuration constants
+DEFAULT_MODEL = os.getenv('OPENAI_MODEL', 'gpt-3.5-turbo')
+DEFAULT_TEMPERATURE = float(os.getenv('OPENAI_TEMPERATURE', '0.7'))
+DEFAULT_MAX_TOKENS = int(os.getenv('OPENAI_MAX_TOKENS', '500'))
 
 
 class OpenAIService:
@@ -19,7 +29,9 @@ class OpenAIService:
             raise ValueError("OPENAI_API_KEY environment variable is not set")
         
         self.client = OpenAI(api_key=self.api_key)
-        self.model = "gpt-3.5-turbo"  # Can be upgraded to gpt-4 if needed
+        self.model = DEFAULT_MODEL
+        self.temperature = DEFAULT_TEMPERATURE
+        self.max_tokens = DEFAULT_MAX_TOKENS
         
         # System prompt for Ci personality
         self.system_prompt = """Ти — Ci, центральне ядро інтелектуальної системи Cimeika.
@@ -72,8 +84,8 @@ class OpenAIService:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                temperature=0.7,
-                max_tokens=500,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
                 top_p=1.0,
                 frequency_penalty=0.0,
                 presence_penalty=0.0
@@ -84,7 +96,7 @@ class OpenAIService:
             
         except Exception as e:
             # Log error and return fallback message
-            print(f"OpenAI API Error: {str(e)}")
+            logger.error(f"OpenAI API Error: {str(e)}")
             return f"Вибачте, виникла помилка при обробці запиту. Спробуйте пізніше. (Error: {str(e)})"
     
     def is_available(self) -> bool:
@@ -95,6 +107,7 @@ class OpenAIService:
 # Singleton instance
 try:
     openai_service = OpenAIService()
+    logger.info("OpenAI service initialized successfully")
 except ValueError as e:
-    print(f"Warning: {str(e)}")
+    logger.warning(f"OpenAI service not available: {str(e)}")
     openai_service = None
