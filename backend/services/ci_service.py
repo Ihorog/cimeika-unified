@@ -5,6 +5,7 @@ Business logic for Ci module
 from datetime import datetime
 from typing import List, Optional
 from ..models.ci_models import CiState, CiChatMessage, CiChatResponse, ModuleInfo, HealthStatus
+from .openai_service import openai_service
 
 
 class CiService:
@@ -35,12 +36,35 @@ class CiService:
         )
 
     def process_chat(self, message: CiChatMessage) -> CiChatResponse:
-        """Process chat message (stub implementation)"""
-        return CiChatResponse(
-            reply=f"Ci отримав ваше повідомлення: '{message.message}'. Функціонал у розробці.",
-            timestamp=datetime.utcnow().isoformat(),
-            context=message.context
-        )
+        """Process chat message with OpenAI GPT"""
+        try:
+            # Extract conversation history from context if provided
+            conversation_history = None
+            if message.context and 'history' in message.context:
+                conversation_history = message.context['history']
+            
+            # Use OpenAI service if available
+            if openai_service and openai_service.is_available():
+                reply = openai_service.chat(
+                    user_message=message.message,
+                    conversation_history=conversation_history
+                )
+            else:
+                # Fallback response if OpenAI is not available
+                reply = f"Ci отримав ваше повідомлення: '{message.message}'. Функціонал у розробці. (OpenAI не налаштовано)"
+            
+            return CiChatResponse(
+                reply=reply,
+                timestamp=datetime.utcnow().isoformat(),
+                context=message.context
+            )
+        except Exception as e:
+            # Error handling
+            return CiChatResponse(
+                reply=f"Вибачте, виникла помилка: {str(e)}",
+                timestamp=datetime.utcnow().isoformat(),
+                context=message.context
+            )
 
 
 # Singleton instance

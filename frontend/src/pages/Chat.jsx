@@ -1,72 +1,198 @@
 /**
- * Chat Page - Ci Chat Interface
- * Basic tap action target for CiButton
+ * Chat Page - Ci Chat Interface with OpenAI GPT
+ * Interactive chat with conversational AI
  */
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export default function Chat() {
-  return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">
-        💬 Чат з Ci
-      </h1>
-      <p className="mt-4 text-lg text-gray-700">
-        Вітаємо в чат-інтерфейсі Ci — центральному комунікаційному модулі Cimeika.
-      </p>
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      content: 'Привіт! Я Ci — центральне ядро Cimeika. Як я можу тобі допомогти? 😊',
+      timestamp: new Date().toISOString()
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  // Auto-scroll to bottom when new messages arrive
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    
+    if (!inputMessage.trim() || isLoading) {
+      return;
+    }
+
+    const userMessage = inputMessage.trim();
+    setInputMessage('');
+    
+    // Add user message to chat
+    const newUserMessage = {
+      role: 'user',
+      content: userMessage,
+      timestamp: new Date().toISOString()
+    };
+    
+    setMessages(prev => [...prev, newUserMessage]);
+    setIsLoading(true);
+
+    try {
+      // Prepare conversation history (last 10 messages for context)
+      const history = messages.slice(-10).map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+
+      // Send to backend
+      const response = await fetch(`${API_BASE}/api/ci/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          context: {
+            history: history
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from Ci');
+      }
+
+      const data = await response.json();
       
-      <div className="mt-8 bg-indigo-50 border border-indigo-200 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-indigo-900 mb-3">
-          Функціонал чату
-        </h2>
-        <ul className="space-y-2 text-gray-700">
-          <li>✨ Швидкий доступ до всіх модулів</li>
-          <li>🔍 Пошук по всій системі</li>
-          <li>💡 Підказки та рекомендації</li>
-          <li>⚙️ Налаштування та управління</li>
-          <li>📊 Огляд статистики та стану системи</li>
-        </ul>
+      // Add AI response to chat
+      const aiMessage = {
+        role: 'assistant',
+        content: data.reply,
+        timestamp: data.timestamp
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      
+      // Add error message
+      const errorMessage = {
+        role: 'assistant',
+        content: 'Вибачте, виникла помилка при з\'єднанні з сервером. Переконайтеся, що бекенд запущений та налаштований. 😔',
+        timestamp: new Date().toISOString()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
+    }
+  };
+
+  return (
+    <div className="flex flex-col h-[calc(100vh-140px)] max-w-4xl mx-auto p-4">
+      {/* Header */}
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold text-gray-900">
+          💬 Чат з Ci
+        </h1>
+        <p className="mt-2 text-gray-600">
+          Інтелектуальний асистент Cimeika з підтримкою GPT
+        </p>
       </div>
 
-      <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Як користуватися Ci-кнопкою?
-        </h2>
-        <div className="space-y-4 text-gray-700">
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">👆</span>
-            <div>
-              <strong>Тап:</strong> Відкриває цей чат-інтерфейс
+      {/* Messages Container */}
+      <div className="flex-1 overflow-y-auto bg-white border border-gray-200 rounded-lg p-4 mb-4 shadow-sm">
+        <div className="space-y-4">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                  message.role === 'user'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-100 text-gray-900'
+                }`}
+              >
+                <p className="whitespace-pre-wrap">{message.content}</p>
+                <p
+                  className={`text-xs mt-1 ${
+                    message.role === 'user' ? 'text-indigo-200' : 'text-gray-500'
+                  }`}
+                >
+                  {new Date(message.timestamp).toLocaleTimeString('uk-UA', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">↑</span>
-            <div>
-              <strong>Свайп вгору:</strong> ПоДія — події та активації
+          ))}
+          
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-gray-100 rounded-lg px-4 py-2">
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">↓</span>
-            <div>
-              <strong>Свайп вниз:</strong> Настрій — емоційні стани
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">←</span>
-            <div>
-              <strong>Свайп вліво:</strong> Казкар — пам'ять та історії
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">→</span>
-            <div>
-              <strong>Свайп вправо:</strong> Маля — ідеї та творчість
-            </div>
-          </div>
+          )}
+          
+          <div ref={messagesEndRef} />
         </div>
       </div>
 
-      <div className="mt-6 text-sm text-gray-500 text-center">
-        <p>Ci-кнопка завжди доступна в правому нижньому куті екрану</p>
+      {/* Input Form */}
+      <form onSubmit={handleSendMessage} className="flex gap-2">
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Напишіть повідомлення..."
+          disabled={isLoading}
+          className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+        />
+        <button
+          type="submit"
+          disabled={isLoading || !inputMessage.trim()}
+          className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+        >
+          {isLoading ? '...' : 'Відправити'}
+        </button>
+      </form>
+
+      {/* Help Text */}
+      <div className="mt-4 text-sm text-gray-500 text-center">
+        <p>Натисніть Enter для відправки, Shift+Enter для нового рядка</p>
       </div>
     </div>
   );
