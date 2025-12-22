@@ -1,0 +1,240 @@
+/**
+ * Ci Button Styles
+ * Floating action button with gesture controls
+ */
+
+/* Container positioned in thumb zone */
+.ci-button-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Main button */
+.ci-button {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 12px rgba(99, 102, 241, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  padding: 12px;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  touch-action: none; /* Prevent default touch behaviors */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Desktop size */
+@media (min-width: 768px) {
+  .ci-button {
+    width: 72px;
+    height: 72px;
+    padding: 14px;
+  }
+}
+
+/* Logo inside button */
+.ci-button-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  /* Removed filter to make logo visible */
+  opacity: 1;
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect (desktop) */
+@media (hover: hover) {
+  .ci-button:hover {
+    transform: scale(1.1);
+    box-shadow: 
+      0 6px 20px rgba(99, 102, 241, 0.4),
+      0 3px 8px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  }
+
+  .ci-button:hover .ci-button-logo {
+    transform: rotate(15deg);
+  }
+}
+
+/* Active/Pressed state */
+.ci-button:active,
+.ci-button.pressed {
+  transform: scale(0.95);
+  box-shadow: 
+    0 2px 8px rgba(99, 102, 241, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+}
+
+/* Focus state for accessibility */
+.ci-button:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 4px;
+}
+
+/* Swiping state */
+.ci-button.swiping {
+  transform: scale(1.05);
+}
+
+/* Swipe direction indicators */
+.swipe-indicator {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  background: rgba(99, 102, 241, 0.95);
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.2s ease-out, fadeOut 0.1s ease-in 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 999;
+}
+
+/* Direction-specific positioning */
+.swipe-indicator.swipe-up {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+}
+
+.swipe-indicator.swipe-down {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+}
+
+.swipe-indicator.swipe-left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-12px);
+}
+
+.swipe-indicator.swipe-right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(12px);
+}
+
+.swipe-arrow {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Hint pulse animation */
+.ci-button-hint {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s ease-in-out infinite;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.hint-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-12px) scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .ci-button-container {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .swipe-indicator {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+/* Ensure minimum tap target size for accessibility */
+@media (max-width: 480px) {
+  .ci-button {
+    min-width: 56px;
+    min-height: 56px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .ci-button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ci-button,
+  .ci-button-logo,
+  .swipe-indicator,
+  .ci-button-hint {
+    animation: none;
+    transition: none;
+  }
+}

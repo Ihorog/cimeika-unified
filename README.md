@@ -57,7 +57,8 @@ cd cimeika-unified
 
 # Налаштування environment
 cp .env.template .env
-# Відредагувати .env з вашими ключами
+# Відредагувати .env з вашими ключами (включно з OPENAI_API_KEY)
+# Детальні інструкції: OPENAI_SETUP.md
 
 # Запуск всього ecosystem
 docker-compose up -d
@@ -65,6 +66,16 @@ docker-compose up -d
 # Backend буде доступний на http://localhost:5000
 # Frontend буде доступний на http://localhost:3000
 ```
+
+### 🤖 OpenAI Integration
+
+Для роботи чат-функціоналу з GPT потрібен OpenAI API ключ:
+
+1. Отримайте ключ на https://platform.openai.com/api-keys
+2. Додайте `OPENAI_API_KEY` в `.env` файл
+3. **Для CI/CD**: Додайте секрет в GitHub Settings → Secrets → Actions
+
+📖 **Детальна інструкція**: [`OPENAI_SETUP.md`](OPENAI_SETUP.md)
 
 ---
 
