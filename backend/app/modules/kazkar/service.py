@@ -75,9 +75,16 @@ class KazkarService(ModuleInterface, ServiceInterface):
         """Get a story by ID"""
         return db.query(KazkarStory).filter(KazkarStory.id == story_id).first()
     
-    def get_stories(self, db: Session, skip: int = 0, limit: int = 100) -> List[KazkarStory]:
-        """Get all stories with pagination"""
-        return db.query(KazkarStory).offset(skip).limit(limit).all()
+    def get_stories(self, db: Session, skip: int = 0, limit: int = 100, story_type: Optional[str] = None) -> List[KazkarStory]:
+        """Get all stories with pagination and optional type filter"""
+        query = db.query(KazkarStory)
+        if story_type:
+            query = query.filter(KazkarStory.story_type == story_type)
+        return query.offset(skip).limit(limit).all()
+    
+    def get_legends(self, db: Session, skip: int = 0, limit: int = 100) -> List[KazkarStory]:
+        """Get only legends"""
+        return self.get_stories(db, skip=skip, limit=limit, story_type='legend')
     
     def update_story(self, db: Session, story_id: int, story_data: KazkarStoryUpdate) -> Optional[KazkarStory]:
         """Update a story"""
@@ -102,4 +109,18 @@ class KazkarService(ModuleInterface, ServiceInterface):
         db.delete(db_story)
         db.commit()
         return True
+    
+    def get_stories_count_by_type(self, db: Session) -> Dict[str, int]:
+        """Get count of stories by type using SQL GROUP BY"""
+        from sqlalchemy import func
+        results = db.query(
+            KazkarStory.story_type,
+            func.count(KazkarStory.id)
+        ).group_by(KazkarStory.story_type).all()
+        
+        counts = {}
+        for story_type, count in results:
+            type_key = story_type or 'unknown'
+            counts[type_key] = count
+        return counts
 

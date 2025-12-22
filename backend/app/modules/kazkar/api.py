@@ -28,6 +28,17 @@ async def get_kazkar_status():
     }
 
 
+@router.get("/stats")
+async def get_stats(db: Session = Depends(get_db)):
+    """Get statistics about stories by type"""
+    counts = service.get_stories_count_by_type(db)
+    total = sum(counts.values())
+    return {
+        "total_stories": total,
+        "by_type": counts
+    }
+
+
 @router.post("/stories", response_model=KazkarStorySchema)
 async def create_story(story: KazkarStoryCreate, db: Session = Depends(get_db)):
     """Create a new story"""
@@ -35,9 +46,15 @@ async def create_story(story: KazkarStoryCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/stories", response_model=List[KazkarStorySchema])
-async def list_stories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """Get all stories with pagination"""
-    return service.get_stories(db, skip=skip, limit=limit)
+async def list_stories(skip: int = 0, limit: int = 100, story_type: str = None, db: Session = Depends(get_db)):
+    """Get all stories with pagination and optional type filter"""
+    return service.get_stories(db, skip=skip, limit=limit, story_type=story_type)
+
+
+@router.get("/legends", response_model=List[KazkarStorySchema])
+async def list_legends(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """Get only legends"""
+    return service.get_legends(db, skip=skip, limit=limit)
 
 
 @router.get("/stories/{story_id}", response_model=KazkarStorySchema)

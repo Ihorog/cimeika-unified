@@ -3,88 +3,102 @@
  * API functions for Kazkar (Memory/Stories) module
  */
 
-import type { KazkarEntry, CreateKazkarEntryRequest, KazkarLibrary } from './types';
+import type { KazkarEntry, CreateKazkarEntryRequest } from './types';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const kazkarApi = {
   /**
-   * Get library overview
+   * Get library overview (stats)
    */
-  async getLibrary(): Promise<KazkarLibrary> {
-    const response = await fetch(`${API_BASE}/api/kazkar/library`);
+  async getStats(): Promise<{ total_stories: number; by_type: Record<string, number> }> {
+    const response = await fetch(`${API_BASE}/api/v1/kazkar/stats`);
     if (!response.ok) {
-      throw new Error('Failed to fetch Kazkar library');
+      throw new Error('Failed to fetch Kazkar stats');
     }
     return response.json();
   },
 
   /**
-   * Get all entries
+   * Get all stories with optional type filter
    */
-  async getEntries(): Promise<KazkarEntry[]> {
-    const response = await fetch(`${API_BASE}/api/kazkar/entries`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch Kazkar entries');
+  async getStories(storyType?: string): Promise<KazkarEntry[]> {
+    const url = new URL(`${API_BASE}/api/v1/kazkar/stories`);
+    if (storyType) {
+      url.searchParams.append('story_type', storyType);
     }
-    const data = await response.json();
-    return data.entries || [];
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      throw new Error('Failed to fetch Kazkar stories');
+    }
+    return response.json();
   },
 
   /**
-   * Create a new entry
+   * Get only legends
    */
-  async createEntry(entry: CreateKazkarEntryRequest): Promise<KazkarEntry> {
-    const response = await fetch(`${API_BASE}/api/kazkar/entries`, {
+  async getLegends(): Promise<KazkarEntry[]> {
+    const response = await fetch(`${API_BASE}/api/v1/kazkar/legends`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch legends');
+    }
+    return response.json();
+  },
+
+  /**
+   * Create a new story
+   */
+  async createStory(story: CreateKazkarEntryRequest): Promise<KazkarEntry> {
+    const response = await fetch(`${API_BASE}/api/v1/kazkar/stories`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(entry),
+      body: JSON.stringify(story),
     });
     if (!response.ok) {
-      throw new Error('Failed to create Kazkar entry');
+      throw new Error('Failed to create story');
     }
     return response.json();
   },
 
   /**
-   * Get entry by ID
+   * Get story by ID
    */
-  async getEntry(id: string): Promise<KazkarEntry> {
-    const response = await fetch(`${API_BASE}/api/kazkar/entries/${id}`);
+  async getStory(id: number): Promise<KazkarEntry> {
+    const response = await fetch(`${API_BASE}/api/v1/kazkar/stories/${id}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch Kazkar entry');
+      throw new Error('Failed to fetch story');
     }
     return response.json();
   },
 
   /**
-   * Update entry
+   * Update story
    */
-  async updateEntry(id: string, entry: Partial<KazkarEntry>): Promise<KazkarEntry> {
-    const response = await fetch(`${API_BASE}/api/kazkar/entries/${id}`, {
+  async updateStory(id: number, story: Partial<KazkarEntry>): Promise<KazkarEntry> {
+    const response = await fetch(`${API_BASE}/api/v1/kazkar/stories/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(entry),
+      body: JSON.stringify(story),
     });
     if (!response.ok) {
-      throw new Error('Failed to update Kazkar entry');
+      throw new Error('Failed to update story');
     }
     return response.json();
   },
 
   /**
-   * Delete entry
+   * Delete story
    */
-  async deleteEntry(id: string): Promise<void> {
-    const response = await fetch(`${API_BASE}/api/kazkar/entries/${id}`, {
+  async deleteStory(id: number): Promise<void> {
+    const response = await fetch(`${API_BASE}/api/v1/kazkar/stories/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
-      throw new Error('Failed to delete Kazkar entry');
+      throw new Error('Failed to delete story');
     }
   },
 };
