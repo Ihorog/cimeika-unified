@@ -26,21 +26,31 @@ export const KazkarEntryCard: React.FC<KazkarEntryCardProps> = ({ entry, onClick
     fact: '#10b981',
   };
 
+  const typeLabel = {
+    story: 'Історія',
+    memory: 'Спогад',
+    legend: 'Легенда',
+    fact: 'Факт',
+  };
+
+  const storyType = entry.story_type || 'memory';
+
   return (
     <div
       style={{
         background: '#fff',
         padding: '1rem',
         borderRadius: '8px',
-        borderLeft: `4px solid ${typeColor[entry.type]}`,
+        borderLeft: `4px solid ${typeColor[storyType]}`,
         cursor: onClick ? 'pointer' : 'default',
         marginBottom: '0.5rem',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
       }}
       onClick={onClick}
     >
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
         <span style={{ fontSize: '1.5rem', marginRight: '0.5rem' }}>
-          {typeEmoji[entry.type]}
+          {typeEmoji[storyType]}
         </span>
         <strong>{entry.title}</strong>
       </div>
@@ -48,9 +58,12 @@ export const KazkarEntryCard: React.FC<KazkarEntryCardProps> = ({ entry, onClick
         {entry.content.length > 200 ? `${entry.content.substring(0, 200)}...` : entry.content}
       </p>
       <div style={{ fontSize: '0.875rem', color: '#888' }}>
-        <div>Тип: {entry.type}</div>
-        <div>Час події: {new Date(entry.timestamp).toLocaleDateString('uk-UA')}</div>
-        <div>Створено: {new Date(entry.created_at).toLocaleDateString('uk-UA')}</div>
+        <div>Тип: {typeLabel[storyType]}</div>
+        {entry.location && <div>Місце: {entry.location}</div>}
+        {entry.participants && entry.participants.length > 0 && (
+          <div>Учасники: {entry.participants.join(', ')}</div>
+        )}
+        <div>Час: {new Date(entry.time).toLocaleDateString('uk-UA')}</div>
       </div>
       {entry.tags && entry.tags.length > 0 && (
         <div style={{ marginTop: '0.5rem' }}>
