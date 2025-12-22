@@ -3,7 +3,7 @@
  * API functions for Kazkar (Memory/Stories) module
  */
 
-import type { KazkarEntry, CreateKazkarEntryRequest, KazkarLibrary } from './types';
+import type { KazkarEntry, CreateKazkarEntryRequest } from './types';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
