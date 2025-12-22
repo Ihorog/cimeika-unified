@@ -3,15 +3,21 @@
  * Central interaction element with 4-axis swipe navigation
  */
 import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useGestureHandler } from './useGestureHandler';
 import CimeikaLogo from '../../modules/image/cimeika-logo.svg';
 import './CiButton.css';
 
 const CiButton = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [isPressed, setIsPressed] = useState(false);
+
+  // Hide button on welcome page
+  if (location.pathname === '/') {
+    return null;
+  }
 
   // Handle swipe gestures
   const handleSwipe = useCallback((direction) => {
