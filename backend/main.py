@@ -311,6 +311,224 @@ def seo_v2_sitemap():
         }), 500
 
 
+# ===== New SEO Matrix API (Family Memory & Planning Hub) =====
+
+@app.route('/api/v1/seo/matrix/strategy')
+def seo_matrix_strategy():
+    """Get product strategy and positioning"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        return jsonify({
+            'status': 'success',
+            'strategy': {
+                'wedge_market': service.wedge_market,
+                'core_promise': service.core_promise,
+                'primary_cta': service.primary_cta,
+                'non_goals': service.product_strategy.get('non_goals_now', [])
+            }
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/modules')
+def seo_matrix_modules():
+    """Get all modules"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        return jsonify({
+            'status': 'success',
+            'modules': service.get_modules()
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/modules/<module_id>')
+def seo_matrix_module(module_id):
+    """Get specific module details"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        module = service.get_module(module_id)
+        if not module:
+            return jsonify({
+                'status': 'error',
+                'message': f'Module not found: {module_id}'
+            }), 404
+        return jsonify({
+            'status': 'success',
+            'module': module
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/categories')
+def seo_matrix_categories():
+    """Get all traffic categories"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        return jsonify({
+            'status': 'success',
+            'categories': service.get_traffic_categories()
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/patterns')
+def seo_matrix_patterns():
+    """Get all patterns (7×7 matrix)"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        module_id = request.args.get('module')
+        patterns = service.get_all_patterns(module_id)
+        return jsonify({
+            'status': 'success',
+            'patterns': patterns
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/patterns/<module_id>/<category_id>')
+def seo_matrix_pattern(module_id, category_id):
+    """Get specific pattern"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        pattern = service.get_pattern(module_id, category_id)
+        if not pattern:
+            return jsonify({
+                'status': 'error',
+                'message': f'Pattern not found: {module_id}/{category_id}'
+            }), 404
+        return jsonify({
+            'status': 'success',
+            'module': module_id,
+            'category': category_id,
+            'pattern': pattern
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/pages')
+def seo_matrix_pages():
+    """Get all pages"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        module_id = request.args.get('module')
+        pages = service.get_all_pages(module_id)
+        return jsonify({
+            'status': 'success',
+            'pages': pages,
+            'count': len(pages)
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/sitemap')
+def seo_matrix_sitemap():
+    """Generate sitemap for all pages"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        base_url = request.args.get('base_url', 'https://cimeika.com')
+        entries = service.generate_sitemap_entries(base_url)
+        return jsonify({
+            'status': 'success',
+            'sitemap': entries,
+            'count': len(entries)
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/sitemap.xml')
+def seo_matrix_sitemap_xml():
+    """Generate sitemap XML"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        from flask import Response
+        service = get_seo_matrix_service()
+        base_url = request.args.get('base_url', 'https://cimeika.com')
+        xml = service.generate_sitemap_xml(base_url)
+        return Response(xml, mimetype='application/xml')
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/robots.txt')
+def seo_matrix_robots():
+    """Generate robots.txt"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        from flask import Response
+        service = get_seo_matrix_service()
+        sitemap_url = request.args.get('sitemap_url', 'https://cimeika.com/sitemap.xml')
+        txt = service.generate_robots_txt(sitemap_url)
+        return Response(txt, mimetype='text/plain')
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
+@app.route('/api/v1/seo/matrix/status')
+def seo_matrix_status():
+    """Get implementation status and execution strategy"""
+    try:
+        from app.config.seo import get_seo_matrix_service
+        service = get_seo_matrix_service()
+        return jsonify({
+            'status': 'success',
+            'implementation_status': service.status,
+            'priority_order': service.get_priority_order(),
+            'gates': service.get_gates()
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+
 if __name__ == '__main__':
     port = int(os.getenv('BACKEND_PORT', 5000))
     host = os.getenv('BACKEND_HOST', '0.0.0.0')
