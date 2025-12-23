@@ -9,6 +9,7 @@ import PodijaView from './modules/podija/PodijaView';
 import NastrijView from './modules/nastrij/NastrijView';
 import MalyaView from './modules/malya/MalyaView';
 import KazkarView from './modules/kazkar/KazkarView';
+import { CiLegendsView } from './modules/Kazkar';
 import CalendarView from './modules/calendar/CalendarView';
 import GalleryView from './modules/gallery/GalleryView';
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/nastrij" element={<NastrijView />} />
             <Route path="/malya" element={<MalyaView />} />
             <Route path="/kazkar" element={<KazkarView />} />
+            <Route path="/kazkar/legends" element={<CiLegendsView />} />
             <Route path="/calendar" element={<CalendarView />} />
             <Route path="/gallery" element={<GalleryView />} />
           </Routes>

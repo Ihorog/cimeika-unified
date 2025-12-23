@@ -84,6 +84,46 @@ const KazkarView: React.FC = () => {
       </div>
 
       <div className="module-view-content">
+        {/* Featured: Ci Legends Link */}
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            border: '2px solid #fbbf24',
+            marginBottom: '2rem',
+            cursor: 'pointer',
+          }}
+          onClick={() => window.location.href = '/kazkar/legends'}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ fontSize: '3rem' }}>⚡</div>
+              <div>
+                <h3 style={{ margin: 0, color: '#92400e', fontSize: '1.5rem' }}>Бібліотека Легенд Ci</h3>
+                <p style={{ margin: '0.5rem 0 0 0', color: '#78350f' }}>
+                  Перегляньте всі легенди Ci в спеціальному інтерфейсі
+                </p>
+              </div>
+            </div>
+            <button
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 6px rgba(245, 158, 11, 0.3)',
+              }}
+            >
+              Відкрити →
+            </button>
+          </div>
+        </div>
+
         {stats && (
           <div style={{ marginBottom: '2rem', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
             <h2>Статистика</h2>
