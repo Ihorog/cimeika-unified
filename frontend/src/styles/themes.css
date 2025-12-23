@@ -1,0 +1,31 @@
+/* Day Theme (Default) */
+:root,
+[data-theme="day"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --surface-color: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --primary-color: #4A90E2;
+  --accent-color: #50C878;
+}
+
+/* Night Theme */
+[data-theme="night"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --surface-color: #2a2a2a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --border-color: #404040;
+  --primary-color: #6B8EC2;
+  --accent-color: #7DCEA0;
+}
+
+/* Apply theme colors */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}

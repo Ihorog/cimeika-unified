@@ -1,0 +1,42 @@
+/* Module View Base Styles */
+.module-view {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.module-header {
+  margin-bottom: 2rem;
+}
+
+.module-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.module-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.module-content {
+  flex: 1;
+}
+
+.module-placeholder {
+  padding: 3rem;
+  text-align: center;
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-color);
+}
+
+/* Module-specific themes */
+.ci-view { --theme: 'day'; }
+.podija-view { --theme: 'day'; }
+.nastrij-view { --theme: 'day'; }
+.malya-view { --theme: 'day'; }
+.kazkar-view { --theme: 'night'; }
+.calendar-view { --theme: 'day'; }
+.gallery-view { --theme: 'day'; }
