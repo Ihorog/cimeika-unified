@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from app.config.database import init_db
 from app.config.canon import CANON_BUNDLE_ID
 from app.api.v1.router import api_router
+from app.startup import setup_modules
 
 # Load environment variables
 load_dotenv()
@@ -18,8 +19,9 @@ load_dotenv()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
-    # Startup: Initialize database
+    # Startup: Initialize database and modules
     init_db()
+    setup_modules()
     yield
     # Shutdown: cleanup if needed
 

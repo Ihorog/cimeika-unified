@@ -86,6 +86,29 @@ export class ModuleRegistry {
   }
 
   /**
+   * Shutdown all registered modules
+   * @returns Object mapping module names to shutdown success
+   */
+  async shutdownAll(): Promise<Record<string, boolean>> {
+    const results: Record<string, boolean> = {};
+    
+    for (const [name, module] of this.modules.entries()) {
+      try {
+        if (module.shutdown) {
+          results[name] = await module.shutdown();
+        } else {
+          results[name] = true; // No shutdown method, assume success
+        }
+      } catch (error) {
+        results[name] = false;
+        console.error(`Failed to shutdown ${name}:`, error);
+      }
+    }
+    
+    return results;
+  }
+
+  /**
    * Get metadata for all registered modules
    * @returns Object mapping module names to their metadata
    */
@@ -113,14 +136,28 @@ export class ModuleRegistry {
    * @param name - Module name
    * @returns True if module was unregistered, false if not found
    */
-  unregister(name: string): boolean {
-    return this.modules.delete(name);
+  async unregister(name: string): Promise<boolean> {
+    const module = this.modules.get(name);
+    if (module) {
+      // Shutdown module before unregistering
+      if (module.shutdown) {
+        try {
+          await module.shutdown();
+        } catch (error) {
+          console.error(`Failed to shutdown ${name} during unregister:`, error);
+        }
+      }
+      return this.modules.delete(name);
+    }
+    return false;
   }
 
   /**
    * Clear all registered modules
    */
-  clear(): void {
+  async clear(): Promise<void> {
+    // Shutdown all modules before clearing
+    await this.shutdownAll();
     this.modules.clear();
   }
 

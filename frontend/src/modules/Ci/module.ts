@@ -70,6 +70,19 @@ export class CiModule implements ModuleInterface {
   }
 
   /**
+   * Shutdown the module gracefully
+   */
+  async shutdown(): Promise<boolean> {
+    try {
+      this.initialized = false;
+      return true;
+    } catch (error) {
+      console.error(`Failed to shutdown ${this.name}:`, error);
+      return false;
+    }
+  }
+
+  /**
    * Get module metadata
    */
   getMetadata(): ModuleMetadata {

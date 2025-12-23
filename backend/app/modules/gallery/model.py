@@ -27,7 +27,7 @@ class GalleryItem(Base):
     thumbnail_url = Column(String, nullable=True)
     file_size = Column(Integer, nullable=True)  # Size in bytes
     mime_type = Column(String, nullable=True)
-    metadata = Column(JSON, nullable=True)  # Additional metadata (dimensions, duration, etc.)
+    media_metadata = Column(JSON, nullable=True)  # Additional metadata (dimensions, duration, etc.)
     
     # Entity metadata
     tags = Column(JSON, nullable=True, default=list)
