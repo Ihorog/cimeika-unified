@@ -87,10 +87,12 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv('BACKEND_PORT', 8000))
     host = os.getenv('BACKEND_HOST', '0.0.0.0')
+    reload = os.getenv('FASTAPI_RELOAD', '1') == '1'
     
+    # Use string reference for reload support, direct app object otherwise
     uvicorn.run(
-        "main:app",
+        "main:app" if reload else app,
         host=host,
         port=port,
-        reload=os.getenv('FASTAPI_RELOAD', '1') == '1'
+        reload=reload
     )
