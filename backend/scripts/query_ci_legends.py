@@ -9,6 +9,7 @@ Usage:
 import sys
 import os
 import argparse
+import traceback
 
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -21,6 +22,14 @@ except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Make sure you're running this from the backend directory")
     sys.exit(1)
+
+
+def get_db_and_service():
+    """Helper function to initialize database and service"""
+    db = SessionLocal()
+    service = KazkarService()
+    service.initialize()
+    return db, service
 
 
 def display_legend(legend: KazkarStory, full: bool = False):
@@ -51,9 +60,7 @@ def display_legend(legend: KazkarStory, full: bool = False):
 
 def query_all_legends():
     """Query and display all Ci legends"""
-    db = SessionLocal()
-    service = KazkarService()
-    service.initialize()
+    db, service = get_db_and_service()
     
     try:
         legends = service.get_legends(db)
@@ -77,7 +84,6 @@ def query_all_legends():
         
     except Exception as e:
         print(f"❌ Error querying legends: {e}")
-        import traceback
         traceback.print_exc()
     finally:
         db.close()
@@ -85,9 +91,7 @@ def query_all_legends():
 
 def query_single_legend(legend_id: int):
     """Query and display a single legend"""
-    db = SessionLocal()
-    service = KazkarService()
-    service.initialize()
+    db, service = get_db_and_service()
     
     try:
         legend = service.get_story(db, legend_id)
@@ -103,7 +107,6 @@ def query_single_legend(legend_id: int):
         
     except Exception as e:
         print(f"❌ Error querying legend: {e}")
-        import traceback
         traceback.print_exc()
     finally:
         db.close()
@@ -143,7 +146,6 @@ def main():
         print("=" * 80)
         print(f"❌ Query failed: {e}")
         print("=" * 80)
-        import traceback
         traceback.print_exc()
         return 1
 
