@@ -11,6 +11,7 @@ const MainLayout = () => {
   const location = useLocation();
 
   const modules = [
+    { path: '/', name: 'Головна', id: 'home' },
     { path: '/ci', name: 'Ci', id: 'ci', description: 'Центральне ядро' },
     { path: '/podija', name: 'ПоДія', id: 'podija', description: 'Події' },
     { path: '/nastrij', name: 'Настрій', id: 'nastrij', description: 'Емоції' },
@@ -28,7 +29,7 @@ const MainLayout = () => {
             <img src={CimeikaLogo} alt="CIMEIKA" className="logo-image" />
           </Link>
           <nav className="main-nav">
-            {modules.map(module => (
+            {modules.slice(1).map(module => (
               <Link
                 key={module.id}
                 to={module.path}
