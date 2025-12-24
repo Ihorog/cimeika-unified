@@ -265,13 +265,15 @@ frontend/src/modules/Kazkar/
 
 | Endpoint | Метод | Опис |
 |----------|-------|------|
-| `/legends` | GET | Всі легенди Ci |
-| `/stories` | GET | Всі історії (з фільтрами) |
+| `/legends` | GET | Всі легенди Ci (зручний alias для stories з фільтром) |
+| `/stories` | GET | Всі історії (з фільтрами: story_type=legend) |
 | `/stories/{id}` | GET | Конкретна легенда |
 | `/stories` | POST | Створити легенду |
 | `/stories/{id}` | PUT | Оновити легенду |
 | `/stories/{id}` | DELETE | Видалити легенду |
 | `/stats` | GET | Статистика по типам |
+
+**Примітка**: `/legends` є зручним alias для `/stories?story_type=legend`, що спрощує доступ до легенд. Всі CRUD операції використовують `/stories` endpoints, оскільки легенди є типом історій (stories).
 
 ### Frontend маршрути
 

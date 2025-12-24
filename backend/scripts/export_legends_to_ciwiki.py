@@ -8,6 +8,8 @@
 
 import os
 import sys
+import re
+import traceback
 from datetime import datetime
 from pathlib import Path
 
@@ -21,10 +23,12 @@ from modules.kazkar.service import KazkarService
 
 def sanitize_filename(title: str) -> str:
     """Конвертує назву легенди в безпечне ім'я файлу"""
-    # Замінюємо спеціальні символи
-    safe_title = title.replace(" ", "-").replace(":", "").replace("—", "-")
-    # Видаляємо подвійні дефіси
-    safe_title = safe_title.replace("--", "-")
+    # Видаляємо або замінюємо спеціальні символи
+    # Замінюємо пробіли на дефіси
+    safe_title = re.sub(r'[^\w\s-]', '', title)  # Видаляємо спецсимволи крім пробілів і дефісів
+    safe_title = re.sub(r'[\s]+', '-', safe_title)  # Замінюємо пробіли на дефіси
+    safe_title = re.sub(r'-+', '-', safe_title)  # Видаляємо подвійні дефіси
+    safe_title = safe_title.strip('-')  # Видаляємо дефіси на початку/кінці
     return safe_title
 
 
@@ -214,7 +218,6 @@ def main():
         
     except Exception as e:
         print(f"❌ Помилка: {e}")
-        import traceback
         traceback.print_exc()
     
     finally:
