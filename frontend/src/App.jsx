@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './core/ThemeManager';
 import MainLayout from './layouts/MainLayout';
+import CiOverlay from './components/CiOverlay';
 
 // Import module views
 import CiView from './modules/ci/CiView';
@@ -23,8 +24,8 @@ function App() {
     <Router>
       <ThemeProvider>
         <Routes>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Navigate to="/ci" replace />} />
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Navigate to="/ci" replace />} />
             <Route path="/ci" element={<CiView />} />
             <Route path="/podija" element={<PodijaView />} />
             <Route path="/nastrij" element={<NastrijView />} />
@@ -35,6 +36,9 @@ function App() {
             <Route path="/gallery" element={<GalleryView />} />
           </Route>
         </Routes>
+        
+        {/* Global Ci Overlay */}
+        <CiOverlay />
       </ThemeProvider>
     </Router>
   );
