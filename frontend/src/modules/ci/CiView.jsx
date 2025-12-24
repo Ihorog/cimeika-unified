@@ -1,17 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Cimeika3DMap_v2 } from '../../components/Cimeika3D';
 
 const CiView = () => {
+  const navigate = useNavigate();
+
+  const handleModuleClick = (module) => {
+    // Navigate to the clicked module
+    if (module.id !== 'ci') {
+      navigate(`/${module.id}`);
+    }
+  };
+
   return (
-    <div className="module-view ci-view">
-      <header className="module-header">
-        <h1>Ci</h1>
-        <p className="module-subtitle">Центральне ядро, оркестрація</p>
-      </header>
-      <main className="module-content">
-        <div className="module-placeholder">
-          <p>Ci module interface</p>
-        </div>
-      </main>
+    <div className="module-view ci-view" style={{ padding: 0, margin: 0, height: '100vh', overflow: 'hidden' }}>
+      <Cimeika3DMap_v2 onModuleClick={handleModuleClick} />
     </div>
   );
 };
