@@ -3,7 +3,7 @@
  * Provides navigation and structure for all pages
  */
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import CiFAB from '../components/CiFAB';
+import CiFAB from '../components/CiFAB/CiFAB';
 import CimeikaLogo from '../assets/logo-cimeika.svg';
 import './MainLayout.css';
 
