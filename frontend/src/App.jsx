@@ -13,6 +13,9 @@ import { CiLegendsView } from './modules/Kazkar';
 import CalendarView from './modules/calendar/CalendarView';
 import GalleryView from './modules/gallery/GalleryView';
 
+// Import Legend ci
+import { LegendCiView } from './modules/LegendCi';
+
 // Import styles
 import './styles/themes.css';
 import './styles/modules.css';
@@ -27,6 +30,7 @@ function App() {
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Navigate to="/ci" replace />} />
               <Route path="ci" element={<CiView />} />
+              <Route path="ci/legend" element={<LegendCiView />} />
               <Route path="podija" element={<PodijaView />} />
               <Route path="nastrij" element={<NastrijView />} />
               <Route path="malya" element={<MalyaView />} />
