@@ -1,0 +1,284 @@
+/**
+ * LegendCiView styles
+ */
+.legend-ci-view {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #fffbeb 0%, #fef3c7 100%);
+}
+
+.legend-ci-view.loading,
+.legend-ci-view.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loading-spinner {
+  font-size: 4rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+.error-message {
+  background: white;
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  max-width: 500px;
+}
+
+.error-message h2 {
+  color: #dc2626;
+  margin: 0 0 1rem 0;
+}
+
+.retry-button {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+}
+
+.retry-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+/* Hero Section */
+.legend-ci-hero {
+  text-align: center;
+  padding: 3rem 2rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 3px solid #f59e0b;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.legend-ci-hero-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.legend-ci-hero-title {
+  font-size: 3rem;
+  color: #92400e;
+  margin: 0 0 1rem 0;
+  font-weight: bold;
+}
+
+.legend-ci-hero-subtitle {
+  font-size: 1.3rem;
+  color: #78350f;
+  margin: 0;
+}
+
+/* State Selector */
+.legend-ci-state-selector {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.state-btn {
+  background: white;
+  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.state-btn:hover {
+  background: #fef3c7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.state-btn.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+.state-icon {
+  font-size: 1.5rem;
+}
+
+/* Progress */
+.legend-ci-progress {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 12px;
+  background: white;
+  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #78350f;
+  font-weight: 600;
+}
+
+/* Map Section */
+.legend-ci-map-section {
+  background: white;
+  border: 3px solid #f59e0b;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.section-title {
+  font-size: 2rem;
+  color: #92400e;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.section-description {
+  text-align: center;
+  color: #78350f;
+  margin: 0 0 2rem 0;
+  font-size: 1.1rem;
+}
+
+/* Structure Overview */
+.legend-ci-structure {
+  background: white;
+  border: 3px solid #f59e0b;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.structure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.structure-card {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.structure-card-title {
+  font-size: 1.3rem;
+  color: #92400e;
+  margin: 0 0 1rem 0;
+  font-weight: bold;
+}
+
+.structure-card-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.structure-node {
+  background: white;
+  border: 2px solid #f59e0b;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.structure-node:hover {
+  background: #fef3c7;
+  transform: translateX(4px);
+}
+
+.structure-node.visited {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .legend-ci-view {
+    padding: 1rem;
+  }
+
+  .legend-ci-hero {
+    padding: 2rem 1rem;
+  }
+
+  .legend-ci-hero-title {
+    font-size: 2rem;
+  }
+
+  .legend-ci-hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .legend-ci-state-selector {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .state-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .structure-grid {
+    grid-template-columns: 1fr;
+  }
+}

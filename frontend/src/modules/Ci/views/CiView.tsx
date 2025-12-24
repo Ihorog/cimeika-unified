@@ -3,6 +3,7 @@
  * UI orchestration without business logic
  */
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useCi } from '../hooks/useCi';
 import { CANON_BUNDLE_ID } from '../../../app/canon';
 import '../../../styles/moduleView.css';
@@ -56,6 +57,46 @@ const CiView: React.FC = () => {
       </div>
 
       <div className="module-view-content">
+        {/* Legend ci Banner */}
+        <div style={{ 
+          background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+          border: '3px solid #f59e0b',
+          borderRadius: '12px',
+          padding: '2rem',
+          marginBottom: '2rem',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✨</div>
+          <h2 style={{ color: '#92400e', margin: '0 0 0.5rem 0' }}>Легенда ci</h2>
+          <p style={{ color: '#78350f', marginBottom: '1.5rem' }}>
+            Інтерактивна модель еволюції знань і сенсів. 20 вузлів дослідження дуальності світобудови.
+          </p>
+          <Link 
+            to="/ci/legend"
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              color: 'white',
+              padding: '0.75rem 2rem',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: 'bold',
+              boxShadow: '0 4px 12px rgba(245, 158, 11, 0.4)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 16px rgba(245, 158, 11, 0.5)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.4)';
+            }}
+          >
+            ⚡ Відкрити Легенду
+          </Link>
+        </div>
+
         <h2>Про модуль</h2>
         <p>
           <strong>Ci</strong> (Сімейка) — це центральний модуль, який координує роботу всіх інших модулів системи.
