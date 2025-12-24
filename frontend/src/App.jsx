@@ -25,7 +25,7 @@ function App() {
       <ThemeProvider>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<Navigate to="/ci" replace />} />
+            <Route index element={<Navigate to="ci" replace />} />
             <Route path="ci" element={<CiView />} />
             <Route path="podija" element={<PodijaView />} />
             <Route path="nastrij" element={<NastrijView />} />
