@@ -1,11 +1,15 @@
 """
 Ci module API routes
 CANON v1.0.0 - ci.capture() flow implementation
++ Legend ci interactive endpoints
 """
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
+from typing import List, Optional
 from app.config.seo import seo_service
 from app.modules.ci.schema import CiCaptureRequest, CiCaptureResponse
+from app.modules.ci.legend_ci_content import LEGEND_CI_NODES, LEGEND_CI_METADATA, SYMBOLIC_LIBRARY
+from app.modules.ci.legend_duality_full import DUALITY_LEGEND_FULL
 import uuid
 
 router = APIRouter(prefix="/ci", tags=["ci"])
@@ -187,3 +191,184 @@ async def get_module_for_state(state: str):
         "module": module,
         "writes_policy": writes_policy
     }
+
+
+# ========================================
+# Legend ci Interactive Endpoints
+# ========================================
+
+@router.get("/legend")
+async def get_legend_metadata():
+    """Get Legend ci metadata and structure"""
+    return LEGEND_CI_METADATA
+
+
+@router.get("/legend/nodes")
+async def get_legend_nodes(tags: Optional[str] = None):
+    """
+    Get all Legend ci nodes or filter by tags
+    
+    Args:
+        tags: Comma-separated list of tags to filter by
+        
+    Returns:
+        List of legend nodes
+    """
+    nodes = LEGEND_CI_NODES
+    
+    if tags:
+        tag_list = [t.strip() for t in tags.split(",")]
+        nodes = [
+            node for node in nodes
+            if any(tag in node.get("tags", []) for tag in tag_list)
+        ]
+    
+    return {
+        "total": len(nodes),
+        "nodes": nodes
+    }
+
+
+@router.get("/legend/nodes/{node_id}")
+async def get_legend_node(node_id: int):
+    """
+    Get specific Legend ci node by ID
+    
+    Args:
+        node_id: Node ID (1-20)
+        
+    Returns:
+        Complete node data including connections
+    """
+    node = next((n for n in LEGEND_CI_NODES if n["id"] == node_id), None)
+    
+    if not node:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Node {node_id} not found"
+        )
+    
+    # Enrich with connected nodes info
+    connected_nodes = []
+    for conn_id in node.get("connections", []):
+        conn_node = next((n for n in LEGEND_CI_NODES if n["id"] == conn_id), None)
+        if conn_node:
+            connected_nodes.append({
+                "id": conn_node["id"],
+                "title": conn_node["title"],
+                "icon": conn_node["icon"]
+            })
+    
+    return {
+        **node,
+        "connected_nodes": connected_nodes
+    }
+
+
+@router.get("/legend/duality")
+async def get_duality_legend():
+    """
+    Get the complete Duality Legend (full narrative)
+    
+    Returns:
+        Complete duality legend with all 10 sections
+    """
+    return DUALITY_LEGEND_FULL
+
+
+@router.get("/legend/duality/sections/{section_id}")
+async def get_duality_section(section_id: str):
+    """
+    Get specific section of the Duality Legend
+    
+    Args:
+        section_id: Section identifier (section_1 through section_10)
+        
+    Returns:
+        Specific section content
+    """
+    section = next(
+        (s for s in DUALITY_LEGEND_FULL["sections"] if s["id"] == section_id),
+        None
+    )
+    
+    if not section:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Section {section_id} not found"
+        )
+    
+    return section
+
+
+@router.get("/legend/symbols")
+async def get_symbolic_library():
+    """
+    Get the symbolic library for Legend ci visualization
+    
+    Returns:
+        Symbolic meanings for numbers, geometry, and elements
+    """
+    return SYMBOLIC_LIBRARY
+
+
+@router.get("/legend/navigation/{current_node_id}")
+async def get_navigation_options(current_node_id: int, state: str = "overview"):
+    """
+    Get navigation options from current node
+    
+    Args:
+        current_node_id: Current node ID
+        state: User state (overview, immersion, integration)
+        
+    Returns:
+        Available navigation paths and recommendations
+    """
+    current = next((n for n in LEGEND_CI_NODES if n["id"] == current_node_id), None)
+    
+    if not current:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Node {current_node_id} not found"
+        )
+    
+    # Get connected nodes
+    connections = []
+    for conn_id in current.get("connections", []):
+        conn_node = next((n for n in LEGEND_CI_NODES if n["id"] == conn_id), None)
+        if conn_node:
+            connections.append({
+                "id": conn_node["id"],
+                "title": conn_node["title"],
+                "icon": conn_node["icon"],
+                "short_text": conn_node["short_text"]
+            })
+    
+    # State-based recommendations
+    recommendations = []
+    if state == "overview":
+        # Suggest starting points
+        recommendations = [n for n in LEGEND_CI_NODES if n["id"] in [1, 2, 8]]
+    elif state == "immersion":
+        # Suggest related by tags
+        current_tags = set(current.get("tags", []))
+        recommendations = [
+            n for n in LEGEND_CI_NODES
+            if n["id"] != current_node_id and
+            len(set(n.get("tags", [])) & current_tags) >= 2
+        ][:3]
+    elif state == "integration":
+        # Suggest synthesis nodes
+        recommendations = [n for n in LEGEND_CI_NODES if n["id"] in [17, 19, 20]]
+    
+    return {
+        "current_node": {
+            "id": current["id"],
+            "title": current["title"],
+            "icon": current["icon"]
+        },
+        "state": state,
+        "direct_connections": connections,
+        "recommendations": recommendations
+    }
+
