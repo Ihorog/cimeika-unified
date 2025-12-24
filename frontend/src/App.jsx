@@ -25,15 +25,15 @@ function App() {
       <ThemeProvider>
         <Routes>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<Navigate to="ci" replace />} />
-            <Route path="ci" element={<CiView />} />
-            <Route path="podija" element={<PodijaView />} />
-            <Route path="nastrij" element={<NastrijView />} />
-            <Route path="malya" element={<MalyaView />} />
-            <Route path="kazkar" element={<KazkarView />} />
-            <Route path="kazkar/legends" element={<CiLegendsView />} />
-            <Route path="calendar" element={<CalendarView />} />
-            <Route path="gallery" element={<GalleryView />} />
+            <Route index element={<Navigate to="/ci" replace />} />
+            <Route path="/ci" element={<CiView />} />
+            <Route path="/podija" element={<PodijaView />} />
+            <Route path="/nastrij" element={<NastrijView />} />
+            <Route path="/malya" element={<MalyaView />} />
+            <Route path="/kazkar" element={<KazkarView />} />
+            <Route path="/kazkar/legends" element={<CiLegendsView />} />
+            <Route path="/calendar" element={<CalendarView />} />
+            <Route path="/gallery" element={<GalleryView />} />
           </Route>
         </Routes>
         
