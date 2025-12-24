@@ -160,15 +160,6 @@ const ModuleSphere = ({
           sizeAttenuation
         />
       </points>
-      
-      {/* Module label */}
-      <sprite position={[0, -2, 0]} scale={[2, 0.5, 1]}>
-        <spriteMaterial
-          color="#ffffff"
-          transparent
-          opacity={0.8}
-        />
-      </sprite>
     </group>
   );
 };

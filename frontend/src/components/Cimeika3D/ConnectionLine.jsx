@@ -41,7 +41,6 @@ const ConnectionLine = ({ start, end, color = '#4a9eff', opacity = 0.3 }) => {
         color={color}
         transparent
         opacity={opacity}
-        linewidth={2}
       />
     </line>
   );

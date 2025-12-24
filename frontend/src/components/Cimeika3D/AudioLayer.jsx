@@ -17,7 +17,7 @@ const AudioLayer = ({ enabled = true, volume = 0.3 }) => {
   }, [enabled]);
 
   const fadeIn = () => {
-    if (audioRef.current) {
+    if (audioRef.current && audioRef.current.src) {
       audioRef.current.volume = 0;
       audioRef.current.play().then(() => {
         setIsPlaying(true);
