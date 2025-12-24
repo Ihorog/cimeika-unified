@@ -6,7 +6,6 @@
 у формат Markdown, готовий для копіювання в ciwiki репозиторій.
 """
 
-import os
 import sys
 import re
 import traceback
@@ -22,13 +21,18 @@ from modules.kazkar.service import KazkarService
 
 
 def sanitize_filename(title: str) -> str:
-    """Конвертує назву легенди в безпечне ім'я файлу"""
-    # Видаляємо або замінюємо спеціальні символи
+    """Конвертує назву легенди в безпечне ім'я файлу
+    
+    Підтримує кириличні символи (українська, російська).
+    """
     # Замінюємо пробіли на дефіси
-    safe_title = re.sub(r'[^\w\s-]', '', title)  # Видаляємо спецсимволи крім пробілів і дефісів
-    safe_title = re.sub(r'[\s]+', '-', safe_title)  # Замінюємо пробіли на дефіси
-    safe_title = re.sub(r'-+', '-', safe_title)  # Видаляємо подвійні дефіси
-    safe_title = safe_title.strip('-')  # Видаляємо дефіси на початку/кінці
+    safe_title = title.replace(' ', '-')
+    # Видаляємо спеціальні символи, але зберігаємо кирилицю, латиницю, цифри і дефіси
+    safe_title = re.sub(r'[^\w\-]', '', safe_title, flags=re.UNICODE)
+    # Видаляємо подвійні дефіси
+    safe_title = re.sub(r'-+', '-', safe_title)
+    # Видаляємо дефіси на початку/кінці
+    safe_title = safe_title.strip('-')
     return safe_title
 
 
