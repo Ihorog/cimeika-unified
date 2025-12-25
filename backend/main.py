@@ -15,6 +15,7 @@ from app.startup import setup_modules
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
 from app.core.rate_limit import RateLimitMiddleware
+from app.core.monitoring import init_sentry, get_monitoring_status
 
 # Load environment variables
 load_dotenv()
@@ -23,6 +24,9 @@ load_dotenv()
 setup_logging()
 logger = get_logger(__name__)
 
+# Initialize Sentry (optional)
+sentry = init_sentry()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,6 +34,13 @@ async def lifespan(app: FastAPI):
     logger.info("Starting CIMEIKA Backend...")
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"Log Level: {settings.LOG_LEVEL}")
+    
+    # Log monitoring status
+    monitoring_status = get_monitoring_status()
+    if monitoring_status["sentry_enabled"]:
+        logger.info("Sentry monitoring: ENABLED")
+    else:
+        logger.info("Sentry monitoring: DISABLED (SENTRY_DSN not configured)")
     
     # Validate configuration
     validation = settings.validate()

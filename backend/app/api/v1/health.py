@@ -6,6 +6,7 @@ import os
 from fastapi import APIRouter, status
 from typing import Dict, Any
 from app.config.canon import CANON_BUNDLE_ID
+from app.core.monitoring import get_monitoring_status
 
 router = APIRouter(tags=["health"])
 
@@ -63,6 +64,13 @@ async def ready() -> Dict[str, Any]:
     # Check database configuration (basic check, not connection)
     db_host = os.getenv('POSTGRES_HOST', 'localhost')
     checks['POSTGRES_HOST'] = f"configured ({db_host})"
+    
+    # Check monitoring status
+    monitoring = get_monitoring_status()
+    checks['monitoring'] = {
+        "sentry_enabled": monitoring["sentry_enabled"],
+        "environment": monitoring["environment"]
+    }
     
     return {
         "status": "ready" if all_ready else "not_ready",
