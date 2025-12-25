@@ -16,6 +16,9 @@ import GalleryView from './modules/gallery/GalleryView';
 // Import Legend ci
 import { LegendCiView } from './modules/LegendCi';
 
+// Import pages
+import Chat from './pages/Chat';
+
 // Import styles
 import './styles/themes.css';
 import './styles/modules.css';
@@ -31,6 +34,7 @@ function App() {
               <Route index element={<Navigate to="/ci" replace />} />
               <Route path="ci" element={<CiView />} />
               <Route path="ci/legend" element={<LegendCiView />} />
+              <Route path="chat" element={<Chat />} />
               <Route path="podija" element={<PodijaView />} />
               <Route path="nastrij" element={<NastrijView />} />
               <Route path="malya" element={<MalyaView />} />

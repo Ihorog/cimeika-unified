@@ -1,8 +1,10 @@
 /**
  * Chat Page - Ci Chat Interface with OpenAI GPT
  * Interactive chat with conversational AI
+ * Supports voice input from Android WebView
  */
 import React, { useState, useRef, useEffect } from 'react';
+import { useVoiceIntegration } from '../hooks/useVoiceIntegration';
 
 // Configuration constants
 const CHAT_CONFIG = {
@@ -23,6 +25,22 @@ export default function Chat() {
   const inputRef = useRef(null);
 
   const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  // Voice integration
+  const { isAndroid, startVoice, speak } = useVoiceIntegration({
+    onVoiceText: (text) => {
+      console.log('Voice text received:', text);
+      setInputMessage(text);
+      // Auto-submit the voice text
+      setTimeout(() => {
+        const event = new Event('submit', { bubbles: true, cancelable: true });
+        document.querySelector('form')?.dispatchEvent(event);
+      }, 100);
+    },
+    onError: (error) => {
+      console.error('Voice error:', error);
+    }
+  });
 
   // Auto-scroll to bottom when new messages arrive
   const scrollToBottom = () => {
@@ -93,6 +111,11 @@ export default function Chat() {
       };
       
       setMessages(prev => [...prev, aiMessage]);
+
+      // Speak the response if on Android
+      if (isAndroid && data.reply) {
+        speak(data.reply);
+      }
     } catch (error) {
       console.error('Chat error:', error);
       
@@ -125,6 +148,7 @@ export default function Chat() {
         </h1>
         <p className="mt-2 text-gray-600">
           Інтелектуальний асистент Cimeika з підтримкою GPT
+          {isAndroid && ' 🎤'}
         </p>
       </div>
 
@@ -186,6 +210,20 @@ export default function Chat() {
           disabled={isLoading}
           className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
         />
+        
+        {/* Voice button for Android */}
+        {isAndroid && (
+          <button
+            type="button"
+            onClick={startVoice}
+            disabled={isLoading}
+            className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            title="Голосове введення"
+          >
+            🎤
+          </button>
+        )}
+        
         <button
           type="submit"
           disabled={isLoading || !inputMessage.trim()}
@@ -197,7 +235,10 @@ export default function Chat() {
 
       {/* Help Text */}
       <div className="mt-4 text-sm text-gray-500 text-center">
-        <p>Натисніть Enter для відправки, Shift+Enter для нового рядка</p>
+        <p>
+          Натисніть Enter для відправки, Shift+Enter для нового рядка
+          {isAndroid && ' • 🎤 для голосового введення'}
+        </p>
       </div>
     </div>
   );
