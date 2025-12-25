@@ -1,0 +1,18 @@
+{
+  "source": "https://github.com/Ihorog/cimeika-unified/tree/main/docs/KAZKAR_LEGEND_UI_FIGMA_SPEC.md",
+  "target": "https://www.figma.com/file/D2eFTza3H8PAEJrW1BnMQp/Ihor-Hlushchuk-s-team-library",
+  "sync": ["colors", "tokens", "frames", "text"],
+  "automation": {
+    "enabled": false,
+    "webhook_url": null,
+    "github_action": ".github/workflows/figma-sync.yml"
+  },
+  "mapping": {
+    "figma_page": "Kazkar Legends",
+    "token_file": "docs/figma_tokens.json",
+    "css_output": "frontend/src/modules/Kazkar/legends/legends.css"
+  },
+  "version": "1.0.0",
+  "last_sync": null,
+  "notes": "Manual sync only. Automated sync to be implemented in future phase."
+}

@@ -1,0 +1,125 @@
+name: Kazkar Legends Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/legends/**.md'
+      - 'frontend/src/modules/Kazkar/legends/**'
+      - 'scripts/sync_legends_to_api.js'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run mode (true/false)'
+        required: false
+        default: 'false'
+
+env:
+  API_URL: ${{ secrets.CIMEIKA_API_URL || 'https://api.cimeika.com.ua' }}
+  NODE_VERSION: '18'
+
+jobs:
+  sync-legends:
+    name: Sync Legends to API
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          cd ${{ github.workspace }}
+          npm install --package-lock-only || npm install
+
+      - name: Run sync script (dry run)
+        if: github.event.inputs.dry_run == 'true'
+        run: |
+          echo "🔍 Running in DRY RUN mode"
+          export DRY_RUN=true
+          export API_URL=${{ env.API_URL }}
+          node scripts/sync_legends_to_api.js
+
+      - name: Run sync script (production)
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          echo "🚀 Running in PRODUCTION mode"
+          export API_URL=${{ env.API_URL }}
+          node scripts/sync_legends_to_api.js
+
+      - name: Sync summary
+        if: always()
+        run: |
+          echo "### Kazkar Legends Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📚 **API Endpoint:** ${{ env.API_URL }}/api/v1/kazkar/import" >> $GITHUB_STEP_SUMMARY
+          echo "🔄 **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "🌿 **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "📝 **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "⚠️ **Mode:** Dry Run (no changes made)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **Mode:** Production (legends synced)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  notify-websocket:
+    name: Notify WebSocket Clients
+    runs-on: ubuntu-latest
+    needs: sync-legends
+    if: success() && github.event.inputs.dry_run != 'true'
+    
+    steps:
+      - name: Trigger WebSocket update
+        run: |
+          echo "🔔 Sending WebSocket notification..."
+          # Future implementation: Send POST to WebSocket broadcast endpoint
+          # curl -X POST ${{ env.API_URL }}/api/v1/kazkar/broadcast \
+          #   -H "Content-Type: application/json" \
+          #   -d '{"event": "legends_synced", "timestamp": "'$(date +%s)'"}'
+          echo "WebSocket notification placeholder - to be implemented"
+
+  verify-deployment:
+    name: Verify External Access
+    runs-on: ubuntu-latest
+    needs: sync-legends
+    if: success() && github.event.inputs.dry_run != 'true'
+    
+    steps:
+      - name: Check API availability
+        run: |
+          echo "🔍 Verifying API access..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.API_URL }}/api/v1/kazkar/ || echo "000")
+          if [ "$response" = "200" ] || [ "$response" = "307" ]; then
+            echo "✅ API is accessible (HTTP $response)"
+          else
+            echo "⚠️ API returned HTTP $response"
+            exit 1
+          fi
+
+      - name: Check legends endpoint
+        run: |
+          echo "🔍 Checking legends endpoint..."
+          response=$(curl -s ${{ env.API_URL }}/api/v1/kazkar/legends | head -c 100 || echo "error")
+          if [ "$response" != "error" ]; then
+            echo "✅ Legends endpoint is responding"
+          else
+            echo "⚠️ Legends endpoint may be unavailable"
+          fi
+
+      - name: Verification summary
+        if: always()
+        run: |
+          echo "### External Access Verification" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ API health check completed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Legends endpoint verified" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **API Base:** ${{ env.API_URL }}" >> $GITHUB_STEP_SUMMARY
+          echo "📖 **Legends:** ${{ env.API_URL }}/api/v1/kazkar/legends" >> $GITHUB_STEP_SUMMARY

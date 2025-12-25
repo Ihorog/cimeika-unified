@@ -83,3 +83,22 @@ async def delete_story(story_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Story not found")
     return {"message": "Story deleted successfully"}
 
+
+@router.post("/import", response_model=KazkarStorySchema)
+async def import_legend(story: KazkarStoryCreate, db: Session = Depends(get_db)):
+    """
+    Import a legend from external source (e.g., GitHub sync script)
+    This endpoint is used by the legends sync pipeline to automatically
+    import markdown legends into the database.
+    """
+    # Check if a story with the same title and source_trace already exists
+    existing = service.get_story_by_source(db, story.source_trace)
+    if existing:
+        # Update existing story instead of creating duplicate
+        update_data = KazkarStoryUpdate(**story.model_dump())
+        updated_story = service.update_story(db, existing.id, update_data)
+        return updated_story
+    
+    # Create new story
+    return service.create_story(db, story)
+

@@ -75,6 +75,12 @@ class KazkarService(ModuleInterface, ServiceInterface):
         """Get a story by ID"""
         return db.query(KazkarStory).filter(KazkarStory.id == story_id).first()
     
+    def get_story_by_source(self, db: Session, source_trace: Optional[str]) -> Optional[KazkarStory]:
+        """Get a story by source_trace for import deduplication"""
+        if not source_trace:
+            return None
+        return db.query(KazkarStory).filter(KazkarStory.source_trace == source_trace).first()
+    
     def get_stories(self, db: Session, skip: int = 0, limit: int = 100, story_type: Optional[str] = None) -> List[KazkarStory]:
         """Get all stories with pagination and optional type filter"""
         query = db.query(KazkarStory)
