@@ -1,0 +1,23 @@
+# CODEOWNERS for CIMEIKA UNIFIED
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for all files
+* @Ihorog
+
+# Backend (Python/FastAPI)
+/backend/ @Ihorog
+
+# Frontend (React)
+/frontend/ @Ihorog
+
+# Infrastructure & DevOps
+/infra/ @Ihorog
+/docker-compose.yml @Ihorog
+/.github/ @Ihorog
+
+# Documentation
+/docs/ @Ihorog
+*.md @Ihorog
+
+# Android WebView
+/android-webview/ @Ihorog
