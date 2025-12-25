@@ -79,11 +79,16 @@ jobs:
       - name: Trigger WebSocket update
         run: |
           echo "🔔 Sending WebSocket notification..."
-          # Future implementation: Send POST to WebSocket broadcast endpoint
-          # curl -X POST ${{ env.API_URL }}/api/v1/kazkar/broadcast \
-          #   -H "Content-Type: application/json" \
-          #   -d '{"event": "legends_synced", "timestamp": "'$(date +%s)'"}'
-          echo "WebSocket notification placeholder - to be implemented"
+          response=$(curl -s -X POST ${{ env.API_URL }}/api/v1/kazkar/broadcast \
+            -H "Content-Type: application/json" \
+            -d "{\"event\": \"legends_synced\", \"timestamp\": $(date +%s), \"source\": \"github-action\"}" \
+            || echo "failed")
+          
+          if [ "$response" != "failed" ]; then
+            echo "✅ WebSocket notification sent successfully"
+          else
+            echo "⚠️ WebSocket notification failed (may not affect deployment)"
+          fi
 
   verify-deployment:
     name: Verify External Access

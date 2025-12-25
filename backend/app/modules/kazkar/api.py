@@ -2,7 +2,7 @@
 Kazkar module API routes
 """
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 from app.config.database import get_db
 from app.modules.kazkar.schema import (
@@ -11,6 +11,7 @@ from app.modules.kazkar.schema import (
     KazkarStoryUpdate
 )
 from app.modules.kazkar.service import KazkarService
+from app.modules.kazkar.websocket import kazkar_ws_manager, broadcast_legend_event
 
 router = APIRouter(prefix="/kazkar", tags=["kazkar"])
 service = KazkarService()
@@ -97,8 +98,62 @@ async def import_legend(story: KazkarStoryCreate, db: Session = Depends(get_db))
         # Update existing story instead of creating duplicate
         update_data = KazkarStoryUpdate(**story.model_dump())
         updated_story = service.update_story(db, existing.id, update_data)
+        
+        # Broadcast update event
+        await broadcast_legend_event(
+            event_type="legend_updated",
+            legend_id=updated_story.id,
+            data={"title": updated_story.title, "action": "updated"}
+        )
+        
         return updated_story
     
     # Create new story
-    return service.create_story(db, story)
+    new_story = service.create_story(db, story)
+    
+    # Broadcast creation event
+    await broadcast_legend_event(
+        event_type="legend_created",
+        legend_id=new_story.id,
+        data={"title": new_story.title, "action": "created"}
+    )
+    
+    return new_story
+
+
+@router.post("/broadcast")
+async def broadcast_event(event: dict):
+    """
+    Broadcast a custom event to all connected WebSocket clients
+    Used for testing or manual event triggers
+    """
+    await kazkar_ws_manager.broadcast(event)
+    return {"status": "success", "message": "Event broadcasted to all clients"}
+
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """
+    WebSocket endpoint for real-time Kazkar updates
+    
+    Clients can connect to receive live events such as:
+    - legend_sense_activated: When a sense node is activated
+    - legend_created: When a new legend is added
+    - legend_updated: When a legend is modified
+    - legends_synced: When batch sync completes
+    """
+    await kazkar_ws_manager.connect(websocket)
+    try:
+        while True:
+            # Keep connection alive and listen for client messages
+            data = await websocket.receive_text()
+            # Echo back for now (can be extended for client -> server events)
+            await websocket.send_json({
+                "event": "echo",
+                "received": data,
+                "timestamp": int(__import__('datetime').datetime.now().timestamp())
+            })
+    except WebSocketDisconnect:
+        kazkar_ws_manager.disconnect(websocket)
+
 
