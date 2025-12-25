@@ -1,0 +1,140 @@
+/**
+ * legends.css
+ * Optional visual effects for Kazkar Legends UI
+ * Provides shimmer, glow, and particle-like ambient effects
+ */
+
+/* Shimmer effect for glowing elements */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.legend-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.2) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Glow pulse effect */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
+                0 0 40px rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.5),
+                0 0 60px rgba(139, 92, 246, 0.3);
+  }
+}
+
+.legend-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Floating particle effect (ambient) */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.6;
+  }
+}
+
+.legend-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.8), transparent);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 4s ease-in-out infinite;
+}
+
+.legend-particle:nth-child(2) {
+  animation-delay: 0.5s;
+  animation-duration: 5s;
+}
+
+.legend-particle:nth-child(3) {
+  animation-delay: 1s;
+  animation-duration: 4.5s;
+}
+
+.legend-particle:nth-child(4) {
+  animation-delay: 1.5s;
+  animation-duration: 5.5s;
+}
+
+/* Breathing glow for ritual mode */
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.legend-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+/* Text gradient glow */
+.legend-text-glow {
+  background: linear-gradient(135deg, #818cf8, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(129, 140, 248, 0.5);
+}
+
+/* Subtle backdrop blur enhancement */
+.legend-glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(30, 27, 75, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* Performance optimization: reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .legend-shimmer,
+  .legend-glow,
+  .legend-particle,
+  .legend-breathe {
+    animation: none;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optional: Container for particles */
+.legend-particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
