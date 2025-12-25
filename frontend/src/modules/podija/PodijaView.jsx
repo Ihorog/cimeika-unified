@@ -173,7 +173,7 @@ const PodijaView = () => {
                 >
                   <option value="personal">Особиста</option>
                   <option value="work">Робота</option>
-                  <option value="family">Сім'я</option>
+                  <option value="family">Сім&apos;я</option>
                   <option value="celebration">Свято</option>
                   <option value="meeting">Зустріч</option>
                   <option value="other">Інше</option>

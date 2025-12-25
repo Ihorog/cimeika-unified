@@ -40,7 +40,7 @@ const CiButton = () => {
   const { handleTouchStart, handleTouchMove, handleTouchEnd } = useGestureHandler(handleSwipe);
 
   // Handle click/tap - navigate to chat
-  const handleClick = useCallback((e) => {
+  const handleClick = useCallback(() => {
     // Only trigger if it was a tap (not a swipe)
     if (!swipeDirection) {
       navigate('/chat');
