@@ -32,12 +32,19 @@ export const useVoiceIntegration = (options: UseVoiceIntegrationOptions = {}) =>
   // Setup voice text handler
   useEffect(() => {
     if (onVoiceText) {
+      // Save previous handler if it exists
+      const previousHandler = window.onVoiceText;
       window.onVoiceText = onVoiceText;
-    }
 
-    return () => {
-      window.onVoiceText = undefined;
-    };
+      return () => {
+        // Restore previous handler or delete
+        if (previousHandler) {
+          window.onVoiceText = previousHandler;
+        } else {
+          delete window.onVoiceText;
+        }
+      };
+    }
   }, [onVoiceText]);
 
   // Start voice recognition

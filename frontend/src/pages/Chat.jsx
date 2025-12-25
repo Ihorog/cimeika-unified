@@ -23,6 +23,7 @@ export default function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const formRef = useRef(null);
 
   const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -31,10 +32,12 @@ export default function Chat() {
     onVoiceText: (text) => {
       console.log('Voice text received:', text);
       setInputMessage(text);
-      // Auto-submit the voice text
+      // Auto-submit the voice text using form ref
       setTimeout(() => {
-        const event = new Event('submit', { bubbles: true, cancelable: true });
-        document.querySelector('form')?.dispatchEvent(event);
+        if (formRef.current) {
+          const event = new Event('submit', { bubbles: true, cancelable: true });
+          formRef.current.dispatchEvent(event);
+        }
       }, 100);
     },
     onError: (error) => {
@@ -199,7 +202,7 @@ export default function Chat() {
       </div>
 
       {/* Input Form */}
-      <form onSubmit={handleSendMessage} className="flex gap-2">
+      <form ref={formRef} onSubmit={handleSendMessage} className="flex gap-2">
         <input
           ref={inputRef}
           type="text"

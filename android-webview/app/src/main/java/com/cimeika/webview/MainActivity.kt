@@ -26,8 +26,8 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
     private var ttsReady = false
 
     companion object {
-        private const val REQUEST_RECORD_AUDIO = 1
-        private const val REQUEST_OVERLAY = 2
+        private const val REQUEST_RECORD_AUDIO = 1001
+        private const val REQUEST_OVERLAY = 1002
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

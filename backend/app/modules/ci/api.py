@@ -10,7 +10,7 @@ from app.config.seo import seo_service
 from app.modules.ci.schema import CiCaptureRequest, CiCaptureResponse, CiChatRequest, CiChatResponse
 from app.modules.ci.legend_ci_content import LEGEND_CI_NODES, LEGEND_CI_METADATA, SYMBOLIC_LIBRARY
 from app.modules.ci.legend_duality_full import DUALITY_LEGEND_FULL
-from backend.services.openai_service import openai_service
+from services.openai_service import openai_service
 import uuid
 
 router = APIRouter(prefix="/ci", tags=["ci"])
