@@ -39,6 +39,7 @@ CIMEIKA follows the "reality first, action before explanation" design philosophy
 - **Module structure**: Follow existing pattern in `frontend/src/modules/`
 - **No business logic in views**: Keep logic in services/hooks
 - **Theme system**: Deterministic route-based (Kazkar=night, others=day)
+- **ESLint warnings**: Up to 10 warnings allowed (for React hooks exhaustive-deps - adding suggested dependencies can cause infinite loops)
 
 ### Backend (Python + FastAPI)
 

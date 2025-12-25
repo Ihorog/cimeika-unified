@@ -87,6 +87,8 @@ jobs:
             --show-source
       
       - name: Run ruff linter
+        # Ruff is informational - flake8 is the primary linter
+        # Continue on ruff errors to avoid blocking on stricter rules during MVP phase
         run: |
           ruff check app/ --line-length=100
         continue-on-error: true
