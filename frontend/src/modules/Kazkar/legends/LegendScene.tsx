@@ -188,8 +188,9 @@ const LegendScene: React.FC<LegendSceneProps> = ({
                 e.currentTarget.style.boxShadow =
                   '0 8px 20px rgba(99, 102, 241, 0.4)';
               }}
+              aria-label="Озвучити легенду"
             >
-              <span>▶️</span>
+              <span aria-hidden="true">▶️</span>
               <span>Озвучити</span>
             </button>
           )}
@@ -219,8 +220,9 @@ const LegendScene: React.FC<LegendSceneProps> = ({
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.background = 'rgba(79, 70, 229, 0.2)';
             }}
+            aria-label="Увійти в режим ритуалу"
           >
-            <span>🌗</span>
+            <span aria-hidden="true">🌗</span>
             <span>Режим Ритуалу</span>
           </button>
         </motion.div>

@@ -127,8 +127,9 @@ const LegendRitualMode: React.FC<LegendRitualModeProps> = ({ onReturn }) => {
             background: 'rgba(99, 102, 241, 0.3)',
           }}
           whileTap={{ scale: 0.95 }}
+          aria-label="Повернутись до легенди"
         >
-          <span>🔙</span>
+          <span aria-hidden="true">🔙</span>
           <span>Повернутись до легенди</span>
         </motion.button>
       </motion.div>

@@ -4,24 +4,11 @@
  */
 import React, { useState, useEffect } from 'react';
 import LegendScene from './LegendScene';
+import { kazkarApi } from '../api';
 import type { KazkarEntry } from '../types';
 
 interface LegendPageProps {
   legendId: string | number;
-}
-
-/**
- * Fetch a legend by ID from the backend API
- */
-async function fetchLegendById(id: string | number): Promise<KazkarEntry> {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-  const res = await fetch(`${apiUrl}/api/v1/kazkar/stories/${id}`);
-  
-  if (!res.ok) {
-    throw new Error(`Failed to fetch legend: ${res.statusText}`);
-  }
-  
-  return await res.json();
 }
 
 /**
@@ -47,7 +34,9 @@ const LegendPage: React.FC<LegendPageProps> = ({ legendId }) => {
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchLegendById(legendId);
+        // Convert to number if string
+        const id = typeof legendId === 'string' ? parseInt(legendId, 10) : legendId;
+        const data = await kazkarApi.getStory(id);
         setLegend(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error occurred');
