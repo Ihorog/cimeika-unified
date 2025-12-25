@@ -2,9 +2,10 @@
  * LegendScene.tsx
  * Immersive legend display with animations and sense nodes
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import LegendRitualMode from './LegendRitualMode';
+import useKazkarRealtime from '../hooks/useKazkarRealtime';
 
 export interface LegendSceneProps {
   title: string;
@@ -20,6 +21,68 @@ const LegendScene: React.FC<LegendSceneProps> = ({
   onPlayVoice,
 }) => {
   const [isRitualMode, setIsRitualMode] = useState(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.5); // 50% default volume
+  const [showVolumeControl, setShowVolumeControl] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // WebSocket connection for real-time updates
+  const { lastEvent, status: wsStatus, isConnected } = useKazkarRealtime({
+    debug: false,
+  });
+
+  // Initialize ambient audio
+  useEffect(() => {
+    const audio = new Audio('/audio/kazkar_ambient.mp3');
+    audio.loop = true;
+    audio.volume = volume;
+    audioRef.current = audio;
+
+    // Handle loading errors gracefully
+    audio.addEventListener('error', () => {
+      console.log('[LegendScene] Ambient audio not available, continuing without audio');
+    });
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Update volume when changed
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
+  // Handle real-time events
+  useEffect(() => {
+    if (lastEvent) {
+      console.log('[LegendScene] Received WebSocket event:', lastEvent);
+      // Handle legend_sense_activated or other events
+      if (lastEvent.event === 'legend_sense_activated') {
+        // Could trigger visual effects or animations here
+      }
+    }
+  }, [lastEvent]);
+
+  // Toggle ambient audio playback
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isAudioPlaying) {
+        audioRef.current.pause();
+        setIsAudioPlaying(false);
+      } else {
+        audioRef.current.play().catch(error => {
+          console.log('[LegendScene] Audio play prevented:', error);
+        });
+        setIsAudioPlaying(true);
+      }
+    }
+  };
 
   if (isRitualMode) {
     return <LegendRitualMode onReturn={() => setIsRitualMode(false)} />;
@@ -227,6 +290,115 @@ const LegendScene: React.FC<LegendSceneProps> = ({
           </button>
         </motion.div>
       </motion.div>
+
+      {/* Audio controls (fixed position) */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          zIndex: 1000,
+        }}
+      >
+        {/* WebSocket status indicator */}
+        {isConnected && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            style={{
+              position: 'absolute',
+              top: '-10px',
+              right: '-10px',
+              width: '12px',
+              height: '12px',
+              borderRadius: '50%',
+              background: '#10b981',
+              boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)',
+            }}
+            title="Connected to real-time updates"
+          />
+        )}
+
+        {/* Main audio button */}
+        <button
+          onClick={toggleAudio}
+          onMouseEnter={() => setShowVolumeControl(true)}
+          style={{
+            background: 'rgba(30, 27, 75, 0.9)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(139, 92, 246, 0.3)',
+            borderRadius: '50%',
+            width: '56px',
+            height: '56px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+            fontSize: '1.5rem',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.1)';
+            e.currentTarget.style.boxShadow = '0 6px 16px rgba(99, 102, 241, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.4)';
+            setShowVolumeControl(false);
+          }}
+          aria-label={isAudioPlaying ? 'Pause ambient audio' : 'Play ambient audio'}
+        >
+          <span aria-hidden="true">{isAudioPlaying ? '🔊' : '🔇'}</span>
+        </button>
+
+        {/* Volume slider */}
+        {showVolumeControl && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            style={{
+              position: 'absolute',
+              bottom: '0',
+              right: '70px',
+              background: 'rgba(30, 27, 75, 0.95)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(139, 92, 246, 0.3)',
+              borderRadius: '28px',
+              padding: '0.75rem 1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
+            }}
+            onMouseEnter={() => setShowVolumeControl(true)}
+            onMouseLeave={() => setShowVolumeControl(false)}
+          >
+            <span style={{ fontSize: '0.875rem', color: '#a5b4fc' }}>Гучність</span>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={volume}
+              onChange={(e) => setVolume(parseFloat(e.target.value))}
+              style={{
+                width: '120px',
+                height: '4px',
+                borderRadius: '2px',
+                background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${volume * 100}%, rgba(139, 92, 246, 0.3) ${volume * 100}%, rgba(139, 92, 246, 0.3) 100%)`,
+                outline: 'none',
+                cursor: 'pointer',
+              }}
+              aria-label="Volume control"
+            />
+            <span style={{ fontSize: '0.875rem', color: '#e0e7ff', minWidth: '35px' }}>
+              {Math.round(volume * 100)}%
+            </span>
+          </motion.div>
+        )}
+      </div>
     </motion.div>
   );
 };
