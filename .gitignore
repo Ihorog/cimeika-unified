@@ -85,3 +85,17 @@ health_report.md
 # Test scripts (temporary)
 test_ci_capture.py
 test_canon_validation.py
+
+# Android
+android-webview/build/
+android-webview/app/build/
+android-webview/.gradle/
+android-webview/local.properties
+android-webview/*.iml
+android-webview/.idea/
+android-webview/captures/
+android-webview/.cxx/
+android-webview/*.apk
+android-webview/*.aab
+android-webview/*.keystore
+android-webview/*.jks

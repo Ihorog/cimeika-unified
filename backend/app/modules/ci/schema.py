@@ -73,3 +73,16 @@ class CiCaptureResponse(BaseModel):
     related_traces: List[dict] = Field(default_factory=list)
     expand_options: List[str] = Field(default_factory=lambda: CI_EXPAND_OPTIONS.copy())
 
+
+# Chat schemas
+class CiChatRequest(BaseModel):
+    """Schema for chat message request"""
+    message: str = Field(..., description="User message")
+    context: Optional[dict] = Field(default=None, description="Optional context including history")
+
+
+class CiChatResponse(BaseModel):
+    """Schema for chat response"""
+    reply: str = Field(..., description="AI response")
+    timestamp: str = Field(..., description="Response timestamp")
+

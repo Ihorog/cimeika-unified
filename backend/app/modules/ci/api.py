@@ -7,9 +7,10 @@ from fastapi import APIRouter, HTTPException
 from datetime import datetime
 from typing import List, Optional
 from app.config.seo import seo_service
-from app.modules.ci.schema import CiCaptureRequest, CiCaptureResponse
+from app.modules.ci.schema import CiCaptureRequest, CiCaptureResponse, CiChatRequest, CiChatResponse
 from app.modules.ci.legend_ci_content import LEGEND_CI_NODES, LEGEND_CI_METADATA, SYMBOLIC_LIBRARY
 from app.modules.ci.legend_duality_full import DUALITY_LEGEND_FULL
+from services.openai_service import openai_service
 import uuid
 
 router = APIRouter(prefix="/ci", tags=["ci"])
@@ -74,6 +75,48 @@ async def ci_capture(request: CiCaptureRequest):
         time_position=time_position,
         related_traces=related_traces
     )
+
+
+@router.post("/chat", response_model=CiChatResponse)
+async def ci_chat(request: CiChatRequest):
+    """
+    Chat with Ci using OpenAI GPT
+    
+    Args:
+        request: Chat request with message and optional context
+        
+    Returns:
+        AI response with timestamp
+    """
+    if not openai_service or not openai_service.is_available():
+        raise HTTPException(
+            status_code=503,
+            detail="Chat service is unavailable. Please configure OPENAI_API_KEY."
+        )
+    
+    try:
+        # Extract conversation history from context
+        conversation_history = []
+        if request.context and "history" in request.context:
+            conversation_history = request.context["history"]
+        
+        # Get AI response
+        reply = openai_service.chat(
+            user_message=request.message,
+            conversation_history=conversation_history
+        )
+        
+        # Return response with timestamp
+        return CiChatResponse(
+            reply=reply,
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to process chat message: {str(e)}"
+        )
 
 
 @router.get("/seo/states")

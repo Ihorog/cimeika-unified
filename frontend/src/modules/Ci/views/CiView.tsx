@@ -97,6 +97,46 @@ const CiView: React.FC = () => {
           </Link>
         </div>
 
+        {/* Chat Link */}
+        <div style={{ 
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          border: '3px solid #5a67d8',
+          borderRadius: '12px',
+          padding: '2rem',
+          marginBottom: '2rem',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💬</div>
+          <h2 style={{ color: 'white', margin: '0 0 0.5rem 0' }}>Чат з Ci</h2>
+          <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '1.5rem' }}>
+            Інтелектуальний асистент з підтримкою GPT і голосового введення
+          </p>
+          <Link 
+            to="/chat"
+            style={{
+              display: 'inline-block',
+              background: 'white',
+              color: '#5a67d8',
+              padding: '0.75rem 2rem',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: 'bold',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.25)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+            }}
+          >
+            🗨️ Відкрити Чат
+          </Link>
+        </div>
+
         <h2>Про модуль</h2>
         <p>
           <strong>Ci</strong> (Сімейка) — це центральний модуль, який координує роботу всіх інших модулів системи.
