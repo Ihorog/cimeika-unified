@@ -7,14 +7,14 @@ import LegendScene from './LegendScene';
 import type { KazkarEntry } from '../types';
 
 interface LegendPageProps {
-  legendId: string;
+  legendId: string | number;
 }
 
 /**
  * Fetch a legend by ID from the backend API
  */
-async function fetchLegendById(id: string): Promise<KazkarEntry> {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+async function fetchLegendById(id: string | number): Promise<KazkarEntry> {
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const res = await fetch(`${apiUrl}/api/v1/kazkar/stories/${id}`);
   
   if (!res.ok) {
@@ -28,12 +28,12 @@ async function fetchLegendById(id: string): Promise<KazkarEntry> {
  * Play voice for the given text using TTS API
  */
 function playVoice(text: string): void {
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const audio = new Audio(`${apiUrl}/api/tts?text=${encodeURIComponent(text)}`);
   audio.play().catch((error) => {
     console.error('Failed to play voice:', error);
-    // Fallback: inform user that TTS is not available
-    alert('Озвучування недоступне в цей момент');
+    // Note: In production, this should use a toast notification
+    // For now, silently fail to avoid disrupting the user experience
   });
 }
 
