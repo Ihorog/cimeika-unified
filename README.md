@@ -33,23 +33,85 @@
 
 ---
 
-## 🚀 Запуск
+## 🚀 Quick Start
+
+### Prerequisites
+- Docker & Docker Compose (recommended)
+- OR: Python 3.12+ and Node.js 18+ for local development
+
+### Option 1: Docker Compose (Recommended)
 
 ```bash
-# 1. Клонування
+# 1. Clone repository
 git clone https://github.com/Ihorog/cimeika-unified.git
 cd cimeika-unified
 
-# 2. Налаштування
-cp .env.template .env
-# Відредагуйте .env з вашими ключами
+# 2. Setup environment
+cp .env.example .env
+# Edit .env with your configuration (passwords, API keys)
 
-# 3. Запуск
-docker-compose up -d
+# 3. Start all services
+docker compose up -d
 
-# Backend: http://localhost:8000
-# Frontend: http://localhost:3000
-# API Docs: http://localhost:8000/api/docs
+# Access:
+# - Backend API: http://localhost:8000
+# - Frontend: http://localhost:3000
+# - API Docs: http://localhost:8000/api/docs
+
+# View logs
+docker compose logs -f
+
+# Stop services
+docker compose down
+```
+
+### Option 2: Makefile Commands
+
+```bash
+# First-time setup
+make setup          # Creates .env and installs dependencies
+
+# Development
+make dev            # Start all services
+make logs           # View logs
+make down           # Stop services
+make restart        # Restart services
+
+# Testing & Linting
+make test           # Run all tests
+make lint           # Run all linters
+make backend-test   # Backend tests only
+make frontend-lint  # Frontend lint only
+
+# Database
+make db-init        # Initialize database
+
+# Health Checks
+make health         # Check service health
+
+# CI (same as GitHub Actions)
+make ci             # Run full CI pipeline
+
+# Help
+make help           # Show all available commands
+```
+
+### Option 3: Local Development (No Docker)
+
+**Backend:**
+```bash
+cd backend
+pip install -r requirements.txt
+python main.py
+# Runs on http://localhost:8000
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm ci
+npm run dev
+# Runs on http://localhost:3000
 ```
 
 ---
