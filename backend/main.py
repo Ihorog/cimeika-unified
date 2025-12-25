@@ -14,6 +14,7 @@ from app.api.v1 import health
 from app.startup import setup_modules
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
+from app.core.rate_limit import RateLimitMiddleware
 
 # Load environment variables
 load_dotenv()
@@ -74,6 +75,14 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Add rate limiting middleware
+app.add_middleware(
+    RateLimitMiddleware,
+    requests_per_minute=60,
+    requests_per_hour=1000,
+    exclude_paths=["/health", "/ready", "/", "/api/docs", "/api/redoc", "/api/openapi.json"]
 )
 
 
