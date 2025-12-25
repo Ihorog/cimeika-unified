@@ -44,10 +44,12 @@ jobs:
         run: |
           echo "🔌 Waking up Hugging Face Space: Ihorog/cimeika-api"
           
-          # Check space status
-          SPACE_STATUS=$(curl -s -H "Authorization: Bearer $HF_TOKEN" \
-            "https://huggingface.co/api/spaces/Ihorog/cimeika-api" | \
-            grep -o '"runtime":{"stage":"[^"]*"' | cut -d'"' -f6 || echo "unknown")
+          # Check space status - using grep with fallback for robustness
+          SPACE_INFO=$(curl -s -H "Authorization: Bearer $HF_TOKEN" \
+            "https://huggingface.co/api/spaces/Ihorog/cimeika-api" || echo '{}')
+          
+          # Try to extract status, default to "unknown" if parsing fails
+          SPACE_STATUS=$(echo "$SPACE_INFO" | grep -o '"runtime":{"stage":"[^"]*"' | cut -d'"' -f6 || echo "unknown")
           
           echo "📊 Current space status: $SPACE_STATUS"
           
@@ -55,7 +57,7 @@ jobs:
           if [ "$SPACE_STATUS" != "RUNNING" ]; then
             echo "⏰ Sending wake-up request..."
             curl -X POST -H "Authorization: Bearer $HF_TOKEN" \
-              "https://huggingface.co/api/spaces/Ihorog/cimeika-api/restart"
+              "https://huggingface.co/api/spaces/Ihorog/cimeika-api/restart" || true
           fi
           
           # Wait for space to respond (up to 20 attempts × 10s = 200s)
@@ -65,7 +67,8 @@ jobs:
             response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 \
               "${{ env.API_URL }}/api/v1/kazkar/" 2>/dev/null || echo "000")
             
-            if [ "$response" = "200" ] || [ "$response" = "307" ] || [ "$response" = "404" ]; then
+            # Accept 200 (OK) or 307 (redirect) as success
+            if [ "$response" = "200" ] || [ "$response" = "307" ]; then
               echo "✅ Space is responding (HTTP $response)"
               sleep 5
               break

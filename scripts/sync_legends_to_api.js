@@ -214,11 +214,8 @@ async function syncLegendsToAPI(legends) {
         }
       } catch (error) {
         lastError = error;
-        const errorDetails = [
-          error.name,
-          error.message,
-          error.cause ? `(cause: ${error.cause})` : ''
-        ].filter(Boolean).join(' ');
+        const causeStr = error.cause ? ` (cause: ${String(error.cause)})` : '';
+        const errorDetails = `${error.name}: ${error.message}${causeStr}`;
         
         if (attempt < MAX_RETRIES) {
           const delay = BASE_DELAY * attempt;
@@ -229,8 +226,9 @@ async function syncLegendsToAPI(legends) {
     }
 
     if (!success) {
+      const causeStr = lastError?.cause ? ` (cause: ${String(lastError.cause)})` : '';
       const errorDetails = lastError ? 
-        `${lastError.name}: ${lastError.message}${lastError.cause ? ` (cause: ${lastError.cause})` : ''}` : 
+        `${lastError.name}: ${lastError.message}${causeStr}` : 
         'Unknown error';
       console.error(`  ❌ ${legend.title}: ${errorDetails}`);
       errorCount++;
