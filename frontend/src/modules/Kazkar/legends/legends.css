@@ -111,12 +111,84 @@
   border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
+/* Audio control styles */
+.legend-audio-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.legend-audio-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.6);
+}
+
+.legend-audio-button:active {
+  transform: scale(0.95);
+}
+
+/* Volume slider custom styling */
+input[type="range"].legend-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"].legend-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.5);
+  transition: all 0.2s;
+}
+
+input[type="range"].legend-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.7);
+}
+
+input[type="range"].legend-volume-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.5);
+  transition: all 0.2s;
+}
+
+input[type="range"].legend-volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.7);
+}
+
+/* WebSocket status indicator pulse */
+@keyframes ws-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+.legend-ws-indicator {
+  animation: ws-pulse 2s ease-in-out infinite;
+}
+
 /* Performance optimization: reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .legend-shimmer,
   .legend-glow,
   .legend-particle,
-  .legend-breathe {
+  .legend-breathe,
+  .legend-ws-indicator {
     animation: none;
   }
   
@@ -138,3 +210,16 @@
   z-index: 1;
   overflow: hidden;
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .legend-audio-button {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .legend-volume-control {
+    display: none; /* Hide volume slider on mobile, only show play/pause */
+  }
+}
+
