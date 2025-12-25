@@ -27,6 +27,9 @@ export default function Chat() {
 
   const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+  // Small delay to ensure state is updated before form submission
+  const VOICE_AUTO_SUBMIT_DELAY = 100; // milliseconds
+
   // Voice integration
   const { isAndroid, startVoice, speak } = useVoiceIntegration({
     onVoiceText: (text) => {
@@ -38,7 +41,7 @@ export default function Chat() {
           const event = new Event('submit', { bubbles: true, cancelable: true });
           formRef.current.dispatchEvent(event);
         }
-      }, 100);
+      }, VOICE_AUTO_SUBMIT_DELAY);
     },
     onError: (error) => {
       console.error('Voice error:', error);

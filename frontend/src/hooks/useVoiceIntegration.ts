@@ -64,7 +64,9 @@ export const useVoiceIntegration = (options: UseVoiceIntegrationOptions = {}) =>
   // Speak text using TTS
   const speak = useCallback((text: string) => {
     if (!isAndroid) {
-      console.log('TTS not available (not in Android app)');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('TTS not available (not in Android app)');
+      }
       return;
     }
 

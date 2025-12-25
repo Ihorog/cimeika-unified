@@ -26,6 +26,7 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
     private var ttsReady = false
 
     companion object {
+        // Unique request codes to avoid conflicts with other activities
         private const val REQUEST_RECORD_AUDIO = 1001
         private const val REQUEST_OVERLAY = 1002
     }
