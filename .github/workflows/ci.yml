@@ -8,10 +8,17 @@ on:
     branches:
       - main
 
+# Minimal permissions for security
+permissions:
+  contents: read
+
 jobs:
   frontend:
     name: Frontend Checks (Node.js ${{ matrix.node-version }})
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
     
     strategy:
       matrix:
@@ -53,6 +60,9 @@ jobs:
   backend:
     name: Backend Checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
     
     strategy:
       matrix:
@@ -104,6 +114,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [frontend, backend]
     if: always()
+    
+    permissions:
+      contents: read
     
     steps:
       - name: Check job results
