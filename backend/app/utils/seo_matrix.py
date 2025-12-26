@@ -26,6 +26,7 @@ _DEFAULT_MATRIX: Dict[str, Any] = {
     "meta_entries": {},  # will be generated below
 }
 
+
 _DEFAULT_STATES = [
     "fatigue",
     "tension",
