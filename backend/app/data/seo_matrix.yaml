@@ -1,3 +1,5 @@
+canonical_lang: en
+
 states:
   - fatigue
   - focus
@@ -21,7 +23,14 @@ meta:
   source: "cimeika"
   language: "uk"
   description: "Default SEO matrix"
-  
+
 hreflang_patterns:
   uk: "/uk/{state}/{intent}"
   en: "/en/{state}/{intent}"
+
+# Мінімальний набір meta_entries, щоб get_meta() не повертав None на базовій парі
+meta_entries:
+  fatigue:
+    understand:
+      title: "Fatigue — understand"
+      description: "Understand fatigue: causes, signals, and first steps."
