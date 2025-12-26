@@ -16,7 +16,7 @@ on:
         default: 'false'
 
 env:
-  API_URL: ${{ secrets.CIMEIKA_API_URL || 'https://api.cimeika.com.ua' }}
+  API_URL: ${{ secrets.CIMEIKA_API_URL || 'https://ihorog-cimeika-api.hf.space' }}
   NODE_VERSION: '18'
 
 jobs:
@@ -37,6 +37,49 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           npm install --package-lock-only || npm install
+
+      - name: Wake up Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+        run: |
+          echo "🔌 Waking up Hugging Face Space: Ihorog/cimeika-api"
+          
+          # Check space status - using grep with fallback for robustness
+          SPACE_INFO=$(curl -s -H "Authorization: Bearer $HF_TOKEN" \
+            "https://huggingface.co/api/spaces/Ihorog/cimeika-api" || echo '{}')
+          
+          # Try to extract status, default to "unknown" if parsing fails
+          SPACE_STATUS=$(echo "$SPACE_INFO" | grep -o '"runtime":{"stage":"[^"]*"' | cut -d'"' -f6 || echo "unknown")
+          
+          echo "📊 Current space status: $SPACE_STATUS"
+          
+          # Wake up if not running
+          if [ "$SPACE_STATUS" != "RUNNING" ]; then
+            echo "⏰ Sending wake-up request..."
+            curl -X POST -H "Authorization: Bearer $HF_TOKEN" \
+              "https://huggingface.co/api/spaces/Ihorog/cimeika-api/restart" || true
+          fi
+          
+          # Wait for space to respond (up to 20 attempts × 10s = 200s)
+          echo "⏳ Waiting for Space to become ready..."
+          for i in {1..20}; do
+            echo "  Attempt $i/20..."
+            response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 \
+              "${{ env.API_URL }}/api/v1/kazkar/" 2>/dev/null || echo "000")
+            
+            # Accept 200 (OK) or 307 (redirect) as success
+            if [ "$response" = "200" ] || [ "$response" = "307" ]; then
+              echo "✅ Space is responding (HTTP $response)"
+              sleep 5
+              break
+            fi
+            
+            if [ $i -eq 20 ]; then
+              echo "⚠️ Space did not respond after 200 seconds, proceeding anyway..."
+            fi
+            
+            sleep 10
+          done
 
       - name: Run sync script (dry run)
         if: github.event.inputs.dry_run == 'true'

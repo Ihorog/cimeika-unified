@@ -158,30 +158,79 @@ async function syncLegendsToAPI(legends) {
     return;
   }
 
+  // Warmup ping to ensure API is ready
+  console.log('\n🔥 Warming up API...');
+  try {
+    const warmupResponse = await fetch(`${API_URL}/api/v1/kazkar/`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(15000)
+    });
+    console.log(`   API warmup: HTTP ${warmupResponse.status}`);
+  } catch (warmupError) {
+    console.warn(`   ⚠️ Warmup ping failed: ${warmupError.message}`);
+    console.log('   Proceeding with sync anyway...\n');
+  }
+
   let successCount = 0;
   let errorCount = 0;
+  const MAX_RETRIES = 3;
+  const BASE_DELAY = 5000; // 5 seconds
 
   for (const legend of legends) {
-    try {
-      const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(legend)
-      });
+    let lastError = null;
+    let success = false;
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log(`  ✅ ${legend.title} (ID: ${result.id || 'N/A'})`);
-        successCount++;
-      } else {
-        const errorText = await response.text();
-        console.error(`  ❌ ${legend.title}: ${response.status} - ${errorText}`);
-        errorCount++;
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const attemptMsg = attempt > 1 ? ` (attempt ${attempt}/${MAX_RETRIES})` : '';
+        if (attempt > 1) {
+          console.log(`  🔄 Retrying ${legend.title}${attemptMsg}...`);
+        }
+
+        const response = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(legend),
+          signal: AbortSignal.timeout(30000) // 30 second timeout
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log(`  ✅ ${legend.title} (ID: ${result.id || 'N/A'})`);
+          successCount++;
+          success = true;
+          break;
+        } else {
+          const errorText = await response.text();
+          lastError = new Error(`HTTP ${response.status}: ${errorText}`);
+          
+          if (attempt < MAX_RETRIES) {
+            const delay = BASE_DELAY * attempt;
+            console.log(`  ⚠️ ${legend.title}: ${lastError.message}, retrying in ${delay/1000}s...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+        }
+      } catch (error) {
+        lastError = error;
+        const causeStr = error.cause ? ` (cause: ${String(error.cause)})` : '';
+        const errorDetails = `${error.name}: ${error.message}${causeStr}`;
+        
+        if (attempt < MAX_RETRIES) {
+          const delay = BASE_DELAY * attempt;
+          console.log(`  ⚠️ ${legend.title}: ${errorDetails}, retrying in ${delay/1000}s...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
       }
-    } catch (error) {
-      console.error(`  ❌ ${legend.title}: ${error.message}`);
+    }
+
+    if (!success) {
+      const causeStr = lastError?.cause ? ` (cause: ${String(lastError.cause)})` : '';
+      const errorDetails = lastError ? 
+        `${lastError.name}: ${lastError.message}${causeStr}` : 
+        'Unknown error';
+      console.error(`  ❌ ${legend.title}: ${errorDetails}`);
       errorCount++;
     }
   }
