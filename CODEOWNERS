@@ -1,0 +1,29 @@
+# CIMEIKA Unified - Code Ownership
+# 
+# This file defines the individuals or teams that are responsible
+# for code in this repository. Code owners are automatically requested
+# for review when someone opens a pull request that modifies code that they own.
+#
+# For more information: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owner
+* @Ihorog
+
+# Backend ownership
+/backend/ @Ihorog
+
+# Frontend ownership
+/frontend/ @Ihorog
+
+# Infrastructure and DevOps
+/.github/ @Ihorog
+/docker-compose.yml @Ihorog
+/infra/ @Ihorog
+
+# Documentation
+/docs/ @Ihorog
+*.md @Ihorog
+
+# Configuration files
+/.editorconfig @Ihorog
+/.gitignore @Ihorog

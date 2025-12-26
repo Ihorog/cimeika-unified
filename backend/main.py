@@ -10,27 +10,68 @@ from dotenv import load_dotenv
 from app.config.database import init_db
 from app.config.canon import CANON_BUNDLE_ID
 from app.api.v1.router import api_router
+from app.api.v1 import health
 from app.startup import setup_modules
+from app.core.config import settings
+from app.core.logging import setup_logging, get_logger
+from app.core.rate_limit import RateLimitMiddleware
+from app.core.monitoring import init_sentry, get_monitoring_status
 
 # Load environment variables
 load_dotenv()
+
+# Setup logging
+setup_logging()
+logger = get_logger(__name__)
+
+# Initialize Sentry (optional)
+sentry = init_sentry()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
+    logger.info("Starting CIMEIKA Backend...")
+    logger.info(f"Environment: {settings.ENVIRONMENT}")
+    logger.info(f"Log Level: {settings.LOG_LEVEL}")
+    
+    # Log monitoring status
+    monitoring_status = get_monitoring_status()
+    if monitoring_status["sentry_enabled"]:
+        logger.info("Sentry monitoring: ENABLED")
+    else:
+        logger.info("Sentry monitoring: DISABLED (SENTRY_DSN not configured)")
+    
+    # Validate configuration
+    validation = settings.validate()
+    if not validation["valid"]:
+        for error in validation["errors"]:
+            logger.error(f"Configuration error: {error}")
+    for warning in validation["warnings"]:
+        logger.warning(f"Configuration warning: {warning}")
+    
     # Startup: Initialize database and modules
-    init_db()
-    setup_modules()
+    try:
+        init_db()
+        logger.info("Database initialized")
+        setup_modules()
+        logger.info("Modules initialized")
+    except Exception as e:
+        logger.error(f"Startup error: {e}", exc_info=True)
+        raise
+    
+    logger.info("CIMEIKA Backend started successfully")
     yield
+    
     # Shutdown: cleanup if needed
+    logger.info("Shutting down CIMEIKA Backend...")
 
 
 # Create FastAPI application
 app = FastAPI(
-    title="CIMEIKA API",
-    description="Центральна екосистема проєкту Cimeika - Family Management Platform",
-    version="0.1.0",
+    title=settings.API_TITLE,
+    description=settings.API_DESCRIPTION,
+    version=settings.API_VERSION,
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
@@ -38,13 +79,21 @@ app = FastAPI(
 )
 
 # Configure CORS
-origins = os.getenv('CORS_ORIGINS', 'http://localhost:3000,http://localhost:5173').split(',')
+logger.info(f"CORS configured with origins: {settings.CORS_ORIGINS}")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Add rate limiting middleware
+app.add_middleware(
+    RateLimitMiddleware,
+    requests_per_minute=60,
+    requests_per_hour=1000,
+    exclude_paths=["/health", "/ready", "/", "/api/docs", "/api/redoc", "/api/openapi.json"]
 )
 
 
@@ -69,15 +118,8 @@ async def root():
     }
 
 
-@app.get("/health")
-async def health():
-    """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "message": "CIMEIKA Backend is running",
-        "canon_bundle_id": CANON_BUNDLE_ID
-    }
-
+# Include health check router (at root level)
+app.include_router(health.router)
 
 # Include API v1 router
 app.include_router(api_router, prefix="/api/v1")
@@ -85,14 +127,13 @@ app.include_router(api_router, prefix="/api/v1")
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv('BACKEND_PORT', 8000))
-    host = os.getenv('BACKEND_HOST', '0.0.0.0')
-    reload = os.getenv('FASTAPI_RELOAD', '1') == '1'
+    
+    logger.info(f"Starting uvicorn server on {settings.BACKEND_HOST}:{settings.BACKEND_PORT}")
     
     # Use string reference for reload support, direct app object otherwise
     uvicorn.run(
-        "main:app" if reload else app,
-        host=host,
-        port=port,
-        reload=reload
+        "main:app" if settings.FASTAPI_RELOAD else app,
+        host=settings.BACKEND_HOST,
+        port=settings.BACKEND_PORT,
+        reload=settings.FASTAPI_RELOAD
     )
