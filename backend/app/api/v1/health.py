@@ -17,13 +17,10 @@ async def health() -> Dict[str, Any]:
     Basic health check endpoint
     
     Returns:
-        dict: Health status with basic system info
+        dict: Simple health status
     """
     return {
-        "status": "ok",
-        "message": "CIMEIKA Backend is running",
-        "version": "0.1.0",
-        "canon_bundle_id": CANON_BUNDLE_ID
+        "status": "ok"
     }
 
 
@@ -32,50 +29,34 @@ async def ready() -> Dict[str, Any]:
     """
     Readiness check endpoint
     Verifies that the service is ready to accept traffic
-    Checks environment configuration and minimal dependencies
+    Validates required environment variables exist (does not print values)
     
     Returns:
-        dict: Readiness status with environment sanity checks
+        dict: Readiness status with dependency checks
     """
-    checks = {}
+    deps = {}
     all_ready = True
     
-    # Check environment variables
-    required_env_vars = ['ENVIRONMENT', 'LOG_LEVEL']
-    optional_env_vars = ['SENTRY_DSN', 'OPENAI_API_KEY', 'ANTHROPIC_API_KEY']
+    # Check required environment variables (MUST exist)
+    required_env_vars = [
+        'POSTGRES_HOST',
+        'POSTGRES_DB',
+        'POSTGRES_USER',
+        'POSTGRES_PASSWORD',
+    ]
     
-    # Required env vars
+    # Check all required vars exist
+    env_status = "ok"
     for var in required_env_vars:
         value = os.getenv(var)
-        if value:
-            checks[var] = "configured"
-        else:
-            checks[var] = "missing (using default)"
+        if not value:
+            env_status = "missing_required"
+            all_ready = False
+            break
     
-    # Optional env vars (just report status, don't fail)
-    for var in optional_env_vars:
-        value = os.getenv(var)
-        checks[var] = "configured" if value else "not configured (optional)"
-    
-    # Check CORS configuration
-    cors_origins = os.getenv('CORS_ORIGINS', 'http://localhost:3000,http://localhost:5173')
-    checks['CORS_ORIGINS'] = "configured" if cors_origins else "missing"
-    
-    # Check database configuration (basic check, not connection)
-    db_host = os.getenv('POSTGRES_HOST', 'localhost')
-    checks['POSTGRES_HOST'] = f"configured ({db_host})"
-    
-    # Check monitoring status
-    monitoring = get_monitoring_status()
-    checks['monitoring'] = {
-        "sentry_enabled": monitoring["sentry_enabled"],
-        "environment": monitoring["environment"]
-    }
+    deps["env"] = env_status
     
     return {
-        "status": "ready" if all_ready else "not_ready",
-        "message": "Service is ready to accept traffic",
-        "version": "0.1.0",
-        "canon_bundle_id": CANON_BUNDLE_ID,
-        "checks": checks
+        "status": "ok" if all_ready else "not_ready",
+        "deps": deps
     }

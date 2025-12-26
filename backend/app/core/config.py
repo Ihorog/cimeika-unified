@@ -23,7 +23,7 @@ class Settings:
     LOG_LEVEL: str = os.getenv('LOG_LEVEL', 'INFO').upper()
     
     # API Configuration
-    API_VERSION: str = "0.1.0"
+    API_VERSION: str = "2.2.1"
     API_TITLE: str = "CIMEIKA API"
     API_DESCRIPTION: str = "Центральна екосистема проєкту Cimeika - Family Management Platform"
     
@@ -59,6 +59,10 @@ class Settings:
     
     # Security
     SECRET_KEY: str = os.getenv('SECRET_KEY', 'change_me_in_production')
+    
+    # Participant API Key
+    CIMEIKA_PARTICIPANT_KEY: Optional[str] = os.getenv('CIMEIKA_PARTICIPANT_KEY', None)
+    PARTICIPANT_API_KEY: Optional[str] = os.getenv('PARTICIPANT_API_KEY', None)
     
     @property
     def database_url(self) -> str:
