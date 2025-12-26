@@ -208,9 +208,10 @@ export default function Chat() {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
-      console.log('Copied to clipboard');
+      console.log('Patch copied to clipboard successfully');
     }).catch((error) => {
-      console.error('Failed to copy:', error);
+      console.error('Failed to copy patch to clipboard:', error);
+      // Could show a user-facing error message here
     });
   };
 

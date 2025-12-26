@@ -24,19 +24,17 @@ export interface ParticipantMessageRequest {
   input: ParticipantMessageInput;
 }
 
-export interface ParticipantAction {
-  type: 'suggest' | 'check' | 'patch';
-  title: string;
-  details: string;
-}
-
 export interface ParticipantMessageResponse {
   participant: string;
   message: string;
   severity: 'info' | 'warn' | 'error';
   outputs: {
     patch_unified_diff?: string | null;
-    actions: ParticipantAction[];
+    actions: Array<{
+      type: 'suggest' | 'check' | 'patch';
+      title: string;
+      details: string;
+    }>;
   };
 }
 
