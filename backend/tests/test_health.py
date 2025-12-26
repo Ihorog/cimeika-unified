@@ -13,6 +13,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 os.environ['ENVIRONMENT'] = 'test'
 os.environ['LOG_LEVEL'] = 'ERROR'
 os.environ['POSTGRES_HOST'] = 'localhost'
+os.environ['POSTGRES_DB'] = 'test_db'
+os.environ['POSTGRES_USER'] = 'test_user'
+os.environ['POSTGRES_PASSWORD'] = 'test_pass'
 
 from main import app
 

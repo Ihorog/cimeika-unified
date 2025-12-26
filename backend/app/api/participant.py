@@ -5,7 +5,7 @@ Handles analysis of CI failures and provides actionable guidance
 from fastapi import APIRouter, Depends, Request, status
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional, Literal
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.core.security import verify_api_key
 from app.core.metrics import (
@@ -131,7 +131,7 @@ def log_audit(path: str, status_code: int, latency_ms: float, metadata: Optional
         metadata: Optional metadata (non-sensitive)
     """
     entry = {
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "path": path,
         "status_code": status_code,
         "latency_ms": latency_ms,
