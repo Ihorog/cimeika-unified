@@ -80,7 +80,7 @@ const NodeView = ({ node, onClose, onNavigate, connectedNodes = [] }) => {
         {/* Connected Nodes */}
         {connectedNodes && connectedNodes.length > 0 && (
           <div className="node-view-connections">
-            <h3 className="node-view-connections-title">Пов'язані вузли</h3>
+            <h3 className="node-view-connections-title">Пов&apos;язані вузли</h3>
             <div className="node-view-connections-grid">
               {connectedNodes.map((conn) => (
                 <button

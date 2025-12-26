@@ -71,7 +71,7 @@ const KazkarView = () => {
     <div className="module-view kazkar-view">
       <header className="module-header">
         <h1>Казкар</h1>
-        <p className="module-subtitle">Пам'ять, історії, легенди</p>
+        <p className="module-subtitle">Пам&apos;ять, історії, легенди</p>
       </header>
       
       <main className="module-content">

@@ -38,12 +38,12 @@ async def ci_capture(request: CiCaptureRequest):
     
     No login required, stateless action, emits event
     """
-    # Step 0: Receive raw event
-    raw_event = {
-        "type": request.type,
-        "content": request.content,
-        "metadata": request.metadata or {}
-    }
+    # Step 0: Receive raw event (for future use)
+    # raw_event = {
+    #     "type": request.type,
+    #     "content": request.content,
+    #     "metadata": request.metadata or {}
+    # }
     
     # Step 1: Structure - classify and attach context
     # 🔧 Simplified classification for initial implementation

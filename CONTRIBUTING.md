@@ -1,214 +1,243 @@
-# Contributing to CIMEIKA Unified
+# Contributing to CIMEIKA UNIFIED
 
-Thank you for your interest in contributing to CIMEIKA! This document outlines the process and rules for contributing to this project.
+Welcome to the CIMEIKA project! We're building a bilingual (EN/UK) family life management platform based on the **CANON v1.0.0** principles with 7 fixed modules.
 
-## 🎯 Philosophy
+## 🎯 Mission & Context
 
-CIMEIKA follows the **"MVP Production Backbone"** approach:
-- **NO fake integrations** - Real implementations only
-- **NO secrets in repo** - Use environment variables
-- **Minimal diffs, maximum value** - Surgical changes only
-- **No mass refactors** - Incremental improvements
+CIMEIKA follows the "reality first, action before explanation" design philosophy with a fixed architecture of 7 immutable modules (Ci, Kazkar, Podija, Nastrij, Malya, Gallery, Calendar). This project is currently in **MVP phase** with a focus on establishing core functionality.
 
-## 📋 PR Requirements
+## 📋 PR Submission Rules
 
-Every Pull Request MUST include:
+### Before Submitting
 
-1. **Summary** - Clear description of what and why
-2. **Changed files list** - Enumerate all modified files
-3. **Local verification steps** - How to test locally
-4. **Acceptance Criteria** - Explicit definition of done
+1. **Read the architecture docs**: Familiarize yourself with `docs/ARCHITECTURE.md` and `CIMEIKA_CANON_TZ_v1.yaml`
+2. **Check existing issues**: Ensure your change aligns with planned work
+3. **Test locally**: Verify all checks pass before submitting
+4. **Keep it minimal**: Make the smallest possible changes to achieve the goal
 
-### PR Template
+### PR Requirements
 
-```markdown
-## Summary
-[Brief description of the change]
+- **Clear title**: Use format `[Module] Brief description` (e.g., `[Ci] Add capture validation`)
+- **Detailed description**: 
+  - What problem does this solve?
+  - What changes were made?
+  - How was it tested?
+- **Link issues**: Reference related issues with `Fixes #123` or `Relates to #456`
+- **Clean commits**: Follow conventional commit format (see below)
+- **Passing CI**: All automated checks must pass (lint, build, tests)
 
-## Changed Files
-- `path/to/file1.py` - [description]
-- `path/to/file2.js` - [description]
+## 💻 Code Style Guidelines
 
-## Local Verification Steps
-1. Step 1
-2. Step 2
-3. Expected result
+### Frontend (React + TypeScript)
 
-## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] CI passes
+- **Indentation**: 2 spaces
+- **Linter**: ESLint (run `npm run lint` in `frontend/`)
+- **Naming conventions**:
+  - Components: PascalCase (`CiOverlay.jsx`)
+  - Hooks: camelCase with `use` prefix (`useCiStore`)
+  - Files: Match component name
+- **Module structure**: Follow existing pattern in `frontend/src/modules/`
+- **No business logic in views**: Keep logic in services/hooks
+- **Theme system**: Deterministic route-based (Kazkar=night, others=day)
+- **ESLint warnings**: Up to 10 warnings allowed (for React hooks exhaustive-deps - adding suggested dependencies can cause infinite loops)
+
+### Backend (Python + FastAPI)
+
+- **Indentation**: 4 spaces
+- **Linter**: flake8 or ruff (CI will run both)
+- **Naming conventions**:
+  - Modules: lowercase (`ci`, `kazkar`)
+  - Classes: PascalCase (`ModuleInterface`)
+  - Functions: snake_case (`get_status()`)
+- **Module structure**: Follow pattern in `backend/app/modules/{module}/`
+  - `api.py` - Routes only (no business logic)
+  - `service.py` - Business logic (implements ModuleInterface)
+  - `model.py` - SQLAlchemy models (require `canon_bundle_id`)
+  - `schema.py` - Pydantic v2 schemas
+- **Type hints**: Use them consistently
+- **Docstrings**: Required for public functions
+
+### General Conventions
+
+- **Language**: Ukrainian for UI text, English for code/docs
+- **Line length**: Max 100 characters (soft limit)
+- **Imports**: Group by stdlib, third-party, local
+- **Comments**: Only when necessary to explain "why", not "what"
+
+## 📝 Commit Message Conventions
+
+We follow **Conventional Commits** format:
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
 ```
 
-## 🔄 Development Workflow
+### Types
 
-### 1. Branch Naming
-```bash
-# Feature branches
-feature/short-description
-
-# Bug fixes
-fix/short-description
-
-# Hotfixes
-hotfix/critical-issue
-
-# MVP PR series (special)
-mvp/pr-01-governance
-mvp/pr-02-backend-bootstrap
-```
-
-### 2. Commit Messages
-Use conventional commits format:
-```
-type(scope): subject
-
-body (optional)
-footer (optional)
-```
-
-**Types:**
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation only
-- `style`: Code style (formatting, no logic change)
-- `refactor`: Code refactoring
-- `test`: Adding or updating tests
-- `chore`: Maintenance tasks
+- `style`: Code style changes (formatting, no logic change)
+- `refactor`: Code restructuring (no feature/bug change)
+- `test`: Adding/updating tests
+- `chore`: Build process, dependencies, tooling
 
-**Examples:**
-```bash
-git commit -m "feat(backend): add rate limiting middleware"
-git commit -m "fix(frontend): resolve theme switching bug in Kazkar"
-git commit -m "docs: update production checklist"
+### Examples
+
+```
+feat(ci): add voice input capture
+fix(kazkar): correct legend date parsing
+docs: update SEO integration guide
+chore: upgrade FastAPI to 0.104.1
 ```
 
-### 3. Before Submitting PR
+### Scope
 
-**Backend:**
-```bash
-cd backend
+Use module names when applicable: `ci`, `kazkar`, `podija`, `nastrij`, `malya`, `gallery`, `calendar`, `backend`, `frontend`, `infra`
 
-# Install dependencies
-pip install -r requirements.txt
+## 🔍 Review Process
 
-# Run linter
-flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+### What Reviewers Look For
 
-# Format code
-black .
+1. **Alignment with CANON principles**: Does it follow the fixed architecture?
+2. **Minimal changes**: Are changes surgical and necessary?
+3. **Code quality**: Proper style, naming, structure
+4. **Testing**: Are changes validated with tests?
+5. **Documentation**: Are relevant docs updated?
+6. **No breaking changes**: Unless explicitly planned
 
-# Run tests
-pytest tests/ -v
-```
+### Response Time Expectations
 
-**Frontend:**
-```bash
-cd frontend
+- Initial review: Within 2-3 business days
+- Follow-up reviews: Within 1 business day
+- Maintainer: @Ihorog
 
-# Install dependencies
-npm ci
+### Addressing Feedback
 
-# Run linter
-npm run lint
+- Respond to all comments (even if just acknowledging)
+- Make requested changes in new commits (don't force-push)
+- Mark conversations as resolved when addressed
+- Request re-review when ready
 
-# Build
-npm run build
-```
+## 🧪 Testing Requirements
 
-**Docker Compose:**
-```bash
-# Full stack test
-docker compose up -d
-curl http://localhost:8000/health
-curl http://localhost:3000
-```
+### Frontend Tests
 
-## 🚫 What NOT to Do
+Currently minimal - focus on manual testing:
+1. Run dev server: `cd frontend && npm run dev`
+2. Test affected modules manually
+3. Verify theme switching works
+4. Check responsive behavior
 
-1. **Don't commit secrets** - Use `.env` files (gitignored)
-2. **Don't add fake integrations** - Real or nothing
-3. **Don't mass refactor** - Small, focused changes
-4. **Don't break existing tests** - Fix or justify
-5. **Don't add unnecessary dependencies** - Justify each new package
-6. **Don't bypass CI** - All PRs must pass CI
+### Backend Tests
+
+Required for all service changes:
+1. Add tests in `backend/tests/`
+2. Follow existing pattern (see `test_kazkar_legend.py`)
+3. Use pytest fixtures for database setup
+4. Run tests: `pytest backend/tests/ -v`
+
+### Integration Testing
+
+- Test with full stack via `docker-compose up`
+- Verify API endpoints with `/api/docs` (Swagger)
+- Check database migrations with `python backend/init_db.py`
 
 ## ✅ Definition of Done
 
-A PR is considered complete when:
+Before marking PR as ready for review, ensure:
 
-- [ ] Code changes are minimal and focused
-- [ ] All CI checks pass (lint, build, tests)
-- [ ] Local verification steps documented and tested
-- [ ] No secrets or credentials committed
-- [ ] Documentation updated (if applicable)
-- [ ] Tests added/updated (if applicable)
-- [ ] Code review approved by @Ihorog
+- [ ] Code follows style guidelines (lint passes)
+- [ ] All CI checks pass (build, lint, tests)
+- [ ] Changes are minimal and focused
+- [ ] Relevant documentation updated
+- [ ] Manual testing completed
+- [ ] No console errors or warnings
+- [ ] Database schema changes are reflected in models
+- [ ] API changes are documented in Swagger (auto-generated)
+- [ ] Commit messages follow conventions
+- [ ] PR description is complete and clear
 
-## 🔐 Security
+## 🚫 What Not to Do
 
-- Use environment variables for all secrets
-- Follow OWASP security best practices
-- Report security vulnerabilities privately to @Ihorog
-- Never commit API keys, passwords, or tokens
+- ❌ Don't add/remove modules (7 is canonical)
+- ❌ Don't create Flask code (archived in `/archive/flask/`)
+- ❌ Don't add root-level directories (structure is fixed)
+- ❌ Don't put business logic in API routes (belongs in services)
+- ❌ Don't use Redux/Context for module state (use Zustand)
+- ❌ Don't add manual theme toggles (themes are route-determined)
+- ❌ Don't modify CANON principles without discussion
 
-## 📚 Code Style
+## 🛠️ Development Workflow
 
-### Python (Backend)
-- Follow PEP 8
-- Use `black` for formatting (line length: 127)
-- Use `flake8` for linting
-- Type hints encouraged
-- Docstrings for public APIs
+### Local Setup
 
-### JavaScript/JSX (Frontend)
-- Follow ESLint configuration
-- Use Prettier for formatting
-- Functional components with hooks
-- PropTypes or TypeScript types
+```bash
+# 1. Clone and setup
+git clone https://github.com/Ihorog/cimeika-unified.git
+cd cimeika-unified
+cp .env.template .env
+# Edit .env with your API keys
 
-### File Structure
-- Follow the existing module structure (7 fixed modules)
-- Keep module-specific code in module directories
-- Shared utilities in `core/` or `utils/`
+# 2. Full stack (recommended)
+docker-compose up -d
 
-## 🧪 Testing
+# 3. Or run separately:
+# Backend
+cd backend
+pip install -r requirements.txt
+python main.py
 
-### Backend Tests
-```python
-# tests/test_*.py
-import pytest
-
-def test_health_endpoint():
-    # Test implementation
-    assert response.status_code == 200
+# Frontend
+cd frontend
+npm install
+npm run dev
 ```
 
-### Frontend Tests
-```javascript
-// Currently using manual testing
-// Automated tests TBD
+### Making Changes
+
+1. **Create branch**: `git checkout -b feature/your-feature-name`
+2. **Make changes**: Follow the guidelines above
+3. **Test locally**: Run lint, build, and tests
+4. **Commit**: Use conventional commit format
+5. **Push**: `git push origin feature/your-feature-name`
+6. **Open PR**: Use PR template, fill all sections
+
+### Running Quality Checks
+
+```bash
+# Frontend checks
+cd frontend
+npm install
+npm run lint
+npm run build
+
+# Backend checks
+cd backend
+pip install -r requirements.txt
+flake8 app/ --max-line-length=100 --extend-ignore=E203,W503
+pytest tests/ -v
 ```
 
-## 📖 Documentation
+## 📚 Key Resources
 
-Update documentation when:
-- Adding new features
-- Changing APIs or interfaces
-- Updating configuration
-- Modifying development workflow
+- **Architecture**: `docs/ARCHITECTURE.md`
+- **CANON Spec**: `CIMEIKA_CANON_TZ_v1.yaml`
+- **Module Orchestration**: `docs/MODULE_ORCHESTRATION.md`
+- **SEO Integration**: `docs/SEO_INTEGRATION.md`
+- **Android Integration**: `docs/ANDROID_WEBVIEW_INTEGRATION.md`
+- **Quick Start**: `QUICKSTART_DEV.md`
 
-Documentation lives in:
-- `/docs/` - Architecture and design docs
-- `README.md` - Quick start and overview
-- `CONTRIBUTING.md` - This file
-- Inline code comments (when necessary)
+## 🤝 Getting Help
 
-## 🙋 Getting Help
-
-- Open an issue for bugs or feature requests
-- Tag @Ihorog for code review
-- Check existing documentation in `/docs/`
+- **Questions**: Open a GitHub Discussion
+- **Bugs**: Open an issue with detailed reproduction steps
+- **Feature requests**: Open an issue with clear use case
+- **Urgent**: Contact @Ihorog directly
 
 ## 📜 License
 
