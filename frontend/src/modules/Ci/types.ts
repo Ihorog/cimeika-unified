@@ -34,3 +34,20 @@ export interface CiChatResponse {
   timestamp: string;
   context?: Record<string, any>;
 }
+
+// Participant API types
+export interface ParticipantAction {
+  type: 'suggest' | 'check' | 'patch';
+  title: string;
+  details: string;
+}
+
+export interface ParticipantMessageData {
+  participant: string;
+  message: string;
+  severity: 'info' | 'warn' | 'error';
+  outputs: {
+    patch_unified_diff?: string | null;
+    actions: ParticipantAction[];
+  };
+}
