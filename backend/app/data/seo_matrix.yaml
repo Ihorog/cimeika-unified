@@ -1,0 +1,27 @@
+states:
+  - fatigue
+  - focus
+  - calm
+  - energy
+  - balance
+  - clarity
+  - flow
+
+intents:
+  - understand
+  - improve
+  - recover
+  - explore
+  - manage
+  - optimize
+  - reflect
+
+meta:
+  version: "1.0"
+  source: "cimeika"
+  language: "uk"
+  description: "Default SEO matrix"
+  
+hreflang_patterns:
+  uk: "/uk/{state}/{intent}"
+  en: "/en/{state}/{intent}"
