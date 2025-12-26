@@ -13,6 +13,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 os.environ['ENVIRONMENT'] = 'test'
 os.environ['LOG_LEVEL'] = 'ERROR'
 os.environ['POSTGRES_HOST'] = 'localhost'
+os.environ['POSTGRES_DB'] = 'test_db'
+os.environ['POSTGRES_USER'] = 'test_user'
+os.environ['POSTGRES_PASSWORD'] = 'test_pass'
 
 from main import app
 
@@ -28,9 +31,7 @@ def test_health_endpoint():
     data = response.json()
     
     assert data["status"] == "ok"
-    assert "version" in data
-    assert "canon_bundle_id" in data
-    assert data["message"] == "CIMEIKA Backend is running"
+    # Simplified health endpoint only returns status
 
 
 def test_ready_endpoint():
@@ -40,36 +41,28 @@ def test_ready_endpoint():
     assert response.status_code == 200
     data = response.json()
     
-    assert data["status"] in ["ready", "not_ready"]
-    assert "version" in data
-    assert "canon_bundle_id" in data
-    assert "checks" in data
+    assert data["status"] in ["ok", "not_ready"]
+    assert "deps" in data
     
-    # Verify checks include expected fields
-    checks = data["checks"]
-    assert "ENVIRONMENT" in checks
-    assert "LOG_LEVEL" in checks
-    assert "CORS_ORIGINS" in checks
-    assert "POSTGRES_HOST" in checks
+    # Verify deps structure
+    deps = data["deps"]
+    assert "env" in deps
+    assert deps["env"] in ["ok", "missing_required"]
 
 
 def test_ready_endpoint_environment_checks():
-    """Test that ready endpoint reports environment variable status"""
+    """Test that ready endpoint validates required environment variables"""
     response = client.get("/ready")
     
     assert response.status_code == 200
     data = response.json()
     
-    checks = data["checks"]
+    deps = data["deps"]
     
-    # Required vars should be configured (we set them above)
-    assert "configured" in checks["ENVIRONMENT"]
-    assert "configured" in checks["LOG_LEVEL"]
-    
-    # Optional vars should report their status
-    assert "SENTRY_DSN" in checks
-    assert "OPENAI_API_KEY" in checks
-    assert "ANTHROPIC_API_KEY" in checks
+    # Should report env status (ok if all required vars present)
+    assert "env" in deps
+    # Since we set required vars in test setup, should be ok
+    assert deps["env"] == "ok"
 
 
 def test_health_response_structure():
@@ -77,10 +70,9 @@ def test_health_response_structure():
     response = client.get("/health")
     data = response.json()
     
-    # Ensure all required fields are present
-    required_fields = ["status", "message", "version", "canon_bundle_id"]
-    for field in required_fields:
-        assert field in data, f"Missing required field: {field}"
+    # Ensure status field is present
+    assert "status" in data
+    assert data["status"] == "ok"
 
 
 def test_ready_response_structure():
@@ -89,12 +81,12 @@ def test_ready_response_structure():
     data = response.json()
     
     # Ensure all required fields are present
-    required_fields = ["status", "message", "version", "canon_bundle_id", "checks"]
+    required_fields = ["status", "deps"]
     for field in required_fields:
         assert field in data, f"Missing required field: {field}"
     
-    # Checks should be a dict
-    assert isinstance(data["checks"], dict)
+    # Deps should be a dict
+    assert isinstance(data["deps"], dict)
 
 
 def test_health_endpoint_performance():

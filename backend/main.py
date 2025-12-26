@@ -11,6 +11,7 @@ from app.config.database import init_db
 from app.config.canon import CANON_BUNDLE_ID
 from app.api.v1.router import api_router
 from app.api.v1 import health
+from app.api import status, participant
 from app.startup import setup_modules
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
@@ -103,7 +104,7 @@ async def root():
     return {
         "status": "success",
         "message": "CIMEIKA FastAPI Backend",
-        "version": "0.1.0",
+        "version": settings.API_VERSION,
         "canon_bundle_id": CANON_BUNDLE_ID,
         "docs": "/api/docs",
         "modules": [
@@ -120,6 +121,12 @@ async def root():
 
 # Include health check router (at root level)
 app.include_router(health.router)
+
+# Include status router (at root level)
+app.include_router(status.router)
+
+# Include participant router (at root level)
+app.include_router(participant.router)
 
 # Include API v1 router
 app.include_router(api_router, prefix="/api/v1")
