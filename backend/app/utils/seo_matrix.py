@@ -249,4 +249,3 @@ class SEOMatrix:
             "hreflang": self.get_hreflang_tags(state, intent),
             "matrix_meta": self._data.get("meta"),
         }
-```0
