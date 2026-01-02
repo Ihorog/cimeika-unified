@@ -339,8 +339,8 @@ execution_strategy_next:
 seo:
   canonical_lang: en
   hreflang:
-    en: "/en/{module}/{category}"
-    ua: "/ua/{module}/{category}"
+    en: "/en/{state}/{intent}"
+    uk: "/uk/{state}/{intent}"
   rules:
     title_max: 60
     description_max: 155
