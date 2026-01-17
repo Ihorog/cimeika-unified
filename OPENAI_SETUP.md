@@ -20,7 +20,7 @@ cp .env.template .env
 
 2. Відкрийте `.env` та додайте ваш ключ:
 ```env
-OPENAI_API_KEY=sk-your-actual-key-here
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
 ```
 
 3. Запустіть бекенд:
@@ -78,7 +78,7 @@ env:
 При запуску Docker контейнера передайте змінну:
 
 ```bash
-docker run -e OPENAI_API_KEY=your-key-here your-image-name
+docker run -e OPENAI_API_KEY=YOUR_OPENAI_API_KEY your-image-name
 ```
 
 Або через docker-compose.yml:

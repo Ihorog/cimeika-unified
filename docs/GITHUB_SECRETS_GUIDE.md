@@ -6,7 +6,7 @@
 
 1. Відкрийте https://platform.openai.com/api-keys
 2. Натисніть **"Create new secret key"**
-3. Скопіюйте ключ (він виглядає як `sk-...`)
+3. Скопіюйте ключ (він виглядає як `YOUR_OPENAI_API_KEY`)
 4. ⚠️ Зберігайте його в безпечному місці!
 
 ### Крок 2: Додавання секрету в GitHub
@@ -24,7 +24,7 @@
 6. Заповніть форму:
    ```
    Name: OPENAI_API_KEY
-   Secret: sk-ваш-ключ-тут
+   Secret: YOUR_OPENAI_API_KEY
    ```
 
 7. Натисніть **"Add secret"**
