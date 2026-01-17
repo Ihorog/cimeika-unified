@@ -284,7 +284,7 @@ VITE_API_URL=https://your-backend.com
 
 ```bash
 # OpenAI API key для чату
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
 OPENAI_MODEL=gpt-3.5-turbo
 OPENAI_TEMPERATURE=0.7
 OPENAI_MAX_TOKENS=500
