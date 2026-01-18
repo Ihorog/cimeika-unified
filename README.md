@@ -475,4 +475,11 @@ TBD
 
 ---
 
+## 🤖 Copilot
+
+This repository follows the global Copilot rules defined in:
+- `ciwiki/.github/copilot-instructions.md` (Source of Truth)
+
+---
+
 **Створено з ❤️ для організації життя** 
