@@ -139,7 +139,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd backend
-          pip install sqlalchemy pydantic
+          pip install -r requirements.txt
       
       - name: Run export script
         run: |
