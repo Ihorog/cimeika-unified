@@ -130,17 +130,21 @@ jobs:
         uses: actions/checkout@v3
         
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: './backend/requirements.txt'
       
       - name: Install dependencies
         run: |
-          pip install sqlalchemy pydantic
+          cd backend
+          pip install -r requirements.txt
       
       - name: Run export script
         run: |
-          python backend/scripts/export_legends_to_ciwiki.py
+          cd backend
+          python scripts/export_legends_to_ciwiki.py
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
       
