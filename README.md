@@ -17,7 +17,8 @@
 - **React + Vite** — сучасний UI stack
 - **7 модульних view** — повноекранні інтерфейси
 - **Ci Chat** — інтелектуальний асистент з GPT
-- **Ci Overlay** — глобальний асистент
+- **CiFAB** — глобальний floating action button для швидкої навігації
+- **WelcomePage** — вітальна сторінка з модулями
 - **Детермінована тема** — залежить від модуля (kazkar=night, інші=day)
 
 ### Android WebView 🎤
@@ -450,7 +451,7 @@ TBD
 
 ### Доступ до легенд
 
-- **Інтерактивний UI**: `/kazkar/legends` — галерея з пошуком та фільтрами
+- **Інтерактивний UI**: `/app/legends` — уніфікований інтерфейс для легенд (замість `/kazkar/legends` та `/ci/legend`)
 - **API**: `/api/v1/kazkar/legends` — REST endpoint
 - **Документація**: [`docs/CI_LEGENDS_UNIFIED_RESOURCE.md`](./docs/CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐
 

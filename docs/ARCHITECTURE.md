@@ -55,6 +55,9 @@ module/
 frontend/src/
 ├─ app/             # App-level components and configuration
 ├─ components/      # Shared components
+│  ├─ CiFAB/       # Global floating action button
+│  ├─ BackgroundTheme/  # Theme management
+│  └─ ModuleStatusDashboard.tsx
 ├─ modules/         # 7 fixed modules (mirror backend)
 │  ├─ Ci/          # Central orchestration core
 │  ├─ Kazkar/      # Memory, stories, legends
@@ -62,7 +65,10 @@ frontend/src/
 │  ├─ Nastrij/     # Emotional states, context
 │  ├─ Malya/       # Ideas, creativity, innovations
 │  ├─ Gallery/     # Visual archive, media
-│  └─ Calendar/    # Time, rhythms, planning
+│  ├─ Calendar/    # Time, rhythms, planning
+│  └─ LegendCi/    # Interactive legend navigation
+├─ pages/          # Top-level pages (WelcomePage, Chat)
+├─ layouts/        # Layout components (MainLayout)
 ├─ stores/         # Global state management
 ├─ services/       # Shared services
 ├─ styles/         # Global styles
