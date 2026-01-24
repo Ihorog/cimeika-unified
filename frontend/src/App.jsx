@@ -9,7 +9,6 @@ import PodijaView from './modules/podija/PodijaView';
 import NastrijView from './modules/nastrij/NastrijView';
 import MalyaView from './modules/malya/MalyaView';
 import KazkarView from './modules/kazkar/KazkarView';
-import { CiLegendsView } from './modules/Kazkar';
 import CalendarView from './modules/calendar/CalendarView';
 import GalleryView from './modules/gallery/GalleryView';
 
@@ -18,6 +17,7 @@ import { LegendCiView } from './modules/LegendCi';
 
 // Import pages
 import Chat from './pages/Chat';
+import WelcomePage from './pages/WelcomePage';
 
 // Import styles
 import './styles/themes.css';
@@ -30,19 +30,26 @@ function App() {
       <ThemeProvider>
         <div className="app">
           <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<Navigate to="/ci" replace />} />
+            {/* Welcome page as root */}
+            <Route path="/" element={<WelcomePage />} />
+            
+            {/* Main app with layout */}
+            <Route path="/app" element={<MainLayout />}>
+              <Route index element={<Navigate to="/app/ci" replace />} />
               <Route path="ci" element={<CiView />} />
-              <Route path="ci/legend" element={<LegendCiView />} />
+              <Route path="legends" element={<LegendCiView />} />
               <Route path="chat" element={<Chat />} />
               <Route path="podija" element={<PodijaView />} />
               <Route path="nastrij" element={<NastrijView />} />
               <Route path="malya" element={<MalyaView />} />
               <Route path="kazkar" element={<KazkarView />} />
-              <Route path="kazkar/legends" element={<CiLegendsView />} />
               <Route path="calendar" element={<CalendarView />} />
               <Route path="gallery" element={<GalleryView />} />
             </Route>
+            
+            {/* Redirects for old legend URLs */}
+            <Route path="/ci/legend" element={<Navigate to="/app/legends" replace />} />
+            <Route path="/kazkar/legends" element={<Navigate to="/app/legends" replace />} />
           </Routes>
         </div>
       </ThemeProvider>
