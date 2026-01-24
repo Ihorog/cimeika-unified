@@ -3,7 +3,6 @@
  */
 
 export { default as KazkarView } from './views/KazkarView';
-export { default as CiLegendsView } from './views/CiLegendsView';
 export { useKazkar } from './hooks/useKazkar';
 export { kazkarService } from './service';
 export { useKazkarStore } from './store';

@@ -17,7 +17,7 @@ export default function WelcomePage() {
       icon: '⚙️', 
       description: 'Центральне ядро системи',
       color: '#667eea',
-      path: '/ci'
+      path: '/app/ci'
     },
     { 
       id: 'podija', 
@@ -25,7 +25,7 @@ export default function WelcomePage() {
       icon: '🎯', 
       description: 'Події та активації',
       color: '#f093fb',
-      path: '/podija'
+      path: '/app/podija'
     },
     { 
       id: 'nastrij', 
@@ -33,7 +33,7 @@ export default function WelcomePage() {
       icon: '😊', 
       description: 'Емоційні стани',
       color: '#4facfe',
-      path: '/nastrij'
+      path: '/app/nastrij'
     },
     { 
       id: 'malya', 
@@ -41,7 +41,7 @@ export default function WelcomePage() {
       icon: '💡', 
       description: 'Ідеї та творчість',
       color: '#43e97b',
-      path: '/malya'
+      path: '/app/malya'
     },
     { 
       id: 'kazkar', 
@@ -49,7 +49,7 @@ export default function WelcomePage() {
       icon: '📖', 
       description: 'Пам\'ять та історії',
       color: '#fa709a',
-      path: '/kazkar'
+      path: '/app/kazkar'
     },
     { 
       id: 'calendar', 
@@ -57,7 +57,7 @@ export default function WelcomePage() {
       icon: '📅', 
       description: 'Час та планування',
       color: '#feca57',
-      path: '/calendar'
+      path: '/app/calendar'
     },
     { 
       id: 'gallery', 
@@ -65,7 +65,7 @@ export default function WelcomePage() {
       icon: '🖼️', 
       description: 'Медіа-контент',
       color: '#ff6b6b',
-      path: '/gallery'
+      path: '/app/gallery'
     },
   ];
 
@@ -93,7 +93,7 @@ export default function WelcomePage() {
           </p>
           <button 
             className="welcome-cta"
-            onClick={() => navigate('/chat')}
+            onClick={() => navigate('/app/chat')}
           >
             <span>Розпочати з чату</span>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
