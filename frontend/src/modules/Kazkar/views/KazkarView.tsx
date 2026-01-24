@@ -94,7 +94,7 @@ const KazkarView: React.FC = () => {
             marginBottom: '2rem',
             cursor: 'pointer',
           }}
-          onClick={() => window.location.href = '/kazkar/legends'}
+          onClick={() => window.location.href = '/app/legends'}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
