@@ -7,6 +7,14 @@ import os
 from pathlib import Path
 from typing import Dict, List, Optional
 from datetime import datetime
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Default manifest structure constants
+DEFAULT_MANIFEST_VERSION = "1.0.0"
+DEFAULT_MANIFEST_KEYS = ["version", "tools", "required_tools", "optional_tools"]
 
 
 class ToolManifest:
@@ -25,8 +33,12 @@ class ToolManifest:
     def _load_manifest(self) -> Dict:
         """Load manifest from JSON file"""
         if not self.manifest_path.exists():
+            logger.warning(
+                f"Manifest file not found at {self.manifest_path}. "
+                "Using empty default manifest. This may indicate a configuration issue."
+            )
             return {
-                "version": "1.0.0",
+                "version": DEFAULT_MANIFEST_VERSION,
                 "tools": [],
                 "required_tools": [],
                 "optional_tools": []
