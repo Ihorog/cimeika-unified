@@ -61,6 +61,10 @@ htmlcov/
 *~
 .DS_Store
 
+# Editor cache/history (VSCode, etc.)
+.history/
+.snapshots/
+
 # Build outputs
 dist/
 build/
