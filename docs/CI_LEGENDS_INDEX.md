@@ -5,7 +5,7 @@
 **Питання**: В яку аптеку розмістити текстовий матеріал бібліотека легенди сі?  
 **Відповідь**: **Модуль Kazkar** — офіційна "аптека" для легенд Ci.
 
-**Головний документ**: [`CI_LEGENDS_SUMMARY.md`](./CI_LEGENDS_SUMMARY.md) ⭐
+**Головний документ**: [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐
 
 ---
 
@@ -15,12 +15,9 @@
 
 | Документ | Опис | Аудиторія |
 |----------|------|-----------|
-| [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐⭐ | **Єдиний спільний ресурс**: Повна інформація про Легенду Сі | Всі |
-| [`CI_LEGENDS_SUMMARY.md`](./CI_LEGENDS_SUMMARY.md) ⭐ | **Головний документ**: Повна відповідь на питання + інструкції | Всі |
-| [`CI_LEGENDS_PLACEMENT.md`](./CI_LEGENDS_PLACEMENT.md) | Детальне обґрунтування чому Kazkar + технічна інформація | Розробники |
-| [`CI_LEGEND_RESEARCH_ROADMAP.md`](./CI_LEGEND_RESEARCH_ROADMAP.md) | Дорожня карта 20-сторінкової наукової публікації | Дослідники |
-| [`CI_LEGENDS_REPOSITORY_COMPARISON.md`](./CI_LEGENDS_REPOSITORY_COMPARISON.md) 🆕 | Порівняння cimeika-unified та ciwiki | Технічна команда |
-| [`CI_LEGENDS_CIWIKI_INTEGRATION.md`](./CI_LEGENDS_CIWIKI_INTEGRATION.md) 🆕 | Інтеграція з ciwiki репозиторієм | DevOps, Документація |
+| [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐ | **Єдиний спільний ресурс**: Повна інформація про Легенду Сі | Всі |
+| [`CI_LEGENDS_UI_GUIDE.md`](./CI_LEGENDS_UI_GUIDE.md) | Гайд по інтерфейсу легенд Ci | Frontend розробники |
+| [`CI_LEGENDS_CIWIKI_INTEGRATION.md`](./CI_LEGENDS_CIWIKI_INTEGRATION.md) | Інтеграція з ciwiki репозиторієм | DevOps, Документація |
 
 ### 2. Модульна документація
 
