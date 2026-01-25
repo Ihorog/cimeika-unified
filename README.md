@@ -425,11 +425,10 @@ curl http://localhost:3000
 8. ⚪ Production deployment
 
 **Детальна документація:**
-- [API Documentation](docs/API_DOCUMENTATION.md)
-- [Development Summary](docs/DEVELOPMENT_SUMMARY.md)
+- [API Reference](API_REFERENCE.md)
 - [Architecture](docs/ARCHITECTURE.md)
-- [Легенди Ci](docs/CI_LEGENDS_PLACEMENT.md) — Бібліотека легенд системи ✨
-- [Дорожня карта дослідницької публікації](docs/CI_LEGEND_RESEARCH_ROADMAP.md) — "Легенда Ci" 📖
+- [Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md)
+- [Легенди Ci](docs/CI_LEGENDS_INDEX.md) — Індекс документації про легенди системи ✨
 
 ---
 
