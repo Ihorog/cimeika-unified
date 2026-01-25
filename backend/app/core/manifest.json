@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cimeika Tool Manifest",
+  "description": "Registry of available tools and modules in the Cimeika ecosystem",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "id": "ci_core",
+      "name": "Ci Core",
+      "description": "Central orchestration module - coordinates all other modules",
+      "status": "active",
+      "category": "core",
+      "endpoints": [
+        "/api/v1/ci/health",
+        "/api/v1/ci/orchestrate"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "kazkar",
+      "name": "Kazkar",
+      "description": "Memory and legends module - stores stories and historical data",
+      "status": "active",
+      "category": "module",
+      "endpoints": [
+        "/api/v1/kazkar/stories",
+        "/api/v1/kazkar/legends"
+      ],
+      "dependencies": ["ci_core"]
+    },
+    {
+      "id": "podija",
+      "name": "Podija",
+      "description": "Events and future scenarios module",
+      "status": "active",
+      "category": "module",
+      "endpoints": [
+        "/api/v1/podija/events"
+      ],
+      "dependencies": ["ci_core"]
+    },
+    {
+      "id": "nastrij",
+      "name": "Nastrij",
+      "description": "Emotional states and context module",
+      "status": "active",
+      "category": "module",
+      "endpoints": [
+        "/api/v1/nastrij/moods"
+      ],
+      "dependencies": ["ci_core"]
+    },
+    {
+      "id": "malya",
+      "name": "Malya",
+      "description": "Ideas and creativity module",
+      "status": "active",
+      "category": "module",
+      "endpoints": [
+        "/api/v1/malya/ideas"
+      ],
+      "dependencies": ["ci_core"]
+    },
+    {
+      "id": "gallery",
+      "name": "Gallery",
+      "description": "Visual archive and media module",
+      "status": "active",
+      "category": "module",
+      "endpoints": [
+        "/api/v1/gallery/media"
+      ],
+      "dependencies": ["ci_core"]
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar",
+      "description": "Time, rhythms and planning module",
+      "status": "active",
+      "category": "module",
+      "endpoints": [
+        "/api/v1/calendar/events"
+      ],
+      "dependencies": ["ci_core"]
+    },
+    {
+      "id": "ai_chat",
+      "name": "AI Chat",
+      "description": "OpenAI GPT integration for intelligent conversations",
+      "status": "active",
+      "category": "integration",
+      "endpoints": [
+        "/api/v1/chat"
+      ],
+      "dependencies": ["ci_core"],
+      "external_dependencies": ["OPENAI_API_KEY"]
+    },
+    {
+      "id": "seo_service",
+      "name": "SEO Service",
+      "description": "SEO optimization and content generation",
+      "status": "active",
+      "category": "service",
+      "endpoints": [
+        "/api/v1/seo/generate"
+      ],
+      "dependencies": ["ci_core"]
+    }
+  ],
+  "required_tools": [
+    "ci_core",
+    "kazkar",
+    "podija",
+    "nastrij",
+    "malya",
+    "gallery",
+    "calendar"
+  ],
+  "optional_tools": [
+    "ai_chat",
+    "seo_service"
+  ]
+}

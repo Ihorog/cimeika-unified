@@ -429,6 +429,47 @@ curl http://localhost:3000
 - [Architecture](docs/ARCHITECTURE.md)
 - [Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md)
 - [Легенди Ci](docs/CI_LEGENDS_INDEX.md) — Індекс документації про легенди системи ✨
+- [Self-Improvement Mechanism](docs/SELF_IMPROVEMENT.md) — Автоматичне виявлення відсутніх інструментів 🤖
+- [SYSTEM_WILL.md](SYSTEM_WILL.md) — Документація для AI агентів
+
+---
+
+## 🤖 Механізм самовдосконалення
+
+Cimeika має вбудований механізм самовдосконалення, який автоматично виявляє відсутні інструменти та генерує детальні GitHub Issues.
+
+### Основні можливості
+
+- 🔍 **Автоматичне виявлення** — Перевіряє наявність усіх необхідних інструментів
+- 📝 **Генерація Issues** — Створює детальні описи GitHub Issues з кроками реалізації
+- 📋 **Реєстр інструментів** — `manifest.json` як джерело правди
+- 🤝 **Інтеграція з AI** — Документація для AI агентів в `SYSTEM_WILL.md`
+
+### Використання
+
+```bash
+# Валідація всіх інструментів
+cd backend
+python -m app.core.self_improvement validate
+
+# Генерація issue для відсутнього інструменту
+python -m app.core.self_improvement generate-issue <tool_id> missing
+
+# Повний звіт
+python -m app.core.self_improvement report
+```
+
+### Структура
+
+```
+backend/app/core/
+├── manifest.json            # Реєстр інструментів
+├── self_improvement.py      # Механізм самовдосконалення
+SYSTEM_WILL.md              # Документація для AI агентів
+docs/SELF_IMPROVEMENT.md    # Детальна документація
+```
+
+**Детальніше:** Див. [docs/SELF_IMPROVEMENT.md](docs/SELF_IMPROVEMENT.md)
 
 ---
 
