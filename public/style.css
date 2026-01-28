@@ -1,0 +1,399 @@
+/**
+ * CIMEIKA Global Styles
+ * Glassmorphism + Cosmic Theme + Presence System
+ */
+
+/* ===== CSS Variables ===== */
+:root {
+    /* Fonts */
+    --font-main: 'Montserrat', sans-serif;
+    --font-header: 'Cinzel', serif;
+    
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(20px);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    
+    /* Themes */
+    --theme-event: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    --theme-mood: radial-gradient(circle, #4facfe 0%, #00f2fe 100%);
+    --theme-kid: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+    --theme-story: radial-gradient(circle, #0f2027, #203a43, #2c5364);
+    --theme-ci: radial-gradient(circle, #667eea 0%, #764ba2 100%);
+    --theme-calendar: linear-gradient(to right, #fa709a 0%, #fee140 100%);
+    --theme-gallery: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+    
+    /* Colors */
+    --cosmic-bg: radial-gradient(ellipse at top, #1a1a2e, #0f0f1e);
+    --text-light: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.7);
+    --accent: #667eea;
+}
+
+/* ===== Reset & Base ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--cosmic-bg);
+    color: var(--text-light);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ===== Seed State (Germination Animation) ===== */
+.seed-state {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cosmic-bg);
+    z-index: 9999;
+    animation: seedFadeOut 3s ease-in-out 3s forwards;
+}
+
+.seed-animation {
+    text-align: center;
+    animation: seedPulse 2s ease-in-out infinite;
+}
+
+.seed-icon {
+    font-size: 120px;
+    margin-bottom: 20px;
+    animation: seedRotate 3s ease-in-out infinite;
+}
+
+.seed-text {
+    font-family: var(--font-header);
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.seed-subtitle {
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+}
+
+@keyframes seedPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes seedRotate {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(10deg); }
+}
+
+@keyframes seedFadeOut {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* ===== Core State (Dashboard) ===== */
+.core-state {
+    min-height: 100vh;
+    padding: 20px;
+    animation: coreReveal 0.8s ease-out;
+}
+
+@keyframes coreReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Header ===== */
+.core-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px 20px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 16px;
+}
+
+.breadcrumb {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: var(--font-header);
+}
+
+.breadcrumb-item {
+    cursor: pointer;
+    color: var(--text-dim);
+    transition: color 0.3s;
+}
+
+.breadcrumb-item:hover,
+.breadcrumb-item.active {
+    color: var(--text-light);
+}
+
+.breadcrumb-item:not(:last-child)::after {
+    content: "›";
+    margin-left: 10px;
+    color: var(--text-dim);
+}
+
+/* ===== Sync Badge ===== */
+.sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(102, 126, 234, 0.2);
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.sync-dot {
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: syncPulse 2s ease-in-out infinite;
+}
+
+@keyframes syncPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* ===== Bento Grid ===== */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ===== Bento Card ===== */
+.bento-card {
+    position: relative;
+    min-height: 200px;
+    padding: 30px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 24px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.bento-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--theme-ci);
+    opacity: 0.1;
+    z-index: 0;
+    transition: opacity 0.3s;
+}
+
+.bento-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--glass-shadow);
+}
+
+.bento-card:hover::before {
+    opacity: 0.2;
+}
+
+.bento-card.large {
+    grid-column: span 2;
+    min-height: 250px;
+}
+
+.bento-card-content {
+    position: relative;
+    z-index: 1;
+}
+
+.bento-card-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.bento-card-title {
+    font-family: var(--font-header);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.bento-card-subtitle {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.5;
+}
+
+/* ===== Module Header (in ability pages) ===== */
+.module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.module-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-family: var(--font-header);
+    font-size: 32px;
+}
+
+.back-button {
+    padding: 10px 20px;
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Presence System ===== */
+#presence-dock {
+    display: flex;
+    gap: 8px;
+}
+
+.presence-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.presence-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background: #4ade80;
+    border-radius: 50%;
+    border: 2px solid #0f0f1e;
+    animation: presencePulse 2s ease-in-out infinite;
+}
+
+@keyframes presencePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ===== Buttons ===== */
+.btn {
+    padding: 12px 24px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: var(--glass-bg);
+    border: var(--glass-border);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bento-card.large {
+        grid-column: span 1;
+    }
+    
+    .seed-icon {
+        font-size: 80px;
+    }
+    
+    .seed-text {
+        font-size: 32px;
+    }
+}
+
+/* ===== Loading State ===== */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

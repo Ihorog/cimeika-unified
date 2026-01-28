@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cimeika OS - Система Операційної Свідомості">
+    <meta name="theme-color" content="#667eea">
+    
+    <title>Cimeika OS</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🌱</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Seed State (Germination Animation) -->
+    <div id="seed-container" class="seed-state">
+        <div class="seed-animation">
+            <div class="seed-icon">🌱</div>
+            <div class="seed-text">CIMEIKA</div>
+            <div class="seed-subtitle">Система Операційної Свідомості</div>
+        </div>
+    </div>
+
+    <!-- Core State (Bento Grid Dashboard) -->
+    <div id="core-container" class="core-state" style="display: none;">
+        <!-- Header -->
+        <header class="core-header">
+            <div class="breadcrumb" id="breadcrumb">
+                <span class="breadcrumb-item active">Cimeika</span>
+            </div>
+            <div class="sync-badge" id="syncBadge">
+                <span class="sync-dot"></span>
+                <span>Синхронізовано</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="core-main">
+            <div class="bento-grid" id="bentoGrid">
+                <!-- Modules will be rendered here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/app.js" type="module"></script>
+</body>
+</html>
