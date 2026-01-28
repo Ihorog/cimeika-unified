@@ -167,7 +167,7 @@
                             <span>Створено: ${item.by}</span>
                             <span class="item-card-device">${item.deviceId}</span>
                         </div>
-                        <button class="btn-delete" onclick="deleteItem(${index})">Видалити</button>
+                        <button class="btn-delete" onclick="deleteItem('${item.id}')">Видалити</button>
                     </div>
                 `;
             }).join('');
@@ -200,9 +200,13 @@
         });
         
         // Delete event
-        window.deleteItem = (index) => {
+        window.deleteItem = (itemId) => {
             if (confirm('Видалити цю подію?')) {
-                podiya.deleteItem(index);
+                const items = podiya.getItems();
+                const index = items.findIndex(item => item.id === Number(itemId));
+                if (index !== -1) {
+                    podiya.deleteItem(index);
+                }
             }
         };
         
