@@ -14,6 +14,9 @@ let navigationHistory = [];
 async function init() {
     console.log('[CIMEIKA] Initializing...');
     
+    // Load modules first
+    await loadModules();
+    
     // Check germination state
     const isGerminated = localStorage.getItem('isGerminated');
     
@@ -27,9 +30,6 @@ async function init() {
         // Already germinated - go straight to core
         transitionToCore();
     }
-    
-    // Load modules
-    await loadModules();
     
     // Register service worker
     registerServiceWorker();
