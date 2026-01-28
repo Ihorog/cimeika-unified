@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея - Cimeika</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .module-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .module-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .gallery-grid {
+            columns: 4;
+            column-gap: 20px;
+        }
+        
+        @media (max-width: 1200px) {
+            .gallery-grid {
+                columns: 3;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-grid {
+                columns: 2;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                columns: 1;
+            }
+        }
+        
+        .gallery-item {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            border-radius: 8px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .gallery-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+        
+        .gallery-source {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            width: 100%;
+            margin-top: 8px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-image {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+        }
+        
+        .modal-close {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-size: 48px;
+            cursor: pointer;
+            color: white;
+            z-index: 1001;
+        }
+        
+        .modal-close:hover {
+            color: #ccc;
+        }
+        
+        .upload-input {
+            display: none;
+        }
+        
+        .section-title {
+            font-family: var(--font-header);
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="module-container">
+        <!-- Module Header -->
+        <div class="module-header">
+            <div class="module-title">
+                <span>🖼️</span>
+                <span>Галерея</span>
+            </div>
+            <div id="presence-dock"></div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="module-controls">
+            <button class="btn" id="uploadBtn">📤 Завантажити фото</button>
+            <a href="/" class="back-button">← Назад до головної</a>
+        </div>
+        
+        <input type="file" id="uploadInput" class="upload-input" accept="image/*" multiple>
+        
+        <!-- Gallery Grid -->
+        <div class="gallery-grid" id="galleryGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="imageModal">
+        <span class="modal-close" id="modalClose">×</span>
+        <img src="" alt="Full size" class="modal-image" id="modalImage">
+    </div>
+
+    <script type="module">
+        import { CimeikaModule } from '/abilities/module-core.js';
+        
+        // Initialize modules
+        const malya = new CimeikaModule({ id: 'malya', name: 'Маля' });
+        const gallery = new CimeikaModule({ id: 'gallery', name: 'Галерея' });
+        
+        // Track changes from both modules
+        let aggregatedMedia = [];
+        
+        function updateGallery() {
+            aggregatedMedia = [
+                ...malya.getItems().map(item => ({ ...item, source: 'malya' })),
+                ...gallery.getItems().map(item => ({ ...item, source: 'gallery' }))
+            ];
+            
+            renderGallery(aggregatedMedia);
+        }
+        
+        // Listen to both modules
+        malya.onItemsChange = updateGallery;
+        gallery.onItemsChange = updateGallery;
+        
+        // Setup presence
+        gallery.onPresenceChange = () => {
+            gallery.renderPresence('presence-dock');
+        };
+        
+        // Render gallery
+        function renderGallery(items) {
+            const grid = document.getElementById('galleryGrid');
+            
+            if (items.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-dim); padding: 60px; grid-column: 1/-1;">Немає зображень.<br>Намалюйте щось в Маля або завантажте фото!</p>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedItems = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            grid.innerHTML = sortedItems.map((item, index) => {
+                const date = new Date(item.date);
+                const formattedDate = date.toLocaleDateString('uk-UA', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                const sourceLabel = item.source === 'malya' ? '🎨 Маля' : '📤 Завантажено';
+                
+                return `
+                    <div class="gallery-item" data-index="${index}" data-source="${item.source}">
+                        <img src="${item.data}" alt="Media" class="gallery-image">
+                        <div class="gallery-meta">
+                            <span>${formattedDate}</span>
+                            <span class="gallery-source">${sourceLabel}</span>
+                        </div>
+                        <div class="gallery-meta" style="margin-top: 5px;">
+                            <span>${item.by}</span>
+                        </div>
+                        ${item.source === 'gallery' ? `<button class="btn-delete" onclick="deleteMedia('${item.source}', ${index})">Видалити</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            // Add click handlers to images
+            grid.querySelectorAll('.gallery-image').forEach((img, idx) => {
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(img.src);
+                });
+            });
+        }
+        
+        // Open image modal
+        function openModal(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            
+            modalImage.src = src;
+            modal.classList.add('active');
+        }
+        
+        // Close modal
+        document.getElementById('modalClose').addEventListener('click', () => {
+            document.getElementById('imageModal').classList.remove('active');
+        });
+        
+        document.getElementById('imageModal').addEventListener('click', (e) => {
+            if (e.target.id === 'imageModal') {
+                document.getElementById('imageModal').classList.remove('active');
+            }
+        });
+        
+        // Upload button
+        document.getElementById('uploadBtn').addEventListener('click', () => {
+            document.getElementById('uploadInput').click();
+        });
+        
+        // Handle file upload
+        document.getElementById('uploadInput').addEventListener('change', (e) => {
+            const files = e.target.files;
+            
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = (event) => {
+                        gallery.addItem({
+                            data: event.target.result,
+                            date: new Date().toISOString(),
+                            filename: file.name
+                        });
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Reset input
+            e.target.value = '';
+        });
+        
+        // Delete media
+        window.deleteMedia = (source, index) => {
+            if (confirm('Видалити це зображення?')) {
+                const items = source === 'malya' ? malya.getItems() : gallery.getItems();
+                const sortedItems = [...aggregatedMedia].filter(i => i.source === source).sort((a, b) => new Date(b.date) - new Date(a.date));
+                const actualIndex = items.indexOf(sortedItems[index]);
+                
+                if (source === 'gallery') {
+                    gallery.deleteItem(actualIndex);
+                }
+            }
+        };
+        
+        // Initial render
+        updateGallery();
+        gallery.renderPresence('presence-dock');
+        
+        // Migrate old data if exists
+        gallery.migrateFromLocalStorage('cimeika-gallery');
+    </script>
+</body>
+</html>
