@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Казкар - Cimeika</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background: radial-gradient(circle, #0f2027, #203a43, #2c5364);
+        }
+        
+        .module-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .module-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .story-grid {
+            columns: 3;
+            column-gap: 20px;
+        }
+        
+        @media (max-width: 992px) {
+            .story-grid {
+                columns: 2;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .story-grid {
+                columns: 1;
+            }
+        }
+        
+        .story-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .story-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .story-card-title {
+            font-family: var(--font-header);
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .story-card-preview {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dim);
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .story-card-date {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 10px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 32px;
+            cursor: pointer;
+            color: var(--text-dim);
+        }
+        
+        .modal-close:hover {
+            color: var(--text-light);
+        }
+        
+        .modal-title {
+            font-family: var(--font-header);
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-text {
+            font-size: 16px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .modal-meta {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+        
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="module-container">
+        <!-- Module Header -->
+        <div class="module-header">
+            <div class="module-title">
+                <span>📖</span>
+                <span>Казкар</span>
+            </div>
+            <div id="presence-dock"></div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="module-controls">
+            <button class="btn" id="addStoryBtn">+ Додати історію</button>
+            <a href="/" class="back-button">← Назад до головної</a>
+        </div>
+        
+        <!-- Stories Grid -->
+        <div class="story-grid" id="storyGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="storyModal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">×</span>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-text" id="modalText"></div>
+            <div class="modal-meta" id="modalMeta"></div>
+            <button class="btn-delete" id="modalDelete">Видалити</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { CimeikaModule } from '/abilities/module-core.js';
+        
+        // Initialize module
+        const kazkar = new CimeikaModule({
+            id: 'kazkar',
+            name: 'Казкар'
+        });
+        
+        let currentStoryIndex = null;
+        
+        // Event handlers
+        kazkar.onItemsChange = (items) => {
+            renderStories(items);
+        };
+        
+        kazkar.onPresenceChange = (users) => {
+            kazkar.renderPresence('presence-dock');
+        };
+        
+        // Render stories
+        function renderStories(items) {
+            const grid = document.getElementById('storyGrid');
+            
+            if (items.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-dim); padding: 40px;">Немає історій. Розкажіть першу історію!</p>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedItems = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            grid.innerHTML = sortedItems.map((item, index) => {
+                const date = new Date(item.date);
+                const formattedDate = date.toLocaleDateString('uk-UA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div class="story-card" data-index="${index}">
+                        <div class="story-card-title">${item.title}</div>
+                        <div class="story-card-preview">${item.text}</div>
+                        <div class="story-card-date">${formattedDate}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Add click handlers
+            grid.querySelectorAll('.story-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const index = parseInt(card.dataset.index);
+                    openStory(sortedItems[index], index);
+                });
+            });
+        }
+        
+        // Open story modal
+        function openStory(story, index) {
+            currentStoryIndex = index;
+            
+            const modal = document.getElementById('storyModal');
+            const title = document.getElementById('modalTitle');
+            const text = document.getElementById('modalText');
+            const meta = document.getElementById('modalMeta');
+            
+            title.textContent = story.title;
+            text.textContent = story.text;
+            
+            const date = new Date(story.date);
+            meta.innerHTML = `
+                Створено: ${date.toLocaleDateString('uk-UA', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })}<br>
+                Автор: ${story.by}<br>
+                Пристрій: ${story.deviceId}
+            `;
+            
+            modal.classList.add('active');
+        }
+        
+        // Close modal
+        document.getElementById('modalClose').addEventListener('click', () => {
+            document.getElementById('storyModal').classList.remove('active');
+        });
+        
+        // Close on background click
+        document.getElementById('storyModal').addEventListener('click', (e) => {
+            if (e.target.id === 'storyModal') {
+                document.getElementById('storyModal').classList.remove('active');
+            }
+        });
+        
+        // Add story
+        document.getElementById('addStoryBtn').addEventListener('click', () => {
+            const title = prompt('Назва історії:');
+            if (!title) return;
+            
+            const text = prompt('Текст історії:');
+            if (!text) return;
+            
+            kazkar.addItem({
+                title,
+                text,
+                date: new Date().toISOString()
+            });
+        });
+        
+        // Delete story
+        document.getElementById('modalDelete').addEventListener('click', () => {
+            if (confirm('Видалити цю історію?')) {
+                const items = kazkar.getItems();
+                const sortedItems = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+                const actualIndex = items.indexOf(sortedItems[currentStoryIndex]);
+                
+                kazkar.deleteItem(actualIndex);
+                document.getElementById('storyModal').classList.remove('active');
+            }
+        });
+        
+        // Initial render
+        renderStories(kazkar.getItems());
+        kazkar.renderPresence('presence-dock');
+        
+        // Migrate old data if exists
+        kazkar.migrateFromLocalStorage('cimeika-kazkar');
+    </script>
+</body>
+</html>

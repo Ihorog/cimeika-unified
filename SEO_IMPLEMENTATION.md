@@ -1,5 +1,7 @@
 # SEO Matrix Implementation - Stage 2/4
 
+> **📖 Full Documentation:** See [`docs/SEO_README.md`](docs/SEO_README.md) for complete SEO strategy and [`docs/SEO_MATRIX_GUIDE.md`](docs/SEO_MATRIX_GUIDE.md) for matrix guide.
+
 ## Overview
 
 This PR implements **Stage 2/4: SEO META CANON + HREFLANG BINDINGS** for the Cimeika Unified project. It provides a complete SEO metadata management system for different emotional states and user intents.

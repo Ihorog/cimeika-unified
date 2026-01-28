@@ -5,7 +5,7 @@
 **Питання**: В яку аптеку розмістити текстовий матеріал бібліотека легенди сі?  
 **Відповідь**: **Модуль Kazkar** — офіційна "аптека" для легенд Ci.
 
-**Головний документ**: [`CI_LEGENDS_SUMMARY.md`](./CI_LEGENDS_SUMMARY.md) ⭐
+**Головний документ**: [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐
 
 ---
 
@@ -15,12 +15,9 @@
 
 | Документ | Опис | Аудиторія |
 |----------|------|-----------|
-| [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐⭐ | **Єдиний спільний ресурс**: Повна інформація про Легенду Сі | Всі |
-| [`CI_LEGENDS_SUMMARY.md`](./CI_LEGENDS_SUMMARY.md) ⭐ | **Головний документ**: Повна відповідь на питання + інструкції | Всі |
-| [`CI_LEGENDS_PLACEMENT.md`](./CI_LEGENDS_PLACEMENT.md) | Детальне обґрунтування чому Kazkar + технічна інформація | Розробники |
-| [`CI_LEGEND_RESEARCH_ROADMAP.md`](./CI_LEGEND_RESEARCH_ROADMAP.md) | Дорожня карта 20-сторінкової наукової публікації | Дослідники |
-| [`CI_LEGENDS_REPOSITORY_COMPARISON.md`](./CI_LEGENDS_REPOSITORY_COMPARISON.md) 🆕 | Порівняння cimeika-unified та ciwiki | Технічна команда |
-| [`CI_LEGENDS_CIWIKI_INTEGRATION.md`](./CI_LEGENDS_CIWIKI_INTEGRATION.md) 🆕 | Інтеграція з ciwiki репозиторієм | DevOps, Документація |
+| [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐ | **Єдиний спільний ресурс**: Повна інформація про Легенду Сі | Всі |
+| [`CI_LEGENDS_UI_GUIDE.md`](./CI_LEGENDS_UI_GUIDE.md) | Гайд по інтерфейсу легенд Ci | Frontend розробники |
+| [`CI_LEGENDS_CIWIKI_INTEGRATION.md`](./CI_LEGENDS_CIWIKI_INTEGRATION.md) | Інтеграція з ciwiki репозиторієм | DevOps, Документація |
 
 ### 2. Модульна документація
 
@@ -34,7 +31,7 @@
 | Документ | Опис |
 |----------|------|
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Загальна архітектура системи Cimeika |
-| [`API_DOCUMENTATION.md`](./API_DOCUMENTATION.md) | API endpoints для всіх модулів |
+| [API Reference](../API_REFERENCE.md) | API endpoints (root level quick reference) |
 
 ---
 
@@ -157,6 +154,8 @@ curl http://localhost:5000/api/kazkar/stats
 
 ## 🔬 Дослідницька публікація
 
+> **📚 Archived:** Research roadmap moved to [`archive/docs-research/ci-legends/CI_LEGEND_RESEARCH_ROADMAP.md`](../archive/docs-research/ci-legends/CI_LEGEND_RESEARCH_ROADMAP.md)
+
 ### "Легенда Ci: Універсальність дуального принципу"
 
 **Формат**: 20-сторінкова наукова праця з ілюстраціями  
@@ -199,7 +198,7 @@ curl http://localhost:5000/api/kazkar/stats
 - FIG-14: Вузлові перетини
 - FIG-15: Лемніската циклів
 
-**Детальна roadmap**: [`CI_LEGEND_RESEARCH_ROADMAP.md`](./CI_LEGEND_RESEARCH_ROADMAP.md)
+**Детальна roadmap**: [`CI_LEGEND_RESEARCH_ROADMAP.md`](../archive/docs-research/ci-legends/CI_LEGEND_RESEARCH_ROADMAP.md) (archived)
 
 ---
 
@@ -209,12 +208,19 @@ curl http://localhost:5000/api/kazkar/stats
 cimeika-unified/
 ├── docs/
 │   ├── CI_LEGENDS_INDEX.md ⭐ ← ВИ ТУТ
-│   ├── CI_LEGENDS_SUMMARY.md ⭐ ← ГОЛОВНИЙ ДОКУМЕНТ
-│   ├── CI_LEGENDS_PLACEMENT.md
-│   ├── CI_LEGEND_RESEARCH_ROADMAP.md
+│   ├── CI_LEGENDS_UNIFIED_RESOURCE.md ⭐ ← ГОЛОВНИЙ ДОКУМЕНТ
+│   ├── CI_LEGENDS_UI_GUIDE.md
+│   ├── CI_LEGENDS_CIWIKI_INTEGRATION.md
 │   └── modules/
 │       ├── kazkar.md
 │       └── README.md
+│
+├── archive/
+│   └── docs-research/
+│       └── ci-legends/  ← ARCHIVED RESEARCH
+│           ├── CI_LEGENDS_SUMMARY.md
+│           ├── CI_LEGENDS_PLACEMENT.md
+│           └── CI_LEGEND_RESEARCH_ROADMAP.md
 │
 ├── backend/
 │   ├── app/
@@ -242,7 +248,7 @@ cimeika-unified/
 
 ### Для розробників
 
-1. Почніть з [`CI_LEGENDS_SUMMARY.md`](./CI_LEGENDS_SUMMARY.md)
+1. Почніть з [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md)
 2. Вивчіть [`modules/kazkar.md`](./modules/kazkar.md)
 3. Подивіться код в `backend/app/modules/kazkar/`
 4. Запустіть seed script: `python backend/scripts/seed_ci_legends.py`
@@ -251,13 +257,13 @@ cimeika-unified/
 ### Для дослідників
 
 1. Прочитайте легенду "Тиша і перша іскра" (в seed даних)
-2. Ознайомтесь з [`CI_LEGEND_RESEARCH_ROADMAP.md`](./CI_LEGEND_RESEARCH_ROADMAP.md)
+2. Ознайомтесь з [`CI_LEGEND_RESEARCH_ROADMAP.md`](../archive/docs-research/ci-legends/CI_LEGEND_RESEARCH_ROADMAP.md) (archived)
 3. Вивчіть структуру 15 розділів
 4. Перегляньте список літератури та методологію
 
 ### Для контент-менеджерів
 
-1. [`CI_LEGENDS_PLACEMENT.md`](./CI_LEGENDS_PLACEMENT.md) — куди додавати легенди
+1. [`CI_LEGENDS_PLACEMENT.md`](../archive/docs-research/ci-legends/CI_LEGENDS_PLACEMENT.md) (archived) — куди додавати легенди
 2. Приклади в `ci_legends_seed.py`
 3. API для створення через POST `/api/kazkar/stories`
 
@@ -271,11 +277,11 @@ cimeika-unified/
 
 ### Kazkar модуль
 - [`modules/kazkar.md`](./modules/kazkar.md)
-- [`CI_LEGENDS_PLACEMENT.md`](./CI_LEGENDS_PLACEMENT.md)
+- [`CI_LEGENDS_PLACEMENT.md`](../archive/docs-research/ci-legends/CI_LEGENDS_PLACEMENT.md) (archived)
 
 ### API
-- [`API_DOCUMENTATION.md`](./API_DOCUMENTATION.md)
-- Розділ "API Endpoints" в [`CI_LEGENDS_SUMMARY.md`](./CI_LEGENDS_SUMMARY.md)
+- [API Reference](../API_REFERENCE.md) (root level quick reference)
+- Розділ "API Endpoints" в [`CI_LEGENDS_UNIFIED_RESOURCE.md`](./CI_LEGENDS_UNIFIED_RESOURCE.md)
 
 ### Seed дані
 - `backend/app/modules/kazkar/ci_legends_seed.py`

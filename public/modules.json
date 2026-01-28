@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "system": "CIMEIKA",
+    "version": "2.0.0",
+    "language": "uk"
+  },
+  "modules": [
+    {
+      "id": "ci",
+      "title": "Ці",
+      "subtitle": "Особистий простір",
+      "icon": "🌱",
+      "theme": "radial-gradient(circle, #667eea 0%, #764ba2 100%)",
+      "size": "large",
+      "type": "container",
+      "children": ["podiya", "kazkar", "nastriy", "malya"]
+    },
+    {
+      "id": "podiya",
+      "parent": "ci",
+      "title": "ПоДія",
+      "subtitle": "Події та майбутнє",
+      "icon": "⚡",
+      "theme": "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+      "size": "medium",
+      "route": "/abilities/podiya.html"
+    },
+    {
+      "id": "kazkar",
+      "parent": "ci",
+      "title": "Казкар",
+      "subtitle": "Історії та легенди",
+      "icon": "📖",
+      "theme": "radial-gradient(circle, #0f2027, #203a43, #2c5364)",
+      "size": "medium",
+      "route": "/abilities/kazkar.html"
+    },
+    {
+      "id": "nastriy",
+      "parent": "ci",
+      "title": "Настрій",
+      "subtitle": "Емоційний стан",
+      "icon": "💧",
+      "theme": "radial-gradient(circle, #4facfe 0%, #00f2fe 100%)",
+      "size": "medium",
+      "route": "/abilities/nastriy.html"
+    },
+    {
+      "id": "malya",
+      "parent": "ci",
+      "title": "Маля",
+      "subtitle": "Творчість та малювання",
+      "icon": "🎨",
+      "theme": "linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)",
+      "size": "medium",
+      "route": "/abilities/malya.html"
+    },
+    {
+      "id": "calendar",
+      "title": "Календар",
+      "subtitle": "Хронологічна лінія",
+      "icon": "📅",
+      "theme": "linear-gradient(to right, #fa709a 0%, #fee140 100%)",
+      "size": "medium",
+      "route": "/abilities/calendar.html"
+    },
+    {
+      "id": "gallery",
+      "title": "Галерея",
+      "subtitle": "Медіа архів",
+      "icon": "🖼️",
+      "theme": "linear-gradient(120deg, #f093fb 0%, #f5576c 100%)",
+      "size": "medium",
+      "route": "/abilities/gallery.html"
+    }
+  ]
+}

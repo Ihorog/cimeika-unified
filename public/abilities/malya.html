@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Маля - Cimeika</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+        }
+        
+        .module-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .module-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .canvas-container {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .canvas-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .color-btn.active {
+            border-color: white;
+            transform: scale(1.2);
+        }
+        
+        .color-btn:hover {
+            transform: scale(1.15);
+        }
+        
+        #drawingCanvas {
+            display: block;
+            width: 100%;
+            max-width: 700px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            cursor: crosshair;
+            touch-action: none;
+            margin: 0 auto;
+        }
+        
+        .drawings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .drawing-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 16px;
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .drawing-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .drawing-preview {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .drawing-date {
+            font-size: 11px;
+            color: var(--text-dim);
+            text-align: center;
+        }
+        
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            width: 100%;
+            margin-top: 8px;
+        }
+        
+        .section-title {
+            font-family: var(--font-header);
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="module-container">
+        <!-- Module Header -->
+        <div class="module-header">
+            <div class="module-title">
+                <span>🎨</span>
+                <span>Маля</span>
+            </div>
+            <div id="presence-dock"></div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="module-controls">
+            <a href="/" class="back-button">← Назад до головної</a>
+        </div>
+        
+        <!-- Canvas -->
+        <div class="canvas-container">
+            <div class="canvas-tools">
+                <div class="color-palette">
+                    <div class="color-btn active" data-color="#000000" style="background: #000000;"></div>
+                    <div class="color-btn" data-color="#FF6B6B" style="background: #FF6B6B;"></div>
+                    <div class="color-btn" data-color="#4ECDC4" style="background: #4ECDC4;"></div>
+                    <div class="color-btn" data-color="#45B7D1" style="background: #45B7D1;"></div>
+                    <div class="color-btn" data-color="#FFA07A" style="background: #FFA07A;"></div>
+                    <div class="color-btn" data-color="#98D8C8" style="background: #98D8C8;"></div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-secondary btn" id="clearBtn">🗑️ Очистити</button>
+                    <button class="btn" id="saveBtn">💾 Зберегти</button>
+                </div>
+            </div>
+            <canvas id="drawingCanvas" width="700" height="500"></canvas>
+        </div>
+        
+        <!-- Saved Drawings -->
+        <div class="section-title">Збережені малюнки</div>
+        <div class="drawings-grid" id="drawingsGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { CimeikaModule } from '/abilities/module-core.js';
+        
+        // Initialize module
+        const malya = new CimeikaModule({
+            id: 'malya',
+            name: 'Маля'
+        });
+        
+        // Canvas setup
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let currentColor = '#000000';
+        
+        // Event handlers
+        malya.onItemsChange = (items) => {
+            renderDrawings(items);
+        };
+        
+        malya.onPresenceChange = (users) => {
+            malya.renderPresence('presence-dock');
+        };
+        
+        // Canvas drawing
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getPosition(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const pos = getPosition(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        function getPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            if (e.touches && e.touches[0]) {
+                return {
+                    x: (e.touches[0].clientX - rect.left) * scaleX,
+                    y: (e.touches[0].clientY - rect.top) * scaleY
+                };
+            }
+            
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+        
+        // Mouse events
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startDrawing(e);
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            draw(e);
+        });
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            stopDrawing();
+        });
+        
+        // Color palette
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentColor = btn.dataset.color;
+            });
+        });
+        
+        // Clear canvas
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (confirm('Очистити полотно?')) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        });
+        
+        // Save drawing
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const dataURL = canvas.toDataURL('image/png');
+            
+            malya.addItem({
+                data: dataURL,
+                date: new Date().toISOString()
+            });
+            
+            // Clear canvas after saving
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+        
+        // Render drawings
+        function renderDrawings(items) {
+            const grid = document.getElementById('drawingsGrid');
+            
+            if (items.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-dim); padding: 40px; grid-column: 1/-1;">Немає збережених малюнків. Намалюйте щось!</p>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedItems = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            grid.innerHTML = sortedItems.map((item, index) => {
+                const date = new Date(item.date);
+                const formattedDate = date.toLocaleDateString('uk-UA', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div class="drawing-card">
+                        <img src="${item.data}" alt="Drawing" class="drawing-preview">
+                        <div class="drawing-date">${formattedDate}</div>
+                        <div class="drawing-date" style="margin-top: 4px;">by ${item.by}</div>
+                        <button class="btn-delete" onclick="deleteDrawing(${index})">Видалити</button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Delete drawing
+        window.deleteDrawing = (index) => {
+            if (confirm('Видалити цей малюнок?')) {
+                const items = malya.getItems();
+                const sortedItems = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+                const actualIndex = items.indexOf(sortedItems[index]);
+                
+                malya.deleteItem(actualIndex);
+            }
+        };
+        
+        // Initial render
+        renderDrawings(malya.getItems());
+        malya.renderPresence('presence-dock');
+        
+        // Migrate old data if exists
+        malya.migrateFromLocalStorage('cimeika-malya');
+    </script>
+</body>
+</html>

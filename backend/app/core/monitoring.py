@@ -2,7 +2,6 @@
 Monitoring integration for CIMEIKA API
 Optional Sentry error tracking and performance monitoring
 """
-import os
 from typing import Optional
 from app.core.config import settings
 from app.core.logging import get_logger

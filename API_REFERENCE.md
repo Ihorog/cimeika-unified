@@ -171,7 +171,7 @@ BACKEND_HOST=0.0.0.0        # Default: 0.0.0.0
 ENVIRONMENT=production      # Default: development
 LOG_LEVEL=INFO              # Default: INFO
 SENTRY_DSN=dsn              # Optional monitoring
-OPENAI_API_KEY=key          # Optional AI features
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY  # Optional AI features
 ```
 
 ## Deployment Ports

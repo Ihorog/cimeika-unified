@@ -1,5 +1,7 @@
 # CIMEIKA Participant API Implementation Summary
 
+> **📖 Full Documentation:** See [`docs/PARTICIPANT_API_INTEGRATION.md`](docs/PARTICIPANT_API_INTEGRATION.md) for complete integration guide.
+
 ## Overview
 
 This implementation adds a complete CI/CD integration layer to the CIMEIKA API, enabling automated analysis of CI failures and providing actionable guidance through a rule-based pattern matching system.
@@ -212,8 +214,8 @@ BACKEND_HOST=0.0.0.0
 SENTRY_DSN=your_sentry_dsn
 
 # AI Integration
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+ANTHROPIC_API_KEY=YOUR_ANTHROPIC_API_KEY
 ```
 
 ## Deployment

@@ -12,13 +12,13 @@ const MainLayout = () => {
 
   const modules = [
     { path: '/', name: 'Головна', id: 'home' },
-    { path: '/ci', name: 'Ci', id: 'ci', description: 'Центральне ядро' },
-    { path: '/podija', name: 'ПоДія', id: 'podija', description: 'Події' },
-    { path: '/nastrij', name: 'Настрій', id: 'nastrij', description: 'Емоції' },
-    { path: '/malya', name: 'Маля', id: 'malya', description: 'Ідеї' },
-    { path: '/kazkar', name: 'Казкар', id: 'kazkar', description: 'Пам\'ять' },
-    { path: '/calendar', name: 'Календар', id: 'calendar', description: 'Час' },
-    { path: '/gallery', name: 'Галерея', id: 'gallery', description: 'Медіа' },
+    { path: '/app/ci', name: 'Ci', id: 'ci', description: 'Центральне ядро' },
+    { path: '/app/podija', name: 'ПоДія', id: 'podija', description: 'Події' },
+    { path: '/app/nastrij', name: 'Настрій', id: 'nastrij', description: 'Емоції' },
+    { path: '/app/malya', name: 'Маля', id: 'malya', description: 'Ідеї' },
+    { path: '/app/kazkar', name: 'Казкар', id: 'kazkar', description: 'Пам\'ять' },
+    { path: '/app/calendar', name: 'Календар', id: 'calendar', description: 'Час' },
+    { path: '/app/gallery', name: 'Галерея', id: 'gallery', description: 'Медіа' },
   ];
 
   return (

@@ -38,42 +38,42 @@ const CiView = () => {
   const modules = [
     { 
       name: 'Казкар', 
-      path: '/kazkar', 
+      path: '/app/kazkar', 
       icon: '📖', 
       description: 'Пам\'ять, історії, легенди',
       color: '#7B2CBF'
     },
     { 
       name: 'Подія', 
-      path: '/podija', 
+      path: '/app/podija', 
       icon: '🎯', 
       description: 'Події, майбутнє, сценарії',
       color: '#F72585'
     },
     { 
       name: 'Настрій', 
-      path: '/nastrij', 
+      path: '/app/nastrij', 
       icon: '💭', 
       description: 'Емоційні стани',
       color: '#4361EE'
     },
     { 
       name: 'Маля', 
-      path: '/malya', 
+      path: '/app/malya', 
       icon: '💡', 
       description: 'Ідеї та творчість',
       color: '#F9C74F'
     },
     { 
       name: 'Календар', 
-      path: '/calendar', 
+      path: '/app/calendar', 
       icon: '📅', 
       description: 'Час та планування',
       color: '#90BE6D'
     },
     { 
       name: 'Галерея', 
-      path: '/gallery', 
+      path: '/app/gallery', 
       icon: '🖼️', 
       description: 'Візуальний архів',
       color: '#F94144'
@@ -215,7 +215,7 @@ const CiView = () => {
             <p>Ci народився з необхідності пам&apos;ятати важливе в потоці життя.</p>
             <button 
               className="btn-secondary"
-              onClick={() => navigate('/ci/legend')}
+              onClick={() => navigate('/app/legends')}
             >
               Читати легенди →
             </button>

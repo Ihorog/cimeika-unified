@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПоДія - Cimeika</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        
+        .module-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .module-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .item-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .item-card-date {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+        
+        .item-card-title {
+            font-family: var(--font-header);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .item-card-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+        }
+        
+        .item-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-dim);
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .item-card-device {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+        
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="module-container">
+        <!-- Module Header -->
+        <div class="module-header">
+            <div class="module-title">
+                <span>⚡</span>
+                <span>ПоДія</span>
+            </div>
+            <div id="presence-dock"></div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="module-controls">
+            <button class="btn" id="addEventBtn">+ Додати подію</button>
+            <a href="/" class="back-button">← Назад до головної</a>
+        </div>
+        
+        <!-- Items Grid -->
+        <div class="items-grid" id="itemsGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { CimeikaModule } from '/abilities/module-core.js';
+        
+        // Initialize module
+        const podiya = new CimeikaModule({
+            id: 'podiya',
+            name: 'ПоДія'
+        });
+        
+        // Event handlers
+        podiya.onItemsChange = (items) => {
+            renderItems(items);
+        };
+        
+        podiya.onPresenceChange = (users) => {
+            podiya.renderPresence('presence-dock');
+        };
+        
+        // Render items
+        function renderItems(items) {
+            const grid = document.getElementById('itemsGrid');
+            
+            if (items.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-dim); padding: 40px;">Немає подій. Додайте першу подію!</p>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedItems = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            grid.innerHTML = sortedItems.map((item, index) => {
+                const date = new Date(item.date);
+                const formattedDate = date.toLocaleDateString('uk-UA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                return `
+                    <div class="item-card">
+                        <div class="item-card-date">${formattedDate}</div>
+                        <div class="item-card-title">${item.title}</div>
+                        <div class="item-card-description">${item.description || ''}</div>
+                        <div class="item-card-meta">
+                            <span>Створено: ${item.by}</span>
+                            <span class="item-card-device">${item.deviceId}</span>
+                        </div>
+                        <button class="btn-delete" onclick="deleteItem('${item.id}')">Видалити</button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Add event
+        document.getElementById('addEventBtn').addEventListener('click', () => {
+            const title = prompt('Назва події:');
+            if (!title) return;
+            
+            const description = prompt('Опис події (необов\'язково):');
+            const dateStr = prompt('Дата події (DD.MM.YYYY HH:MM):');
+            
+            let date;
+            if (dateStr) {
+                // Parse Ukrainian date format
+                const [datePart, timePart] = dateStr.split(' ');
+                const [day, month, year] = datePart.split('.');
+                const [hours, minutes] = timePart ? timePart.split(':') : ['00', '00'];
+                date = new Date(year, month - 1, day, hours, minutes);
+            } else {
+                date = new Date();
+            }
+            
+            podiya.addItem({
+                title,
+                description: description || '',
+                date: date.toISOString()
+            });
+        });
+        
+        // Delete event
+        window.deleteItem = (itemId) => {
+            if (confirm('Видалити цю подію?')) {
+                const items = podiya.getItems();
+                const index = items.findIndex(item => item.id === Number(itemId));
+                if (index !== -1) {
+                    podiya.deleteItem(index);
+                }
+            }
+        };
+        
+        // Initial render
+        renderItems(podiya.getItems());
+        podiya.renderPresence('presence-dock');
+        
+        // Migrate old data if exists
+        podiya.migrateFromLocalStorage('cimeika-podiya');
+    </script>
+</body>
+</html>

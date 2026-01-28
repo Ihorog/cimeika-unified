@@ -17,7 +17,8 @@
 - **React + Vite** — сучасний UI stack
 - **7 модульних view** — повноекранні інтерфейси
 - **Ci Chat** — інтелектуальний асистент з GPT
-- **Ci Overlay** — глобальний асистент
+- **CiFAB** — глобальний floating action button для швидкої навігації
+- **WelcomePage** — вітальна сторінка з модулями
 - **Детермінована тема** — залежить від модуля (kazkar=night, інші=day)
 
 ### Android WebView 🎤
@@ -424,11 +425,51 @@ curl http://localhost:3000
 8. ⚪ Production deployment
 
 **Детальна документація:**
-- [API Documentation](docs/API_DOCUMENTATION.md)
-- [Development Summary](docs/DEVELOPMENT_SUMMARY.md)
+- [API Reference](API_REFERENCE.md)
 - [Architecture](docs/ARCHITECTURE.md)
-- [Легенди Ci](docs/CI_LEGENDS_PLACEMENT.md) — Бібліотека легенд системи ✨
-- [Дорожня карта дослідницької публікації](docs/CI_LEGEND_RESEARCH_ROADMAP.md) — "Легенда Ci" 📖
+- [Implementation Summary](docs/IMPLEMENTATION_SUMMARY.md)
+- [Легенди Ci](docs/CI_LEGENDS_INDEX.md) — Індекс документації про легенди системи ✨
+- [Self-Improvement Mechanism](docs/SELF_IMPROVEMENT.md) — Автоматичне виявлення відсутніх інструментів 🤖
+- [SYSTEM_WILL.md](SYSTEM_WILL.md) — Документація для AI агентів
+
+---
+
+## 🤖 Механізм самовдосконалення
+
+Cimeika має вбудований механізм самовдосконалення, який автоматично виявляє відсутні інструменти та генерує детальні GitHub Issues.
+
+### Основні можливості
+
+- 🔍 **Автоматичне виявлення** — Перевіряє наявність усіх необхідних інструментів
+- 📝 **Генерація Issues** — Створює детальні описи GitHub Issues з кроками реалізації
+- 📋 **Реєстр інструментів** — `manifest.json` як джерело правди
+- 🤝 **Інтеграція з AI** — Документація для AI агентів в `SYSTEM_WILL.md`
+
+### Використання
+
+```bash
+# Валідація всіх інструментів
+cd backend
+python -m app.core.self_improvement validate
+
+# Генерація issue для відсутнього інструменту
+python -m app.core.self_improvement generate-issue <tool_id> missing
+
+# Повний звіт
+python -m app.core.self_improvement report
+```
+
+### Структура
+
+```
+backend/app/core/
+├── manifest.json            # Реєстр інструментів
+├── self_improvement.py      # Механізм самовдосконалення
+SYSTEM_WILL.md              # Документація для AI агентів
+docs/SELF_IMPROVEMENT.md    # Детальна документація
+```
+
+**Детальніше:** Див. [docs/SELF_IMPROVEMENT.md](docs/SELF_IMPROVEMENT.md)
 
 ---
 
@@ -450,7 +491,7 @@ TBD
 
 ### Доступ до легенд
 
-- **Інтерактивний UI**: `/kazkar/legends` — галерея з пошуком та фільтрами
+- **Інтерактивний UI**: `/app/legends` — уніфікований інтерфейс для легенд (замість `/kazkar/legends` та `/ci/legend`)
 - **API**: `/api/v1/kazkar/legends` — REST endpoint
 - **Документація**: [`docs/CI_LEGENDS_UNIFIED_RESOURCE.md`](./docs/CI_LEGENDS_UNIFIED_RESOURCE.md) ⭐
 
@@ -472,6 +513,13 @@ TBD
 - **Документація:** [ciwiki](https://github.com/Ihorog/ciwiki)
 - **Legacy Backend:** [cimeika](https://github.com/Ihorog/cimeika)
 - **Legacy Frontend:** [cimeika-real-time-data-app](https://github.com/Ihorog/cimeika-real-time-data-app)
+
+---
+
+## 🤖 Copilot
+
+This repository follows the global Copilot rules defined in:
+- `ciwiki/.github/copilot-instructions.md` (Source of Truth)
 
 ---
 
