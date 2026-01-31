@@ -159,5 +159,16 @@ class AbilityRegistry:
 # Global registry instance
 registry = AbilityRegistry()
 
+# Import ability implementations
+from .notes import NotesAbility
+from .scheduler import SchedulerAbility
+from .intent_observer import IntentObserverAbility
 
-__all__ = ['Ability', 'AbilityRegistry', 'registry']
+__all__ = [
+    'Ability', 
+    'AbilityRegistry', 
+    'registry',
+    'NotesAbility',
+    'SchedulerAbility',
+    'IntentObserverAbility'
+]

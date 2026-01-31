@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "abilities": {
     "notes": {
-      "enabled": false,
+      "enabled": true,
       "version": "0.1.0",
       "description": "Note-taking and knowledge capture",
       "dependencies": []
