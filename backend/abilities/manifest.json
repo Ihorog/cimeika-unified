@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0",
+  "abilities": {
+    "notes": {
+      "enabled": false,
+      "version": "0.1.0",
+      "description": "Note-taking and knowledge capture",
+      "dependencies": []
+    },
+    "scheduler": {
+      "enabled": false,
+      "version": "0.1.0",
+      "description": "Task scheduling and reminders",
+      "dependencies": []
+    },
+    "intent_observer": {
+      "enabled": false,
+      "version": "0.1.0",
+      "description": "User intent pattern detection",
+      "dependencies": []
+    }
+  }
+}
