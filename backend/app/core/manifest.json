@@ -105,6 +105,27 @@
         "/api/v1/seo/generate"
       ],
       "dependencies": ["ci_core"]
+    },
+    {
+      "id": "abilities_system",
+      "name": "Abilities System",
+      "description": "Plugin-based dormant module activation system (CIT-ORGANISM protocol)",
+      "status": "active",
+      "category": "core",
+      "endpoints": [
+        "/api/v1/abilities",
+        "/api/v1/abilities/manifest",
+        "/api/v1/abilities/{ability_name}",
+        "/api/v1/abilities/{ability_name}/activate",
+        "/api/v1/abilities/{ability_name}/deactivate",
+        "/api/v1/abilities/{ability_name}/execute"
+      ],
+      "dependencies": ["ci_core"],
+      "sub_components": [
+        "notes",
+        "scheduler",
+        "intent_observer"
+      ]
     }
   ],
   "required_tools": [
@@ -114,7 +135,8 @@
     "nastrij",
     "malya",
     "gallery",
-    "calendar"
+    "calendar",
+    "abilities_system"
   ],
   "optional_tools": [
     "ai_chat",

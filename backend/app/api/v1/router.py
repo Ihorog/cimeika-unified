@@ -11,6 +11,7 @@ from app.modules.malya import api as malya_api
 from app.modules.gallery import api as gallery_api
 from app.modules.calendar import api as calendar_api
 from app.api import modules as modules_api
+from app.api.v1 import abilities
 
 # Create main API router
 api_router = APIRouter()
@@ -26,3 +27,6 @@ api_router.include_router(nastrij_api.router, tags=["nastrij"])
 api_router.include_router(malya_api.router, tags=["malya"])
 api_router.include_router(gallery_api.router, tags=["gallery"])
 api_router.include_router(calendar_api.router, tags=["calendar"])
+
+# Include abilities router
+api_router.include_router(abilities.router, tags=["abilities"])
