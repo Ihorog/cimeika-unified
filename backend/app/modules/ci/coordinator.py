@@ -88,8 +88,7 @@ class CiCoordinator:
             )
             self.db.add(state)
         
-        # Update timestamp
-        state.updated_at = datetime.now(timezone.utc)
+        # Commit changes (updated_at is auto-updated by SQLAlchemy)
         self.db.commit()
         
         self.current_persona = target_persona
