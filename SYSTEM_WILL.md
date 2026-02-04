@@ -1,45 +1,6 @@
-# SYSTEM_WILL — Memory of Cimeika Organism
+# SYSTEM_WILL.md
 
-## Version: 0.1.0-awakening
-## Last Updated: 2026-02-04
-
----
-
-## DEPRECATION LOG (2026-02-04)
-
-### Archived Repositories:
-1. **Ihorog/Cimejka** (Template Scaffold)
-   - Status: Minimal starter, no active development
-   - Assets: Basic README/LICENSE → `docs/archive/legacy-cimejka/`
-   
-2. **Ihorog/cimeika** (Legacy Prototype)
-   - Status: Mixed HTML/Next.js/Gradle hybrid
-   - Assets: Technical specs, orchestra scripts → `docs/archive/legacy-cimeika/` + `abilities/dormant/orchestra/`
-   
-3. **Ihorog/cimeika-real-time-data-app** (Audit Prototype)
-   - Status: Extensive documentation, real-time backend
-   - Assets: Architecture docs, audit reports, API schemas → `docs/archive/legacy-realtime/` + `abilities/dormant/realtime-core/`
-
-### Reason:
-System consolidation into **Cimeika-Unified**. Elimination of architectural redundancy. Focus on 111-density evolution.
-
-### Post-Migration Actions:
-- [x] Verify all assets migrated successfully
-- [ ] Update cross-references in `ciwiki` documentation
-- [ ] Delete deprecated repositories (manual confirmation required)
-- [ ] Update CI/CD pipelines to remove legacy repo references
-
----
-
-## ACTIVE REPOSITORIES (Current Nervous System)
-
-| Repository | Role | Status |
-|------------|------|--------|
-| `cimeika-unified` | Core Monorepo | Active (Target) |
-| `cimeika-core-api` | Backend Logic | Active |
-| `ciwiki` | Knowledge Base | Active |
-| `cimeika-sdk` | TypeScript SDK | Dormant |
-| `cimeika-app` | Mobile Interface | Dormant |
+**Cimeika System Will — Guidance for AI Agents**
 
 ---
 
@@ -62,16 +23,6 @@ Cimeika is an integrated life management platform built around **7 specialized m
 3. **Self-Improvement** — The system detects gaps and suggests enhancements
 4. **Documentation First** — All behavior must be documented before implementation
 5. **Anti-Repeat Principle** — Eliminate all repeated actions permanently
-
----
-
-## ARCHITECTURE PRINCIPLES
-
-1. **Monorepo Strategy**: Single source of truth in `cimeika-unified`
-2. **Dormant Modules**: `/abilities/dormant/` contains inactive but preserved functionality
-3. **Archive Pattern**: `/docs/archive/` preserves legacy intellectual assets
-4. **Intent Observer**: Continuous monitoring for activation triggers
-5. **Self-Evolution**: Automated issue creation for missing features
 
 ---
 
@@ -102,17 +53,9 @@ cimeika-unified/
 │       ├── modules/          # UI for each backend module
 │       └── components/       # Shared components
 ├── docs/                     # Documentation
-│   └── archive/              # Legacy repository archives
-│       ├── legacy-cimeika/   # Original prototype assets
-│       ├── legacy-realtime/  # Real-time app documentation
-│       └── legacy-cimejka/   # Template scaffold
-├── abilities/                # System capabilities
-│   └── dormant/             # Inactive but preserved modules
-│       ├── orchestra/       # Deployment orchestration scripts
-│       └── realtime-core/   # Real-time architecture reference
 ├── .github/                  # CI/CD and Copilot instructions
 │   └── copilot-instructions.md    # Global rules (canonical)
-└── SYSTEM_WILL.md           # This file — AI guidance and organism memory
+└── SYSTEM_WILL.md           # This file — AI guidance
 
 ```
 
