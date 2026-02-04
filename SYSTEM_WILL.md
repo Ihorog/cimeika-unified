@@ -1,6 +1,6 @@
-# SYSTEM_WILL.md
+# Cimeika System Will
 
-**Cimeika System Will — Guidance for AI Agents**
+**Guidance for AI Agents**
 
 ---
 
