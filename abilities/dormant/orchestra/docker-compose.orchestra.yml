@@ -1,0 +1,44 @@
+---
+source: Ihorog/cimeika
+archived: 2026-02-04
+reason: System consolidation
+---
+
+version: '3.8'
+
+services:
+  orchestra-master:
+    build:
+      context: .
+      dockerfile: Dockerfile.orchestra
+    environment:
+      - VERCEL_TOKEN=${VERCEL_TOKEN}
+      - BACKEND_API_BASE=${BACKEND_API_BASE}
+      - ENVIRONMENT=local
+    volumes:
+      - ./:/app
+      - /tmp:/tmp
+    ports:
+      - "8080:8080"
+    command: ["./cimeika-orchestra.sh", "start"]
+
+  orchestra-monitoring:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+
+  orchestra-dashboard:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=cimeika123
+    volumes:
+      - ./monitoring/grafana-dashboards:/var/lib/grafana/dashboards
+      - ./monitoring/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml

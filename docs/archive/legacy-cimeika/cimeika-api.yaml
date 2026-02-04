@@ -1,0 +1,1278 @@
+---
+source: Ihorog/cimeika
+archived: 2026-02-04
+reason: System consolidation
+---
+
+info:
+  title: Cimeika API
+  description: API для інтеграції GPT у існуючий інтерфейс чату та управління системою поєднаних компонентів
+  version: 1.0.0
+servers:
+  - url: https://api.cimeika.com/v1
+    description: Основний сервер
+paths:
+  /chat/completion:
+    post:
+      operationId: createChatCompletion
+      summary: Створення запиту до GPT для відповіді у чаті
+      description: Endpoint для створення запиту до GPT для отримання відповіді у чаті
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                  description: Модель GPT для використання
+                  example: text-davinci-003
+                prompt:
+                  type: string
+                  description: Запит для моделі GPT
+                  example: Напиши доповідь про сучасні технології штучного інтелекту.
+                max_tokens:
+                  type: integer
+                  description: Максимальна кількість токенів у відповіді
+                  example: 100
+                temperature:
+                  type: number
+                  description: Температура вибірки
+                  example: 0.7
+      responses:
+        "200":
+          description: Відповідь від GPT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: cmpl-5t6fN9FPjsMxlm8Zy1dJ1Z7P
+                  object:
+                    type: string
+                    example: text_completion
+                  created:
+                    type: integer
+                    example: 1591685959
+                  model:
+                    type: string
+                    example: text-davinci-003
+                  choices:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                          example: Сучасні технології штучного інтелекту включають глибинне навчання, нейронні мережі та обробку природної мови...
+                        index:
+                          type: integer
+                          example: 0
+                        logprobs:
+                          type: object
+                          nullable: true
+                        finish_reason:
+                          type: string
+                          example: length
+        "400":
+          description: Невірний запит
+  /ai/huggingface/completion:
+    post:
+      operationId: createHuggingFaceCompletion
+      summary: Створення запиту до Hugging Face GPT для відповіді у чаті
+      description: Endpoint для створення запиту до Hugging Face GPT для отримання відповіді у чаті
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: string
+                  description: Модель GPT на Hugging Face для використання
+                  example: gpt-neo-2.7B
+                prompt:
+                  type: string
+                  description: Запит для моделі GPT
+                  example: Напиши доповідь про сучасні технології штучного інтелекту.
+                max_tokens:
+                  type: integer
+                  description: Максимальна кількість токенів у відповіді
+                  example: 150
+                temperature:
+                  type: number
+                  description: Температура вибірки
+                  example: 0.6
+      responses:
+        "200":
+          description: Відповідь від Hugging Face GPT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/collect:
+    post:
+      operationId: collectData
+      summary: Збір даних для аналізу
+      description: Endpoint для збору даних з різних джерел для подальшого аналізу
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataSource:
+                  type: string
+                  description: Джерело даних
+                  example: API
+                data:
+                  type: object
+                  description: Дані для збору
+      responses:
+        "200":
+          description: Дані успішно зібрані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Статус операції
+                    example: success
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/log:
+    post:
+      operationId: logData
+      summary: Фіксація зібраних даних
+      description: Endpoint для фіксації зібраних даних у системі
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataId:
+                  type: string
+                  description: ID зібраних даних
+                  example: data-12345
+                logDetails:
+                  type: object
+                  description: Деталі фіксації даних
+      responses:
+        "200":
+          description: Дані успішно зафіксовані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Статус операції
+                    example: success
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/analyze:
+    post:
+      operationId: analyzeData
+      summary: Аналіз даних
+      description: Endpoint для аналізу зібраних даних
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataId:
+                  type: string
+                  description: ID зібраних даних
+                  example: data-12345
+      responses:
+        "200":
+          description: Дані успішно проаналізовані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  analysis:
+                    type: object
+                    description: Результати аналізу
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/save:
+    post:
+      operationId: saveData
+      summary: Збереження даних в базі даних
+      description: Endpoint для збереження зібраних даних у базі даних
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataId:
+                  type: string
+                  description: ID зібраних даних
+                  example: data-12345
+                storageDetails:
+                  type: object
+                  description: Деталі збереження даних
+      responses:
+        "200":
+          description: Дані успішно збережені
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Статус операції
+                    example: success
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/transfer:
+    post:
+      operationId: transferData
+      summary: Передача даних до іншої системи
+      description: Endpoint для передачі зібраних даних до іншої системи
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataId:
+                  type: string
+                  description: ID зібраних даних
+                  example: data-12345
+                destination:
+                  type: string
+                  description: Місце призначення даних
+                  example: external-system
+                transferDetails:
+                  type: object
+                  description: Деталі передачі даних
+      responses:
+        "200":
+          description: Дані успішно передані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Статус операції
+                    example: success
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/predict:
+    post:
+      operationId: predictData
+      summary: Прогнозування на основі зібраних даних
+      description: Endpoint для прогнозування на основі зібраних даних
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataId:
+                  type: string
+                  description: ID зібраних даних
+                  example: data-12345
+                modelId:
+                  type: string
+                  description: ID моделі прогнозування
+                  example: model-67890
+                predictionParameters:
+                  type: object
+                  description: Параметри для прогнозування
+      responses:
+        "200":
+          description: Прогноз успішно створений
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prediction:
+                    type: object
+                    description: Результати прогнозування
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /components:
+    get:
+      operationId: getComponents
+      summary: Отримати список всіх компонентів
+      description: Endpoint для отримання списку всіх компонентів системи
+      responses:
+        "200":
+          description: Список компонентів успішно отриманий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Component"
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+    post:
+      operationId: createComponent
+      summary: Створити новий компонент
+      description: Endpoint для створення нового компоненту системи
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Component"
+      responses:
+        "201":
+          description: Компонент успішно створений
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Component"
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /components/{id}:
+    get:
+      operationId: getComponentById
+      summary: Отримати інформацію про компонент за ID
+      description: Endpoint для отримання інформації про компонент за його ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Інформація про компонент успішно отримана
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Component"
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "404":
+          description: Компонент не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Component not found
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+    put:
+      operationId: updateComponent
+      summary: Оновити інформацію про компонент за ID
+      description: Endpoint для оновлення інформації про компонент за його ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Component"
+      responses:
+        "200":
+          description: Компонент успішно оновлений
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Component"
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "404":
+          description: Компонент не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Component not found
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+    delete:
+      operationId: deleteComponent
+      summary: Видалити компонент за ID
+      description: Endpoint для видалення компоненту за його ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Компонент успішно видалений
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "404":
+          description: Компонент не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Component not found
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /components/{id}/link:
+    post:
+      operationId: linkComponent
+      summary: Зв'язати компонент з іншим компонентом
+      description: Endpoint для зв'язування компоненту з іншим компонентом
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetComponentId:
+                  type: string
+                  description: ID компоненту, з яким потрібно зв'язати
+                  example: component-98765
+                linkType:
+                  type: string
+                  description: Тип зв'язку (наприклад, залежність, асоціація)
+                  example: dependency
+      responses:
+        "200":
+          description: Компоненти успішно зв'язані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Статус операції
+                    example: linked
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "404":
+          description: Компонент не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Component not found
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /components/{id}/unlink:
+    post:
+      operationId: unlinkComponent
+      summary: Розірвати зв'язок між компонентами
+      description: Endpoint для розірвання зв'язку між компонентами
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                targetComponentId:
+                  type: string
+                  description: ID компоненту, з яким потрібно розірвати зв'язок
+                  example: component-98765
+      responses:
+        "200":
+          description: Зв'язок між компонентами успішно розірвано
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Статус операції
+                    example: unlinked
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "404":
+          description: Компонент не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Component not found
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /components/{id}/attributes:
+    get:
+      operationId: getComponentAttributes
+      summary: Отримати атрибути компоненту за ID
+      description: Endpoint для отримання атрибутів компоненту за його ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Атрибути компоненту успішно отримані
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Attribute"
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "404":
+          description: Компонент не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Component not found
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /weather/current:
+    get:
+      operationId: getCurrentWeather
+      summary: Отримати поточні погодні дані
+      description: Endpoint для отримання поточних погодних даних для вказаного міста
+      parameters:
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Назва міста
+            example: London
+      responses:
+        "200":
+          description: Поточні погодні дані успішно отримані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  weather:
+                    type: string
+                    description: Опис погоди
+                    example: clear sky
+                  temperature:
+                    type: number
+                    description: Температура в градусах Цельсія
+                    example: 20.5
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /astrology/forecast:
+    get:
+      operationId: getAstrologicalForecast
+      summary: Отримати астрологічний прогноз
+      description: Endpoint для отримання астрологічного прогнозу для вказаного знаку зодіаку
+      parameters:
+        - name: sign
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Знак зодіаку
+            example: aries
+      responses:
+        "200":
+          description: Астрологічний прогноз успішно отриманий
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  forecast:
+                    type: string
+                    description: Опис астрологічного прогнозу
+                    example: Today is a good day for new beginnings.
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /time/current:
+    get:
+      operationId: getCurrentTime
+      summary: Отримати поточний час
+      description: Endpoint для отримання поточного часу
+      responses:
+        "200":
+          description: Поточний час успішно отриманий
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  time:
+                    type: string
+                    description: Поточний час
+                    example: 2023-09-15T12:34:56Z
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/weather:
+    get:
+      operationId: getWeatherData
+      summary: Отримати погодні дані
+      description: Endpoint для отримання погодних даних для вказаного міста
+      parameters:
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Назва міста
+            example: London
+      responses:
+        "200":
+          description: Погодні дані успішно отримані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  weather:
+                    type: string
+                    description: Опис погоди
+                    example: clear sky
+                  temperature:
+                    type: number
+                    description: Температура в градусах Цельсія
+                    example: 20.5
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+  /data/astrology:
+    get:
+      operationId: getAstrologyData
+      summary: Отримати астрологічні дані
+      description: Endpoint для отримання астрологічних даних для вказаного знаку зодіаку
+      parameters:
+        - name: sign
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Знак зодіаку
+            example: aries
+      responses:
+        "200":
+          description: Астрологічні дані успішно отримані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  forecast:
+                    type: string
+                    description: Опис астрологічного прогнозу
+                    example: Today is a good day for new beginnings.
+        "400":
+          description: Невірний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request parameters
+        "401":
+          description: Неавторизований доступ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized access
+        "500":
+          description: Внутрішня помилка сервера
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - apiKeyAuth: []
+components:
+  schemas:
+    Component:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Унікальний ідентифікатор компоненту
+          example: component-12345
+        name:
+          type: string
+          description: Назва компоненту
+          example: Компонент 1
+        type:
+          type: string
+          description: Тип компоненту
+          example: базовий
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attribute"
+    Attribute:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Назва атрибуту
+          example: атрибут-1
+        value:
+          type: string
+          description: Значення атрибуту
+          example: значення-1
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
