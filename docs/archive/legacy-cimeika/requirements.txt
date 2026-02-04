@@ -1,0 +1,10 @@
+---
+source: Ihorog/cimeika
+archived: 2026-02-04
+reason: System consolidation
+---
+
+Flask
+requests
+gunicorn
+python-dotenv
