@@ -128,6 +128,10 @@ app.include_router(status.router)
 # Include participant router (at root level)
 app.include_router(participant.router)
 
+# Include personas router (at root level)
+from app.api.personas import router as personas_router
+app.include_router(personas_router)
+
 # Include API v1 router
 app.include_router(api_router, prefix="/api/v1")
 
