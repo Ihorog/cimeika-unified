@@ -2,6 +2,7 @@
 Database package for CIMEIKA
 Exports all models and utilities for clean imports
 """
+
 from database.models import (
     Base,
     PersonaEnum,
