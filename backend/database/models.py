@@ -96,7 +96,13 @@ class Persona(Base):
 
 
 class MemoryEntry(Base):
-    """Memory entry with vector embedding for semantic search"""
+    """
+    Memory entry with vector embedding for semantic search
+
+    Note: The 'metadata' column is accessed as 'meta_data' in Python code
+    to avoid conflicts with SQLAlchemy's reserved 'metadata' attribute.
+    In the database, the column is named 'metadata'.
+    """
 
     __tablename__ = "memory_entries"
 
@@ -113,7 +119,7 @@ class MemoryEntry(Base):
     )  # OpenAI ada-002 embedding dimension
     meta_data = Column(
         "metadata", JSON, nullable=True, default=dict
-    )  # Use meta_data in Python, metadata in DB
+    )  # Python: meta_data, DB: metadata
     created_at = Column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )

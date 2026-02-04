@@ -207,14 +207,17 @@ results = db.execute(
 ### Add Memory with Embedding
 ```python
 from database import MemoryEntry, get_db
-import openai
+from openai import OpenAI
 
-# Generate embedding using OpenAI
-response = openai.Embedding.create(
+# Initialize OpenAI client
+client = OpenAI()  # Uses OPENAI_API_KEY from environment
+
+# Generate embedding using OpenAI v1.0+ API
+response = client.embeddings.create(
     input="My important memory",
     model="text-embedding-ada-002"
 )
-embedding = response['data'][0]['embedding']
+embedding = response.data[0].embedding
 
 # Store in database
 db = next(get_db())
@@ -222,7 +225,7 @@ memory = MemoryEntry(
     user_id=user_id,
     content="My important memory",
     embedding=embedding,
-    metadata={"source": "user_input", "tags": ["important"]}
+    meta_data={"source": "user_input", "tags": ["important"]}  # Note: meta_data in Python
 )
 db.add(memory)
 db.commit()
