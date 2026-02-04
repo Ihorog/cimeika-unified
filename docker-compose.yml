@@ -1,7 +1,7 @@
 services:
   # PostgreSQL Database with pgvector
   postgres:
-    image: ankane/pgvector:latest
+    image: ankane/pgvector:v0.5.1
     container_name: cimeika-postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-cimeika}
@@ -63,7 +63,7 @@ services:
       - cimeika-network
     command: >
       sh -c "
-        alembic upgrade head || echo 'Alembic migrations skipped (not configured)' &&
+        alembic upgrade head 2>/dev/null || echo 'Alembic migrations skipped (not configured)' ;
         uvicorn main:app --host 0.0.0.0 --port 8000 --reload
       "
 

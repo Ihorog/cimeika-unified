@@ -102,7 +102,6 @@ frontend-install: ## Install frontend dependencies only
 	cd frontend && npm ci
 
 # Database Commands
-# Database Commands
 db-up: ## Start only PostgreSQL
 	docker compose up postgres -d
 	@echo "Waiting for PostgreSQL..."
