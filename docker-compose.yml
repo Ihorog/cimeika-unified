@@ -1,7 +1,7 @@
 services:
-  # PostgreSQL Database
+  # PostgreSQL Database with pgvector
   postgres:
-    image: postgres:15-alpine
+    image: ankane/pgvector:v0.5.1
     container_name: cimeika-postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-cimeika}
@@ -11,6 +11,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cimeika_user}"]
       interval: 10s
@@ -38,6 +39,7 @@ services:
       dockerfile: Dockerfile
     container_name: cimeika-backend
     environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-cimeika_user}:${POSTGRES_PASSWORD:-change_me_in_production}@postgres:5432/${POSTGRES_DB:-cimeika}
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_DB=${POSTGRES_DB:-cimeika}
@@ -59,6 +61,11 @@ services:
         condition: service_healthy
     networks:
       - cimeika-network
+    command: >
+      sh -c "
+        alembic upgrade head 2>/dev/null || echo 'Alembic migrations skipped (not configured)' ;
+        uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      "
 
   # Optional: Celery Worker (uncomment if background processing needed)
   # celery-worker:

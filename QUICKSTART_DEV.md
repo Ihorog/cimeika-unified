@@ -60,6 +60,68 @@ npm run dev
 - Backend: http://localhost:5000
 - API Docs: http://localhost:5000/api/docs
 
+---
+
+## 🐳 Local Development with Docker
+
+### Prerequisites
+- Docker 24+
+- Docker Compose 2.20+
+
+### Quick Start
+
+1. **Clone and setup:**
+```bash
+git clone https://github.com/Ihorog/cimeika-unified.git
+cd cimeika-unified
+cp .env.example .env
+# Edit .env and set your passwords and API keys
+```
+
+2. **Start all services:**
+```bash
+make dev
+# or
+docker compose up -d
+```
+
+3. **Check status:**
+```bash
+docker compose ps
+docker compose logs backend
+```
+
+4. **Access:**
+- Backend API: http://localhost:8000/docs
+- Frontend: http://localhost:3000
+- PostgreSQL: localhost:5432
+
+5. **Run migrations:**
+```bash
+make db-init
+```
+
+### Useful Commands
+
+- `make db-up` - Start only PostgreSQL
+- `make db-migrate msg="description"` - Create new migration
+- `make stop` - Stop all services
+- `make clean` - Remove all containers and volumes
+
+### Testing PostgreSQL with pgvector
+
+Check that pgvector extension is installed:
+```bash
+docker compose exec postgres psql -U cimeika_user -d cimeika -c "SELECT * FROM pg_extension WHERE extname='vector';"
+```
+
+Verify backend health:
+```bash
+curl http://localhost:8000/health
+```
+
+---
+
 ## 🔧 Виправлення помилок
 
 ### Помилка: "Порожня сторінка після навігації"

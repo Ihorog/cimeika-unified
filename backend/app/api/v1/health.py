@@ -5,8 +5,10 @@ Provides health and readiness checks for monitoring and orchestration
 import os
 from fastapi import APIRouter, status
 from typing import Dict, Any
+from sqlalchemy import text
 from app.config.canon import CANON_BUNDLE_ID
 from app.core.monitoring import get_monitoring_status
+from app.config.database import engine
 
 router = APIRouter(tags=["health"])
 
@@ -14,14 +16,38 @@ router = APIRouter(tags=["health"])
 @router.get("/health", status_code=status.HTTP_200_OK)
 async def health() -> Dict[str, Any]:
     """
-    Basic health check endpoint
+    Basic health check endpoint with database connectivity check
     
     Returns:
-        dict: Simple health status
+        dict: Health status including database and pgvector status
     """
-    return {
-        "status": "ok"
+    health_status = {
+        "status": "healthy",
+        "database": "disconnected",
+        "pgvector": "unknown"
     }
+    
+    try:
+        # Test database connection
+        with engine.connect() as conn:
+            # Test basic query
+            conn.execute(text("SELECT 1"))
+            health_status["database"] = "connected"
+            
+            # Check if pgvector extension is available
+            result = conn.execute(
+                text("SELECT 1 FROM pg_extension WHERE extname='vector'")
+            )
+            if result.fetchone():
+                health_status["pgvector"] = "enabled"
+            else:
+                health_status["pgvector"] = "not_installed"
+                
+    except Exception as e:
+        health_status["status"] = "unhealthy"
+        health_status["error"] = str(e)
+    
+    return health_status
 
 
 @router.get("/ready", status_code=status.HTTP_200_OK)

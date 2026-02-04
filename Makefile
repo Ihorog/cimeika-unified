@@ -16,12 +16,17 @@ dev: ## Start all services in development mode
 	@echo "Backend API: http://localhost:8000"
 	@echo "Frontend: http://localhost:3000"
 	@echo "API Docs: http://localhost:8000/api/docs"
+	@echo "\nFollowing backend logs (Ctrl+C to exit)..."
+	@sleep 2
+	docker compose logs -f backend
 
 up: dev ## Alias for dev
 
 down: ## Stop all services
 	docker compose down
 	@echo "✅ Services stopped"
+
+stop: down ## Alias for down
 
 logs: ## View logs from all services
 	docker compose logs -f
@@ -38,6 +43,7 @@ build: ## Rebuild all Docker images
 
 clean: ## Stop services and remove volumes (WARNING: deletes data!)
 	docker compose down -v
+	rm -rf backend/__pycache__ backend/**/__pycache__
 	@echo "✅ Services stopped and volumes removed"
 
 restart: down dev ## Restart all services
@@ -96,8 +102,23 @@ frontend-install: ## Install frontend dependencies only
 	cd frontend && npm ci
 
 # Database Commands
+db-up: ## Start only PostgreSQL
+	docker compose up postgres -d
+	@echo "Waiting for PostgreSQL..."
+	@sleep 3
+	@docker compose exec postgres pg_isready -U cimeika_user
+
+db-down: ## Stop PostgreSQL
+	docker compose down postgres
+
 db-init: ## Initialize database (run migrations)
-	docker compose exec backend python init_db.py
+	docker compose exec backend alembic upgrade head || docker compose exec backend python init_db.py
+
+db-migrate: ## Create new migration (usage: make db-migrate msg="description")
+	docker compose exec backend alembic revision --autogenerate -m "$(msg)"
+
+db-seed: ## Seed database with schema
+	docker compose exec postgres psql -U cimeika_user -d cimeika -f /docker-entrypoint-initdb.d/01-schema.sql
 
 # Development Helpers
 shell-backend: ## Open a shell in the backend container
