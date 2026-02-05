@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ci Orchestrator v5.2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0a; color: #d4d4d4; font-family: 'Inter', sans-serif; }
+        .ci-card { background: #171717; border: 1px solid #262626; border-radius: 8px; padding: 1.5rem; }
+        .accent { color: #3b82f6; }
+        .vector-glow { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <header class="mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold accent">Система Сі <span class="text-xs text-gray-500 font-mono text-white">v5.2</span></h1>
+            <p class="text-sm text-gray-400">Мій прояв — твій намір</p>
+        </div>
+        <div id="status-indicator" class="h-3 w-3 rounded-full bg-green-500 animate-pulse"></div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="ci-card">
+            <h2 class="text-lg mb-4 opacity-70 italic">Вектор Середовища</h2>
+            <div class="text-5xl font-mono mb-2 accent vector-glow" id="vector-state">0.00</div>
+            <p class="text-xs text-gray-500">Нормалізоване значення (Data/Events)</p>
+        </div>
+
+        <div class="ci-card md:col-span-2">
+            <h2 class="text-lg mb-4 opacity-70 italic">Останні ПоДії</h2>
+            <div id="event-list" class="space-y-2 text-sm max-h-48 overflow-y-auto">
+                <div class="text-gray-600 italic">Синхронізація з ядром...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 ci-card">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg opacity-70 italic">Консоль Оркестратора</h2>
+            <span id="files-count" class="text-xs bg-blue-900/30 text-blue-400 px-2 py-1 rounded">Файлів: 0</span>
+        </div>
+        <div class="flex gap-2">
+            <input type="text" id="cmd" class="w-full bg-black border border-gray-800 p-2 rounded text-sm outline-none focus:border-blue-500 transition-all" placeholder="Введіть намір для обробки...">
+            <button onclick="sendIntent()" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded text-sm font-bold transition">Виконати</button>
+        </div>
+    </div>
+
+    <script>
+        async function updateDashboard() {
+            try {
+                const res = await fetch('/api/status');
+                if (!res.ok) throw new Error('API Offline');
+                const data = await res.json();
+                
+                // Оновлення вектора та лічильника
+                document.getElementById('vector-state').innerText = data.vector.toFixed(2);
+                document.getElementById('files-count').innerText = `Файлів: ${data.files}`;
+                
+                // Оновлення списку подій
+                const list = document.getElementById('event-list');
+                if (data.events && data.events.length > 0) {
+                    list.innerHTML = data.events.map(e => `
+                        <div class="border-l-2 border-blue-600 pl-4 py-2 bg-blue-900/10 rounded-r">
+                            <span class="text-gray-500 text-xs">${e.event_date}</span><br>
+                            <span class="font-medium">${e.title}</span>
+                        </div>
+                    `).join("");
+                } else {
+                    list.innerHTML = '<div class="text-gray-600 italic">Подій у базі не виявлено.</div>';
+                }
+                document.getElementById('status-indicator').classList.replace('bg-red-500', 'bg-green-500');
+            } catch (err) {
+                console.error('Update failed:', err);
+                document.getElementById('status-indicator').classList.replace('bg-green-500', 'bg-red-500');
+            }
+        }
+
+        function sendIntent() {
+            const cmd = document.getElementById('cmd').value;
+            if (!cmd) return;
+            alert('Намір передано: ' + cmd);
+            document.getElementById('cmd').value = '';
+        }
+
+        setInterval(updateDashboard, 5000);
+        updateDashboard();
+    </script>
+</body>
+</html>

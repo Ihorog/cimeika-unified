@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cimeika System Will
 
 **Guidance for AI Agents**
@@ -779,3 +780,23 @@ If any no → reconsider
 *"Copilot prepares. Human decides."*
 
 END OF SYSTEM_WILL.md
+=======
+# CIMEIKA ORGANISM MEMORY
+
+## Architecture Principle
+Система Ci працює як 7-лопатевий організм. Кожен модуль спить до виклику Оркестратором (Ci).
+
+## Execution Order
+1. Ci (Оркестрація, парсинг інтенту)
+2. Kazkar (Історія, Wiki)
+3. Podija (Події, плани)
+4. Nastrij (Емоційний стан)
+5. Malya (Творчість)
+6. Calendar (Час)
+7. Gallery (ВІЗУАЛЬНИЙ ШАР - LOCKED. Шляхи /media та /gallery НЕЗМІННІ)
+
+## Hard Constraints
+- Жодних NLP-галюцинацій у модулі Podija.
+- Тільки суворий JSON-формат.
+- Галерея активується ТІЛЬКИ після конвергенції 1-6 лопастей.
+>>>>>>> 78e093c (feat: unified structure from cit + cimeika)

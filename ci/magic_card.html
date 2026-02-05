@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ci Cloud Terminal</title>
+    <style>
+        body { background: #05050a; color: #00d4ff; font-family: monospace; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        #sidebar { width: 260px; border-right: 1px solid #112244; padding: 15px; background: #070712; display: flex; flex-direction: column; }
+        #main { flex: 1; display: flex; flex-direction: column; background: #05050a; }
+        #clock { font-size: 1.2em; color: #ffaa00; text-align: center; border: 1px solid #ffaa00; padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        #chat { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 5px; max-width: 85%; border: 1px solid #112244; word-wrap: break-word; }
+        .bot { background: #112244; align-self: flex-start; }
+        .user { background: #004466; align-self: flex-end; }
+        #input-area { padding: 15px; border-top: 1px solid #112244; display: flex; gap: 10px; background: #070712; }
+        input[type="text"] { flex: 1; background: #000; border: 1px solid #00d4ff; color: #00d4ff; padding: 10px; outline: none; }
+        button { background: #00d4ff; color: #000; border: none; padding: 10px; cursor: pointer; font-weight: bold; }
+        .upload-btn { background: #ffaa00 !important; margin-top: 10px; width: 100%; }
+        #file-info { font-size: 0.8em; color: #8899aa; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div id="clock">00:00:00</div>
+        <h3 style="font-size: 1em; border-bottom: 1px solid #112244;">АРТЕФАКТИ СІ</h3>
+        <div id="file-info">Синхронізація бази...</div>
+        <input type="file" id="file-input" style="display:none" onchange="uploadArtifact()">
+        <button class="upload-btn" onclick="document.getElementById('file-input').click()">📁 ЗАВАНТАЖИТИ АРТЕФАКТ</button>
+        <div style="margin-top: auto; font-size: 0.7em; opacity: 0.5;">v17.0 Connected</div>
+    </div>
+    <div id="main">
+        <div id="chat"><div class="msg bot">Система активована. Годинник та модуль завантаження в нормі.</div></div>
+        <div id="input-area">
+            <input type="text" id="user-msg" placeholder="Команда для Сі..." onkeypress="if(event.key==='Enter') send()">
+            <button onclick="send()">SEND</button>
+        </div>
+    </div>
+    <script>
+        function updateTime() {
+            const n = new Date();
+            document.getElementById('clock').innerText = n.toLocaleTimeString('uk-UA');
+        }
+        setInterval(updateTime, 1000); updateTime();
+
+        function send() {
+            const i = document.getElementById('user-msg'); if(!i.value) return;
+            append("user", i.value);
+            fetch('/api/hint').then(r => r.text()).then(t => append("bot", t));
+            i.value = '';
+        }
+
+        function append(role, text) {
+            const c = document.getElementById('chat');
+            const d = document.createElement('div');
+            d.className = 'msg ' + role; d.innerText = text;
+            c.appendChild(d); c.scrollTop = c.scrollHeight;
+        }
+
+        function uploadArtifact() {
+            const file = document.getElementById('file-input').files[0];
+            if(!file) return;
+            let fd = new FormData(); fd.append("file", file);
+            append("user", "Передача файлу: " + file.name);
+            fetch('/api/upload', {method: 'POST', body: fd})
+                .then(r => r.json()).then(data => {
+                    append("bot", "СИСТЕМАТИЗОВАНО: " + data.file);
+                    updateStatus();
+                });
+        }
+
+        function updateStatus() {
+            fetch('/api/status').then(r => r.json()).then(d => {
+                document.getElementById('file-info').innerText = "Файлів: " + d.files + " | Вектор: " + d.vector;
+            });
+        }
+        updateStatus(); setInterval(updateStatus, 5000);
+    </script>
+</body>
+</html>
