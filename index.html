@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ci · Панель керування</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #1e1e2e;
+      --text: #e0e0e8;
+      --text-dim: #7a7a8e;
+      --up: #22c55e;
+      --up-bg: rgba(34,197,94,0.08);
+      --degraded: #f59e0b;
+      --degraded-bg: rgba(245,158,11,0.08);
+      --down: #ef4444;
+      --down-bg: rgba(239,68,68,0.08);
+      --accent: #6366f1;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+    }
+
+    .header h1 span {
+      color: var(--accent);
+    }
+
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    /* Summary bar */
+    .summary {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .summary-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .summary-dot.up { background: var(--up); }
+    .summary-dot.degraded { background: var(--degraded); }
+    .summary-dot.down { background: var(--down); }
+
+    .summary-count {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Component list */
+    .components {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .component {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: var(--surface);
+      gap: 1rem;
+    }
+
+    .component-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .component-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .component-name a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .component-name a:hover {
+      color: var(--accent);
+    }
+
+    .component-details {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Status badge */
+    .status-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .status-badge.up {
+      color: var(--up);
+      background: var(--up-bg);
+    }
+
+    .status-badge.degraded {
+      color: var(--degraded);
+      background: var(--degraded-bg);
+    }
+
+    .status-badge.down {
+      color: var(--down);
+      background: var(--down-bg);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.78rem;
+    }
+
+    .footer .update-time {
+      margin-bottom: 0.3rem;
+    }
+
+    /* Loading state */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-dim);
+    }
+
+    .error-msg {
+      text-align: center;
+      padding: 2rem;
+      color: var(--down);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 1.5rem 1rem; }
+      .component { padding: 0.85rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <h1><span>Ci</span> · Панель керування</h1>
+      <div class="subtitle">CIMEIKA — стан системи</div>
+    </div>
+
+    <div id="summary" class="summary">
+      <div class="loading">Завантаження…</div>
+    </div>
+
+    <div id="components" class="components">
+    </div>
+
+    <div class="footer">
+      <div class="update-time" id="update-time"></div>
+      <div>cimeika.com.ua</div>
+    </div>
+
+  </div>
+
+  <script>
+    const STATUS_URL = 'status.json';
+
+    const STATUS_LABELS = {
+      UP: 'Працює',
+      DEGRADED: 'Деградовано',
+      DOWN: 'Не працює'
+    };
+
+    function formatDate(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return d.toLocaleString('uk-UA', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function renderSummary(summary) {
+      const el = document.getElementById('summary');
+      el.innerHTML = `
+        <div class="summary-item">
+          <span class="summary-dot up"></span>
+          Працює: <span class="summary-count">${summary.up}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-dot degraded"></span>
+          Деградовано: <span class="summary-count">${summary.degraded}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-dot down"></span>
+          Не працює: <span class="summary-count">${summary.down}</span>
+        </div>
+      `;
+    }
+
+    function renderComponents(components) {
+      const el = document.getElementById('components');
+      const keys = Object.keys(components);
+
+      // Sort: UP first, then DEGRADED, then DOWN
+      const order = { UP: 0, DEGRADED: 1, DOWN: 2 };
+      keys.sort((a, b) => (order[components[a].status] ?? 3) - (order[components[b].status] ?? 3));
+
+      el.innerHTML = keys.map(key => {
+        const c = components[key];
+        const statusClass = c.status.toLowerCase();
+        const label = STATUS_LABELS[c.status] || c.status;
+        const nameHtml = c.url
+          ? `<a href="${c.url}" target="_blank" rel="noopener">${c.name}</a>`
+          : c.name;
+
+        return `
+          <div class="component">
+            <div class="component-info">
+              <div class="component-name">${nameHtml}</div>
+              <div class="component-details">${c.details || ''}</div>
+            </div>
+            <div class="status-badge ${statusClass}">${label}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function load() {
+      try {
+        const res = await fetch(STATUS_URL + '?t=' + Date.now());
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        renderSummary(data.summary);
+        renderComponents(data.components);
+        document.getElementById('update-time').textContent =
+          'Оновлено: ' + formatDate(data.last_updated);
+      } catch (err) {
+        document.getElementById('summary').innerHTML =
+          `<div class="error-msg">Не вдалося завантажити стан: ${err.message}</div>`;
+      }
+    }
+
+    load();
+    // Auto-refresh every 5 minutes
+    setInterval(load, 5 * 60 * 1000);
+  </script>
+</body>
+</html>
