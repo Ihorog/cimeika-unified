@@ -1,0 +1,56 @@
+{
+  "system": "CIMEIKA",
+  "version": "0.1.0",
+  "last_updated": "2026-02-07T00:00:00Z",
+  "updated_by": "manual",
+  "components": {
+    "domain": {
+      "name": "Домен",
+      "url": "https://cimeika.com.ua",
+      "status": "DOWN",
+      "details": "404 — потребує підключення"
+    },
+    "control_panel": {
+      "name": "Ci Control Panel",
+      "url": "https://cimeika.com.ua",
+      "status": "DOWN",
+      "details": "MVP в розробці"
+    },
+    "github_unified": {
+      "name": "GitHub: cimeika-unified",
+      "url": "https://github.com/ihorog/cimeika-unified",
+      "status": "UP",
+      "details": "Control Plane repo"
+    },
+    "github_ciwiki": {
+      "name": "GitHub: ciwiki",
+      "url": "https://github.com/ihorog/ciwiki",
+      "status": "UP",
+      "details": "Документація, 199 комітів"
+    },
+    "hf_space": {
+      "name": "HuggingFace: cimeika-api",
+      "url": "https://huggingface.co/spaces/Ihorog/cimeika-api",
+      "status": "DEGRADED",
+      "details": "Sleeping з 12.01.2026"
+    },
+    "backend_api": {
+      "name": "Backend API",
+      "url": null,
+      "status": "DOWN",
+      "details": "Не реалізовано (0%)"
+    },
+    "telegram_bot": {
+      "name": "Telegram Bot",
+      "url": null,
+      "status": "DOWN",
+      "details": "Не реалізовано"
+    }
+  },
+  "summary": {
+    "total": 7,
+    "up": 2,
+    "degraded": 1,
+    "down": 4
+  }
+}
