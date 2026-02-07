@@ -1,0 +1,171 @@
+name: Ci Health Check
+
+on:
+  schedule:
+    # Every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run health checks
+        run: |
+          #!/bin/bash
+          set -euo pipefail
+
+          echo "=== Ci Health Check ==="
+          echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          # Function: check URL status
+          check_url() {
+            local url="$1"
+            local timeout=10
+            local http_code
+            http_code=$(curl -s -o /dev/null -w "%{http_code}" --max-time "$timeout" "$url" 2>/dev/null || echo "000")
+            echo "$http_code"
+          }
+
+          # Check components
+          echo "Checking domain..."
+          DOMAIN_CODE=$(check_url "https://cimeika.com.ua")
+
+          echo "Checking HuggingFace Space..."
+          HF_CODE=$(check_url "https://ihorog-cimeika-api.hf.space")
+
+          echo "Checking GitHub repos..."
+          GH_UNIFIED_CODE=$(check_url "https://github.com/ihorog/cimeika-unified")
+          GH_CIWIKI_CODE=$(check_url "https://github.com/ihorog/ciwiki")
+
+          # Determine statuses
+          determine_status() {
+            local code="$1"
+            if [[ "$code" == "200" || "$code" == "301" || "$code" == "302" ]]; then
+              echo "UP"
+            elif [[ "$code" == "000" || "$code" == "502" || "$code" == "503" ]]; then
+              echo "DOWN"
+            else
+              echo "DEGRADED"
+            fi
+          }
+
+          DOMAIN_STATUS=$(determine_status "$DOMAIN_CODE")
+          HF_STATUS=$(determine_status "$HF_CODE")
+          GH_UNIFIED_STATUS=$(determine_status "$GH_UNIFIED_CODE")
+          GH_CIWIKI_STATUS=$(determine_status "$GH_CIWIKI_CODE")
+
+          # Backend and Telegram — manual for now
+          BACKEND_STATUS="DOWN"
+          TELEGRAM_STATUS="DOWN"
+
+          # Count summary
+          UP=0; DEGRADED=0; DOWN=0; TOTAL=7
+
+          for s in "$DOMAIN_STATUS" "UP" "$GH_UNIFIED_STATUS" "$GH_CIWIKI_STATUS" "$HF_STATUS" "$BACKEND_STATUS" "$TELEGRAM_STATUS"; do
+            case "$s" in
+              UP) ((UP++)) ;;
+              DEGRADED) ((DEGRADED++)) ;;
+              DOWN) ((DOWN++)) ;;
+            esac
+          done
+
+          # Control Panel status = same as domain (since it's hosted there)
+          CP_STATUS="$DOMAIN_STATUS"
+
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+          # Generate status.json
+          cat > status.json << EOF
+          {
+            "system": "CIMEIKA",
+            "version": "0.1.0",
+            "last_updated": "${NOW}",
+            "updated_by": "github-actions",
+            "components": {
+              "domain": {
+                "name": "Домен",
+                "url": "https://cimeika.com.ua",
+                "status": "${DOMAIN_STATUS}",
+                "details": "HTTP ${DOMAIN_CODE}"
+              },
+              "control_panel": {
+                "name": "Ci Control Panel",
+                "url": "https://cimeika.com.ua",
+                "status": "${CP_STATUS}",
+                "details": "Головна сторінка системи"
+              },
+              "github_unified": {
+                "name": "GitHub: cimeika-unified",
+                "url": "https://github.com/ihorog/cimeika-unified",
+                "status": "${GH_UNIFIED_STATUS}",
+                "details": "Control Plane repo — HTTP ${GH_UNIFIED_CODE}"
+              },
+              "github_ciwiki": {
+                "name": "GitHub: ciwiki",
+                "url": "https://github.com/ihorog/ciwiki",
+                "status": "${GH_CIWIKI_STATUS}",
+                "details": "Документація — HTTP ${GH_CIWIKI_CODE}"
+              },
+              "hf_space": {
+                "name": "HuggingFace: cimeika-api",
+                "url": "https://huggingface.co/spaces/Ihorog/cimeika-api",
+                "status": "${HF_STATUS}",
+                "details": "Docker Space — HTTP ${HF_CODE}"
+              },
+              "backend_api": {
+                "name": "Backend API",
+                "url": null,
+                "status": "${BACKEND_STATUS}",
+                "details": "Не реалізовано"
+              },
+              "telegram_bot": {
+                "name": "Telegram Bot",
+                "url": null,
+                "status": "${TELEGRAM_STATUS}",
+                "details": "Не реалізовано"
+              }
+            },
+            "summary": {
+              "total": ${TOTAL},
+              "up": ${UP},
+              "degraded": ${DEGRADED},
+              "down": ${DOWN}
+            }
+          }
+          EOF
+
+          # Clean up indentation from heredoc
+          python3 -c "
+          import json
+          with open('status.json') as f:
+              data = json.load(f)
+          with open('status.json', 'w') as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+          "
+
+          echo ""
+          echo "=== Result ==="
+          echo "UP: $UP | DEGRADED: $DEGRADED | DOWN: $DOWN"
+          cat status.json
+
+      - name: Commit updated status
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add status.json
+          if git diff --cached --quiet; then
+            echo "No changes to status.json"
+          else
+            git commit -m "ci: оновлення статусу $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+            git push
+          fi
