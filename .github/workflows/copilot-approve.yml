@@ -1,0 +1,81 @@
+name: Copilot Approve
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+jobs:
+  approve:
+    if: contains(github.event.comment.body, '@copilot approve') && github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Get PR details
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            
+            // Extract manifest path from PR body
+            const manifestMatch = pr.body.match(/\*\*Manifest:\*\*\s+`([^`]+)`/);
+            if (!manifestMatch) {
+              throw new Error('Could not find manifest path in PR body');
+            }
+            
+            return {
+              manifest: manifestMatch[1],
+              prNumber: context.issue.number
+            };
+      
+      - name: Add approved label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['copilot-approved']
+            });
+      
+      - name: Trigger execution workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prData = ${{ steps.pr.outputs.result }};
+            
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'copilot-execute.yml',
+              ref: context.ref,
+              inputs: {
+                manifest: prData.manifest,
+                pr: String(prData.prNumber)
+              }
+            });
+      
+      - name: Reply to comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '✅ Task approved! Execution workflow triggered.\n\nMonitor progress in the Actions tab.'
+            });

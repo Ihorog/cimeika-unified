@@ -1,0 +1,137 @@
+name: Copilot Execute
+
+on:
+  workflow_dispatch:
+    inputs:
+      manifest:
+        description: 'Path to manifest file'
+        required: true
+        type: string
+      pr:
+        description: 'PR number'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install PyYAML
+      
+      - name: Convert YAML to JSON
+        run: |
+          python3 -c "
+          import yaml
+          import json
+          
+          with open('${{ inputs.manifest }}') as f:
+              manifest = yaml.safe_load(f)
+          
+          with open('manifest.json', 'w') as f:
+              json.dump(manifest, f, indent=2)
+          "
+      
+      - name: Execute task
+        id: execute
+        continue-on-error: true
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          # Redirect output to log file
+          python3 .copilot/executor.py --manifest manifest.json 2>&1 | tee execution.log
+          
+          # Capture exit code
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          exit $EXIT_CODE
+      
+      - name: Upload execution logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: execution-logs-${{ inputs.pr }}
+          path: execution.log
+          retention-days: 30
+      
+      - name: Report success
+        if: steps.execute.outputs.exit_code == '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const logContent = fs.readFileSync('execution.log', 'utf8');
+            const truncatedLog = logContent.length > 5000 
+              ? logContent.slice(-5000) + '\n\n... (truncated, see artifacts for full log)'
+              : logContent;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt('${{ inputs.pr }}'),
+              body: `## ✅ Task Execution Completed
+            
+            **Status:** Success
+            **Manifest:** \`${{ inputs.manifest }}\`
+            
+            ### Execution Log
+            
+            \`\`\`
+            ${truncatedLog}
+            \`\`\`
+            
+            Full logs are available in the workflow artifacts.`
+            });
+      
+      - name: Report failure
+        if: steps.execute.outputs.exit_code != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const logContent = fs.readFileSync('execution.log', 'utf8');
+            const truncatedLog = logContent.length > 5000 
+              ? logContent.slice(-5000) + '\n\n... (truncated, see artifacts for full log)'
+              : logContent;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt('${{ inputs.pr }}'),
+              body: `## ❌ Task Execution Failed
+            
+            **Status:** Failed
+            **Manifest:** \`${{ inputs.manifest }}\`
+            **Exit Code:** ${{ steps.execute.outputs.exit_code }}
+            
+            ### Execution Log
+            
+            \`\`\`
+            ${truncatedLog}
+            \`\`\`
+            
+            Full logs are available in the workflow artifacts.`
+            });
+      
+      - name: Fail workflow if execution failed
+        if: steps.execute.outputs.exit_code != '0'
+        run: exit 1
