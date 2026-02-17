@@ -86,6 +86,12 @@ temp/
 health_report.json
 health_report.md
 
+# Test manifests (temporary)
+manifests/test-*.yml
+manifests/test-*.yaml
+manifest.json
+execution.log
+
 # Test scripts (temporary)
 test_ci_capture.py
 test_canon_validation.py

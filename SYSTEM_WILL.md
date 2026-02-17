@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Cimeika System Will
 
 **Guidance for AI Agents**
@@ -751,6 +750,76 @@ If any no → reconsider
 
 ---
 
+## COPILOT INTEGRATION (111 PRIORITY)
+
+### Architecture
+
+Comment → Workflow → Manifest → PR → Approval → Execution → Report
+
+### Workflows
+
+- **`copilot-task-detect.yml`** — Comment parsing & manifest generation
+  - Triggered by: `@copilot task:` in issue/PR comments
+  - Extracts task description, generates unique ID
+  - Calls `.copilot/generate.py` to create manifest
+  - Creates feature branch and PR with manifest preview
+  
+- **`copilot-approve.yml`** — Approval gate & execution trigger
+  - Triggered by: `@copilot approve` in PR comments
+  - Validates approval context and manifest path
+  - Labels PR as approved
+  - Triggers copilot-execute.yml via workflow_dispatch
+  
+- **`copilot-execute.yml`** — Task execution & reporting
+  - Triggered by: workflow_dispatch from copilot-approve.yml
+  - Converts YAML manifest to JSON
+  - Executes steps sequentially via `.copilot/executor.py`
+  - Reports results to PR
+  - Uploads execution logs as artifacts
+
+### Scripts
+
+- **`.copilot/generate.py`** — Manifest generator with task type detection
+  - Detects task type from description (deployment/health-check/rollback)
+  - Uses predefined templates for each task type
+  - Generates YAML manifest with constraints and steps
+  - Outputs to `manifests/auto-{task-id}.yml`
+
+- **`.copilot/executor.py`** — Sequential step executor with error handling
+  - Loads manifest JSON
+  - Executes each step sequentially
+  - Captures stdout/stderr for each step
+  - Halts on first failure
+  - Returns detailed execution results
+
+### Safety
+
+- ✅ Approval required for destructive operations (deploy/rollback)
+- ✅ Backup before deployment (mandatory)
+- ✅ Timeout protection per step (default 300s)
+- ✅ Rollback capability on failure
+- ✅ Atomic execution (all-or-nothing)
+- ✅ Audit trail (logs + artifacts)
+
+### Integration Points
+
+- **GitHub Issues/PRs** → Copilot comments trigger workflows
+- **Vercel deployment** → Auto-deploy with verification
+- **Health checks** → Scheduled + on-demand via comments
+- **Secrets management** → GitHub Secrets for VERCEL_TOKEN, etc.
+
+### Usage
+
+See `docs/COPILOT_QUICKSTART.md` for complete user guide.
+
+**Quick example:**
+```
+@copilot task: Deploy to production
+```
+→ Generates manifest → Creates PR → Review → `@copilot approve` → Executes
+
+---
+
 ## RESOURCES
 
 ### Documentation
@@ -758,11 +827,14 @@ If any no → reconsider
 - Architecture: `docs/ARCHITECTURE.md`
 - API Reference: `API_REFERENCE.md`
 - Quick Start: `QUICKSTART_DEV.md`
+- Copilot Tasks: `docs/COPILOT_QUICKSTART.md`
 
 ### Tools
 - Self-Improvement: `backend/app/core/self_improvement.py`
 - Manifest: `backend/app/core/manifest.json`
 - Orchestrator: `backend/app/core/orchestrator.py`
+- Copilot Generator: `.copilot/generate.py`
+- Copilot Executor: `.copilot/executor.py`
 
 ### External
 - GitHub Repository: https://github.com/Ihorog/cimeika-unified
@@ -770,8 +842,8 @@ If any no → reconsider
 
 ---
 
-**VERSION:** 1.0.0  
-**LAST UPDATED:** 2026-01-25  
+**VERSION:** 1.1.0  
+**LAST UPDATED:** 2026-02-17  
 **MAINTAINED BY:** Cimeika Core Team  
 **FOR:** AI Agents (GitHub Copilot, Claude, GPT, etc.)
 
@@ -779,14 +851,14 @@ If any no → reconsider
 
 *"Copilot prepares. Human decides."*
 
-END OF SYSTEM_WILL.md
-=======
-# CIMEIKA ORGANISM MEMORY
+---
 
-## Architecture Principle
+## CIMEIKA ORGANISM MEMORY
+
+### Architecture Principle
 Система Ci працює як 7-лопатевий організм. Кожен модуль спить до виклику Оркестратором (Ci).
 
-## Execution Order
+### Execution Order
 1. Ci (Оркестрація, парсинг інтенту)
 2. Kazkar (Історія, Wiki)
 3. Podija (Події, плани)
@@ -795,8 +867,11 @@ END OF SYSTEM_WILL.md
 6. Calendar (Час)
 7. Gallery (ВІЗУАЛЬНИЙ ШАР - LOCKED. Шляхи /media та /gallery НЕЗМІННІ)
 
-## Hard Constraints
+### Hard Constraints
 - Жодних NLP-галюцинацій у модулі Podija.
 - Тільки суворий JSON-формат.
 - Галерея активується ТІЛЬКИ після конвергенції 1-6 лопастей.
->>>>>>> 78e093c (feat: unified structure from cit + cimeika)
+
+---
+
+END OF SYSTEM_WILL.md
