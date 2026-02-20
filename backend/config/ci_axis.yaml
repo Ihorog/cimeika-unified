@@ -1,0 +1,60 @@
+profiles:
+  default:
+    modes:
+      normal:
+        max_chars: 2000
+        max_paragraphs: 5
+      smart:
+        max_chars: 3000
+        max_paragraphs: 7
+      critical:
+        max_chars: 500
+        max_paragraphs: 2
+
+  strict:
+    modes:
+      normal:
+        max_chars: 1000
+        max_paragraphs: 3
+      smart:
+        max_chars: 1500
+        max_paragraphs: 4
+      critical:
+        max_chars: 300
+        max_paragraphs: 1
+
+  code:
+    modes:
+      normal:
+        max_chars: 4000
+        max_paragraphs: 10
+      smart:
+        max_chars: 6000
+        max_paragraphs: 15
+      critical:
+        max_chars: 1000
+        max_paragraphs: 3
+
+  docs:
+    modes:
+      normal:
+        max_chars: 3000
+        max_paragraphs: 8
+      smart:
+        max_chars: 5000
+        max_paragraphs: 12
+      critical:
+        max_chars: 800
+        max_paragraphs: 3
+
+  chat:
+    modes:
+      normal:
+        max_chars: 1500
+        max_paragraphs: 4
+      smart:
+        max_chars: 2500
+        max_paragraphs: 6
+      critical:
+        max_chars: 400
+        max_paragraphs: 2
