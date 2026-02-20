@@ -2,6 +2,14 @@
   "version": 2,
   "buildCommand": null,
   "outputDirectory": "public",
+  "env": {
+    "CI_ADMIN_KEY": "@ci-admin-key"
+  },
+  "build": {
+    "env": {
+      "CI_ADMIN_KEY": "@ci-admin-key"
+    }
+  },
   "rewrites": [
     { "source": "/abilities/(.*)", "destination": "/abilities/$1" },
     { "source": "/(.*)", "destination": "/$1" }
