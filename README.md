@@ -524,3 +524,72 @@ This repository follows the global Copilot rules defined in:
 ---
 
 **Створено з ❤️ для організації життя** 
+## Deployment to Vercel
+
+
+
+### Prerequisites
+
+- Node.js 18+
+
+- npm/yarn installed
+
+- Vercel account with `cimeika-unified` project created
+
+
+
+### Canonical Entry Point
+
+This repo uses **`web/` (Next.js)** as the canonical UI.
+
+Other UIs (`frontend/`, `ci/ui/`) are legacy/backup.
+
+
+
+### Local Development
+
+```bash
+
+cd web
+
+cp .env.local.example .env.local
+
+npm run dev
+
+```
+
+
+
+### Vercel Deployment
+
+1. Push changes to main
+
+2. Vercel auto-detects `vercel.json`
+
+3. Build runs: `cd web && npm ci && npm run build`
+
+4. Output: `web/.next` served
+
+
+
+### Environment Variables (Vercel)
+
+```
+
+NEXT_PUBLIC_API_URL = https://your-api.com
+
+NEXT_PUBLIC_AGENTS_BASE_URL = https://cimeika-backend.workers.dev/api
+
+NEXT_PUBLIC_GITAPI_BASE_URL = https://api.cimeika.com.ua
+
+```
+
+
+
+### Troubleshooting
+
+- Build fails: Check Node.js 18+, clear cache
+
+- Blank page: Verify env vars, rede ploy
+
+- API 404: Check rewrite destination

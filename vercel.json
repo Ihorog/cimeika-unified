@@ -1,34 +1,24 @@
 {
   "version": 2,
-  "buildCommand": null,
-  "outputDirectory": "public",
-  "env": {
-    "CI_ADMIN_KEY": "@ci-admin-key"
-  },
-  "build": {
-    "env": {
-      "CI_ADMIN_KEY": "@ci-admin-key"
-    }
-  },
+  "buildCommand": "cd web && npm ci && npm run build",
+  "outputDirectory": "web/.next",
+  "framework": "nextjs",
   "rewrites": [
-    { "source": "/abilities/(.*)", "destination": "/abilities/$1" },
-    { "source": "/(.*)", "destination": "/$1" }
-  ],
-  "headers": [
     {
-      "source": "/sw.js",
-      "headers": [
-        { "key": "Service-Worker-Allowed", "value": "/" },
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "X-Requested-With, Content-Type, Authorization" }
-      ]
+      "source": "/api/:path*",
+      "destination": "https://cimeika-backend.workers.dev/api/:path*"
     }
-  ]
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@next-public-api-url",
+    "NEXT_PUBLIC_AGENTS_BASE_URL": "@next-public-agents-base-url",
+    "NEXT_PUBLIC_GITAPI_BASE_URL": "@next-public-gitapi-base-url"
+  },
+  "regions": ["bru"],
+  "functions": {
+    "web/app/**/*": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
 }
