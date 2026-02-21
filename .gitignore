@@ -109,3 +109,4 @@ android-webview/*.apk
 android-webview/*.aab
 android-webview/*.keystore
 android-webview/*.jks
+*.db

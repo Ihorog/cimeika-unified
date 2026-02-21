@@ -28,6 +28,14 @@ async def get_calendar_status():
     }
 
 
+@router.post("/sync")
+async def trigger_sync(db: Session = Depends(get_db)):
+    """Trigger Google Calendar sync for pending calendar_entries"""
+    from app.modules.calendar.worker import run_sync
+    result = run_sync(db)
+    return {"status": "ok", "synced": result["synced"], "failed": result["failed"]}
+
+
 @router.post("/entries", response_model=CalendarEntrySchema)
 async def create_entry(entry: CalendarEntryCreate, db: Session = Depends(get_db)):
     """Create a new calendar entry"""

@@ -30,6 +30,12 @@ class CalendarEntry(Base):
     location = Column(String, nullable=True)
     participants = Column(JSON, nullable=True)
     reminder_settings = Column(JSON, nullable=True)
+    external_id = Column(String, nullable=True, index=True)  # External calendar ID (e.g. Google Calendar)
+    
+    # Google Calendar sync fields
+    sync_status = Column(String, nullable=False, default='pending', index=True)  # pending/synced/failed/cancelled
+    external_id = Column(String, nullable=True, unique=True)  # Google Calendar event id
+    last_error = Column(Text, nullable=True)
     
     # Entity metadata
     tags = Column(JSON, nullable=True, default=list)
@@ -37,4 +43,7 @@ class CalendarEntry(Base):
     canon_bundle_id = Column(String, nullable=False, default=CANON_BUNDLE_ID)
     
     def __repr__(self):
-        return f"<CalendarEntry(id={self.id}, title='{self.title}', scheduled='{self.scheduled_at}')>"
+        return (
+            f"<CalendarEntry(id={self.id}, title='{self.title}', "
+            f"scheduled='{self.scheduled_at}', sync_status='{self.sync_status}')>"
+        )

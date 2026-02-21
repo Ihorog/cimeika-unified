@@ -2,12 +2,21 @@
 Podija module service layer
 Business logic goes here
 """
+Gymfrom datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
 from app.core.interfaces import ModuleInterface, ServiceInterface
 from app.modules.podija.model import PodijaEvent
 from app.modules.podija.schema import PodijaEventCreate, PodijaEventUpdate
+
+# Valid status transitions
+STATUS_TRANSITIONS = {
+    "active": {"done", "cancelled"},
+    "done": set(),
+    "cancelled": set(),
+}
 
 
 class PodijaService(ModuleInterface, ServiceInterface):
@@ -65,9 +74,25 @@ class PodijaService(ModuleInterface, ServiceInterface):
     
     # CRUD Operations
     def create_event(self, db: Session, event_data: PodijaEventCreate) -> PodijaEvent:
-        """Create a new event"""
+        """Create a new PoDiya event and a linked calendar_entry with sync_status=pending"""
+        from app.modules.calendar.model import CalendarEntry
+
         db_event = PodijaEvent(**event_data.model_dump())
         db.add(db_event)
+        db.flush()  # Send INSERT to DB so that db_event.id is assigned before we use it below
+
+        # Create linked calendar_entry with sync_status=pending when event has a date
+        if db_event.event_date:
+            calendar_entry = CalendarEntry(
+                title=db_event.title,
+                description=db_event.description,
+                scheduled_at=db_event.event_date,
+                location=db_event.location,
+                source_trace=f"podija_event:{db_event.id}",
+                sync_status='pending',
+            )
+            db.add(calendar_entry)
+
         db.commit()
         db.refresh(db_event)
         return db_event
@@ -80,16 +105,84 @@ class PodijaService(ModuleInterface, ServiceInterface):
         """Get all events with pagination"""
         return db.query(PodijaEvent).offset(skip).limit(limit).all()
     
+    def get_events_by_range(self, db: Session, range_type: str) -> List[PodijaEvent]:
+        """
+        Get events filtered by date range.
+
+        Args:
+            range_type: 'today' or 'week'
+
+        Returns:
+            List of PodijaEvent within the requested range
+        """
+        now = datetime.utcnow()
+        if range_type == "today":
+            start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+            end = start + timedelta(days=1)
+        elif range_type == "week":
+            start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+            end = start + timedelta(days=7)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid range '{range_type}'. Use 'today' or 'week'."
+            )
+        return (
+            db.query(PodijaEvent)
+            .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
+            .all()
+        )
+    
     def update_event(self, db: Session, event_id: int, event_data: PodijaEventUpdate) -> Optional[PodijaEvent]:
-        """Update an event"""
+        """Partially update an event (PATCH semantics)"""
         db_event = self.get_event(db, event_id)
         if not db_event:
             return None
         
         update_data = event_data.model_dump(exclude_unset=True)
+
+        # Validate status transition if status is being updated
+        if "status" in update_data:
+            new_status = update_data["status"]
+            current_status = db_event.status
+            allowed = STATUS_TRANSITIONS.get(current_status, set())
+            if new_status != current_status and new_status not in allowed:
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail=f"Cannot transition from '{current_status}' to '{new_status}'."
+                )
+
         for field, value in update_data.items():
             setattr(db_event, field, value)
         
+        db.commit()
+        db.refresh(db_event)
+        return db_event
+    
+    def cancel_event(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """
+        Cancel a PoDiya event (MVP: also delete linked Google Calendar event).
+
+        Marks the event status='cancelled' and cancels any linked calendar_entry.
+        """
+        from app.modules.calendar.model import CalendarEntry
+        from app.modules.calendar.worker import cancel_entry
+
+        db_event = self.get_event(db, event_id)
+        if not db_event:
+            return None
+
+        db_event.status = 'cancelled'
+
+        # Cancel linked calendar entry (deletes Google event if synced)
+        linked_entry = (
+            db.query(CalendarEntry)
+            .filter(CalendarEntry.source_trace == f"podija_event:{event_id}")
+            .first()
+        )
+        if linked_entry:
+            cancel_entry(db, linked_entry)
+
         db.commit()
         db.refresh(db_event)
         return db_event

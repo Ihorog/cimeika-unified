@@ -1,6 +1,6 @@
 """
 Podija module ORM models
-Події - майбутнє, сценарії
+PoDiya - майбутнє, сценарії
 """
 from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, Boolean
 from datetime import datetime
@@ -24,10 +24,12 @@ class PodijaEvent(Base):
     description = Column(Text, nullable=True)
     event_date = Column(DateTime, nullable=True)  # When the event is/was scheduled
     event_type = Column(String, nullable=True)  # past, future, planned, scenario
+    status = Column(String, nullable=False, default='planned', index=True)  # planned, done, cancelled
     is_completed = Column(Boolean, default=False)
     status = Column(String, nullable=False, default='planned')  # planned/done/cancelled
     participants = Column(JSON, nullable=True)  # List of participants
     location = Column(String, nullable=True)
+    # Note: external calendar IDs go in calendar_entries.external_id, not here
     
     # Entity metadata
     tags = Column(JSON, nullable=True, default=list)
@@ -35,4 +37,4 @@ class PodijaEvent(Base):
     canon_bundle_id = Column(String, nullable=False, default=CANON_BUNDLE_ID)
     
     def __repr__(self):
-        return f"<PodijaEvent(id={self.id}, title='{self.title}', date='{self.event_date}')>"
+        return f"<PodijaEvent(id={self.id}, title='{self.title}', date='{self.event_date}', status='{self.status}')>"

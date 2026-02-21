@@ -17,6 +17,7 @@ from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
 from app.core.rate_limit import RateLimitMiddleware
 from app.core.monitoring import init_sentry, get_monitoring_status
+from app.modules.podija.reminder_worker import ReminderWorker
 
 # Load environment variables
 load_dotenv()
@@ -27,6 +28,9 @@ logger = get_logger(__name__)
 
 # Initialize Sentry (optional)
 sentry = init_sentry()
+
+# Reminder worker singleton
+_reminder_worker = ReminderWorker()
 
 
 @asynccontextmanager
@@ -60,11 +64,15 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Startup error: {e}", exc_info=True)
         raise
+
+    # Start reminder worker
+    _reminder_worker.start()
     
     logger.info("CIMEIKA Backend started successfully")
     yield
     
-    # Shutdown: cleanup if needed
+    # Shutdown: stop reminder worker and cleanup
+    _reminder_worker.stop()
     logger.info("Shutting down CIMEIKA Backend...")
 
 
