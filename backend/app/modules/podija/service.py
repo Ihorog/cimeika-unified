@@ -2,9 +2,8 @@
 Podija module service layer
 Business logic goes here
 """
-Gymfrom datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
+from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.core.interfaces import ModuleInterface, ServiceInterface
