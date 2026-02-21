@@ -2,6 +2,7 @@
 Podija module service layer
 Business logic goes here
 """
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, List, Optional
 from sqlalchemy.orm import Session
 from app.core.interfaces import ModuleInterface, ServiceInterface
@@ -78,6 +79,48 @@ class PodijaService(ModuleInterface, ServiceInterface):
     def get_events(self, db: Session, skip: int = 0, limit: int = 100) -> List[PodijaEvent]:
         """Get all events with pagination"""
         return db.query(PodijaEvent).offset(skip).limit(limit).all()
+    
+    def get_today_events(self, db: Session) -> List[PodijaEvent]:
+        """Get events scheduled for today (UTC date)"""
+        today = datetime.now(timezone.utc).date()
+        start = datetime(today.year, today.month, today.day, tzinfo=timezone.utc)
+        end = start + timedelta(days=1)
+        return (
+            db.query(PodijaEvent)
+            .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
+            .all()
+        )
+    
+    def get_week_events(self, db: Session) -> List[PodijaEvent]:
+        """Get events scheduled within the next 7 days (UTC)"""
+        now = datetime.now(timezone.utc)
+        end = now + timedelta(days=7)
+        return (
+            db.query(PodijaEvent)
+            .filter(PodijaEvent.event_date >= now, PodijaEvent.event_date < end)
+            .all()
+        )
+    
+    def mark_done(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """Mark an event as done"""
+        db_event = self.get_event(db, event_id)
+        if not db_event:
+            return None
+        db_event.status = 'done'
+        db_event.is_completed = True
+        db.commit()
+        db.refresh(db_event)
+        return db_event
+    
+    def mark_cancelled(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """Mark an event as cancelled"""
+        db_event = self.get_event(db, event_id)
+        if not db_event:
+            return None
+        db_event.status = 'cancelled'
+        db.commit()
+        db.refresh(db_event)
+        return db_event
     
     def update_event(self, db: Session, event_id: int, event_data: PodijaEventUpdate) -> Optional[PodijaEvent]:
         """Update an event"""

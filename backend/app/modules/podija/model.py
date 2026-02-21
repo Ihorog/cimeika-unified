@@ -24,6 +24,7 @@ class PodijaEvent(Base):
     description = Column(Text, nullable=True)
     event_date = Column(DateTime, nullable=True)  # When the event is/was scheduled
     event_type = Column(String, nullable=True)  # past, future, planned, scenario
+    status = Column(String(32), nullable=False, default='planned', index=True)  # planned, done, cancelled
     is_completed = Column(Boolean, default=False)
     participants = Column(JSON, nullable=True)  # List of participants
     location = Column(String, nullable=True)
