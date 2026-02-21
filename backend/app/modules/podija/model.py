@@ -28,6 +28,7 @@ class PodijaEvent(Base):
     is_completed = Column(Boolean, default=False)
     participants = Column(JSON, nullable=True)  # List of participants
     location = Column(String, nullable=True)
+    # Note: external calendar IDs go in calendar_entries.external_id, not here
     
     # Entity metadata
     tags = Column(JSON, nullable=True, default=list)

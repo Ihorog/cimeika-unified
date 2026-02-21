@@ -1,8 +1,9 @@
 """
 Podija module API routes
+URL prefix: /podiya  (code name: podiya / podija)
 """
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.config.database import get_db
 from app.modules.podija.schema import (
@@ -12,7 +13,7 @@ from app.modules.podija.schema import (
 )
 from app.modules.podija.service import PodijaService
 
-router = APIRouter(prefix="/podija", tags=["podija"])
+router = APIRouter(prefix="/podiya", tags=["podiya"])
 service = PodijaService()
 service.initialize()
 
@@ -28,33 +29,55 @@ async def get_podija_status():
     }
 
 
-@router.post("/events", response_model=PodijaEventSchema)
+@router.post("/events", response_model=PodijaEventSchema, status_code=201)
 async def create_event(event: PodijaEventCreate, db: Session = Depends(get_db)):
     """Create a new PoDiya event (also creates calendar_entry with sync_status=pending)"""
     return service.create_event(db, event)
 
 
+@router.get("/events/today", response_model=List[PodijaEventSchema])
+async def get_today_events(db: Session = Depends(get_db)):
+    """Get events scheduled for today (UTC)"""
+    return service.get_today_events(db)
+
+
+@router.get("/events/week", response_model=List[PodijaEventSchema])
+async def get_week_events(db: Session = Depends(get_db)):
+    """Get events scheduled within the next 7 days (UTC)"""
+    return service.get_week_events(db)
+
+
 @router.get("/events", response_model=List[PodijaEventSchema])
-async def list_events(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """Get all events with pagination"""
+async def list_events(
+    range: Optional[str] = Query(
+        default=None,
+        description="Date range filter: 'today' or 'week'"
+    ),
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """Get ПоДія events. Use ?range=today or ?range=week to filter by date."""
+    if range is not None:
+        return service.get_events_by_range(db, range)
     return service.get_events(db, skip=skip, limit=limit)
 
 
 @router.get("/events/{event_id}", response_model=PodijaEventSchema)
 async def get_event(event_id: int, db: Session = Depends(get_db)):
-    """Get an event by ID"""
+    """Get a ПоДія event by ID"""
     event = service.get_event(db, event_id)
     if not event:
-        raise HTTPException(status_code=404, detail="Event not found")
+        raise HTTPException(status_code=404, detail="ПоДія not found")
     return event
 
 
-@router.put("/events/{event_id}", response_model=PodijaEventSchema)
+@router.patch("/events/{event_id}", response_model=PodijaEventSchema)
 async def update_event(event_id: int, event: PodijaEventUpdate, db: Session = Depends(get_db)):
-    """Update an event"""
+    """Partially update a ПоДія event"""
     updated_event = service.update_event(db, event_id, event)
     if not updated_event:
-        raise HTTPException(status_code=404, detail="Event not found")
+        raise HTTPException(status_code=404, detail="ПоДія not found")
     return updated_event
 
 
@@ -79,9 +102,9 @@ async def mark_event_done(event_id: int, db: Session = Depends(get_db)):
 
 @router.delete("/events/{event_id}")
 async def delete_event(event_id: int, db: Session = Depends(get_db)):
-    """Delete an event"""
+    """Delete a ПоДія event"""
     success = service.delete_event(db, event_id)
     if not success:
-        raise HTTPException(status_code=404, detail="Event not found")
-    return {"message": "Event deleted successfully"}
+        raise HTTPException(status_code=404, detail="ПоДія not found")
+    return {"message": "ПоДія deleted successfully"}
 

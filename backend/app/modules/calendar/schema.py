@@ -19,6 +19,7 @@ class CalendarEntryBase(BaseModel):
     location: Optional[str] = None
     participants: Optional[List[str]] = None
     reminder_settings: Optional[dict] = None
+    external_id: Optional[str] = None  # google_event_id stored ONLY in calendar_entries
     tags: List[str] = Field(default_factory=list)
     source_trace: Optional[str] = None
 
@@ -40,6 +41,7 @@ class CalendarEntryUpdate(BaseModel):
     location: Optional[str] = None
     participants: Optional[List[str]] = None
     reminder_settings: Optional[dict] = None
+    external_id: Optional[str] = None  # google_event_id stored ONLY in calendar_entries
     tags: Optional[List[str]] = None
     source_trace: Optional[str] = None
 
@@ -53,6 +55,5 @@ class CalendarEntrySchema(CalendarEntryBase):
     external_id: Optional[str] = None
     last_error: Optional[str] = None
     canon_bundle_id: str = CANON_BUNDLE_ID
-    
-    model_config = ConfigDict(from_attributes=True)
 
+    model_config = ConfigDict(from_attributes=True)
