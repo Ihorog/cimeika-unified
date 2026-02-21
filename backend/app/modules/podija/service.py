@@ -74,9 +74,25 @@ class PodijaService(ModuleInterface, ServiceInterface):
     
     # CRUD Operations
     def create_event(self, db: Session, event_data: PodijaEventCreate) -> PodijaEvent:
-        """Create a new event"""
+        """Create a new PoDiya event and a linked calendar_entry with sync_status=pending"""
+        from app.modules.calendar.model import CalendarEntry
+
         db_event = PodijaEvent(**event_data.model_dump())
         db.add(db_event)
+        db.flush()  # Send INSERT to DB so that db_event.id is assigned before we use it below
+
+        # Create linked calendar_entry with sync_status=pending when event has a date
+        if db_event.event_date:
+            calendar_entry = CalendarEntry(
+                title=db_event.title,
+                description=db_event.description,
+                scheduled_at=db_event.event_date,
+                location=db_event.location,
+                source_trace=f"podija_event:{db_event.id}",
+                sync_status='pending',
+            )
+            db.add(calendar_entry)
+
         db.commit()
         db.refresh(db_event)
         return db_event
@@ -143,35 +159,30 @@ class PodijaService(ModuleInterface, ServiceInterface):
         db.refresh(db_event)
         return db_event
     
-    def mark_done(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
-        """Mark an event as done"""
+    def cancel_event(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """
+        Cancel a PoDiya event (MVP: also delete linked Google Calendar event).
+
+        Marks the event status='cancelled' and cancels any linked calendar_entry.
+        """
+        from app.modules.calendar.model import CalendarEntry
+        from app.modules.calendar.worker import cancel_entry
+
         db_event = self.get_event(db, event_id)
         if not db_event:
             return None
-        current_status = db_event.status
-        if "done" not in STATUS_TRANSITIONS.get(current_status, set()):
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=f"Cannot mark as done from status '{current_status}'."
-            )
-        db_event.status = "done"
-        db_event.is_completed = True
-        db.commit()
-        db.refresh(db_event)
-        return db_event
-    
-    def mark_cancelled(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
-        """Cancel an event"""
-        db_event = self.get_event(db, event_id)
-        if not db_event:
-            return None
-        current_status = db_event.status
-        if "cancelled" not in STATUS_TRANSITIONS.get(current_status, set()):
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=f"Cannot cancel from status '{current_status}'."
-            )
-        db_event.status = "cancelled"
+
+        db_event.status = 'cancelled'
+
+        # Cancel linked calendar entry (deletes Google event if synced)
+        linked_entry = (
+            db.query(CalendarEntry)
+            .filter(CalendarEntry.source_trace == f"podija_event:{event_id}")
+            .first()
+        )
+        if linked_entry:
+            cancel_entry(db, linked_entry)
+
         db.commit()
         db.refresh(db_event)
         return db_event

@@ -20,10 +20,10 @@ service.initialize()
 
 @router.get("/")
 async def get_podija_status():
-    """Get ПоДія module status"""
+    """Get PoDiya module status"""
     return {
-        "module": "podiya",
-        "name": "ПоДія",
+        "module": "podija",
+        "name": "PoDiya",
         "description": "Події, майбутнє, сценарії",
         "status": "active"
     }
@@ -31,7 +31,7 @@ async def get_podija_status():
 
 @router.post("/events", response_model=PodijaEventSchema, status_code=201)
 async def create_event(event: PodijaEventCreate, db: Session = Depends(get_db)):
-    """Create a new ПоДія event"""
+    """Create a new PoDiya event (also creates calendar_entry with sync_status=pending)"""
     return service.create_event(db, event)
 
 
@@ -81,22 +81,23 @@ async def update_event(event_id: int, event: PodijaEventUpdate, db: Session = De
     return updated_event
 
 
-@router.post("/events/{event_id}/done", response_model=PodijaEventSchema)
-async def mark_event_done(event_id: int, db: Session = Depends(get_db)):
-    """Mark a ПоДія event as done"""
-    event = service.mark_done(db, event_id)
-    if not event:
-        raise HTTPException(status_code=404, detail="ПоДія not found")
-    return event
-
-
 @router.post("/events/{event_id}/cancel", response_model=PodijaEventSchema)
 async def cancel_event(event_id: int, db: Session = Depends(get_db)):
-    """Cancel a ПоДія event"""
-    event = service.mark_cancelled(db, event_id)
-    if not event:
-        raise HTTPException(status_code=404, detail="ПоДія not found")
-    return event
+    """Cancel a PoDiya event (MVP: also deletes linked Google Calendar event)"""
+    cancelled = service.cancel_event(db, event_id)
+    if not cancelled:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return cancelled
+
+
+@router.post("/events/{event_id}/done", response_model=PodijaEventSchema)
+async def mark_event_done(event_id: int, db: Session = Depends(get_db)):
+    """Mark a PoDiya event as done"""
+    update_data = PodijaEventUpdate(status='done', is_completed=True)
+    updated = service.update_event(db, event_id, update_data)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return updated
 
 
 @router.delete("/events/{event_id}")
