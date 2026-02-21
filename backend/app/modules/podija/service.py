@@ -197,44 +197,48 @@ class PodijaService(ModuleInterface, ServiceInterface):
         db.commit()
         return True
 
+    def get_events_today(self, db: Session) -> List[PodijaEvent]:
+        """Get events scheduled for today"""
+        today = datetime.utcnow().date()
+        start = datetime(today.year, today.month, today.day)
+        end = start + timedelta(days=1)
+        return (
+            db.query(PodijaEvent)
+            .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
+            .order_by(PodijaEvent.event_date)
+            .all()
+        )
+
+    def get_events_week(self, db: Session) -> List[PodijaEvent]:
+        """Get events scheduled for the current week (today + 6 days)"""
+        today = datetime.utcnow().date()
+        start = datetime(today.year, today.month, today.day)
+        end = start + timedelta(days=7)
+        return (
+            db.query(PodijaEvent)
+            .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
+            .order_by(PodijaEvent.event_date)
+            .all()
+        )
+
     def mark_done(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
-        """Mark an event as completed"""
+        """Mark event as done"""
         db_event = self.get_event(db, event_id)
         if not db_event:
             return None
+        db_event.status = 'done'
         db_event.is_completed = True
         db.commit()
         db.refresh(db_event)
         return db_event
 
-    def get_today_events(self, db: Session) -> List[PodijaEvent]:
-        """Get all events scheduled for today (UTC)"""
-        now = datetime.utcnow()
-        start = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        end = start + timedelta(days=1)
-        return (
-            db.query(PodijaEvent)
-            .filter(
-                PodijaEvent.event_date >= start,
-                PodijaEvent.event_date < end,
-                PodijaEvent.is_completed.is_(False),
-            )
-            .order_by(PodijaEvent.event_date)
-            .all()
-        )
+    def mark_cancel(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """Mark event as cancelled"""
+        db_event = self.get_event(db, event_id)
+        if not db_event:
+            return None
+        db_event.status = 'cancelled'
+        db.commit()
+        db.refresh(db_event)
+        return db_event
 
-    def get_week_events(self, db: Session) -> List[PodijaEvent]:
-        """Get all events scheduled in the next 7 days (UTC)"""
-        now = datetime.utcnow()
-        start = now.replace(hour=0, minute=0, second=0, microsecond=0)
-        end = start + timedelta(days=7)
-        return (
-            db.query(PodijaEvent)
-            .filter(
-                PodijaEvent.event_date >= start,
-                PodijaEvent.event_date < end,
-                PodijaEvent.is_completed.is_(False),
-            )
-            .order_by(PodijaEvent.event_date)
-            .all()
-        )

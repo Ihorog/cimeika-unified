@@ -36,15 +36,15 @@ async def create_event(event: PodijaEventCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/events/today", response_model=List[PodijaEventSchema])
-async def get_today_events(db: Session = Depends(get_db)):
-    """Get events scheduled for today (UTC)"""
-    return service.get_today_events(db)
+async def get_events_today(db: Session = Depends(get_db)):
+    """Get events scheduled for today"""
+    return service.get_events_today(db)
 
 
 @router.get("/events/week", response_model=List[PodijaEventSchema])
-async def get_week_events(db: Session = Depends(get_db)):
-    """Get events scheduled within the next 7 days (UTC)"""
-    return service.get_week_events(db)
+async def get_events_week(db: Session = Depends(get_db)):
+    """Get events scheduled for the current week"""
+    return service.get_events_week(db)
 
 
 @router.get("/events", response_model=List[PodijaEventSchema])
@@ -81,23 +81,22 @@ async def update_event(event_id: int, event: PodijaEventUpdate, db: Session = De
     return updated_event
 
 
-@router.post("/events/{event_id}/cancel", response_model=PodijaEventSchema)
-async def cancel_event(event_id: int, db: Session = Depends(get_db)):
-    """Cancel a PoDiya event (MVP: also deletes linked Google Calendar event)"""
-    cancelled = service.cancel_event(db, event_id)
-    if not cancelled:
-        raise HTTPException(status_code=404, detail="Event not found")
-    return cancelled
-
-
 @router.post("/events/{event_id}/done", response_model=PodijaEventSchema)
 async def mark_event_done(event_id: int, db: Session = Depends(get_db)):
-    """Mark a PoDiya event as done"""
-    update_data = PodijaEventUpdate(status='done', is_completed=True)
-    updated = service.update_event(db, event_id, update_data)
-    if not updated:
+    """Mark event as done"""
+    event = service.mark_done(db, event_id)
+    if not event:
         raise HTTPException(status_code=404, detail="Event not found")
-    return updated
+    return event
+
+
+@router.post("/events/{event_id}/cancel", response_model=PodijaEventSchema)
+async def cancel_event(event_id: int, db: Session = Depends(get_db)):
+    """Cancel an event"""
+    event = service.mark_cancel(db, event_id)
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return event
 
 
 @router.delete("/events/{event_id}")
