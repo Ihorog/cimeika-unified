@@ -12,6 +12,7 @@ export interface PodijaEvent {
   event_date?: string;
   event_type?: string;
   is_completed?: boolean;
+  status?: string;
   tags?: string[];
   time?: string;
   module?: string;
@@ -102,6 +103,38 @@ const podijaService = {
    */
   async getUpcomingEvents(limit: number = 10): Promise<PodijaEvent[]> {
     return this.getEvents({ is_completed: false, limit });
+  },
+
+  /**
+   * Get events scheduled for today
+   */
+  async getEventsToday(): Promise<PodijaEvent[]> {
+    const response = await apiClient.get('/api/v1/podija/events/today');
+    return response.data;
+  },
+
+  /**
+   * Get events scheduled for the current week
+   */
+  async getEventsWeek(): Promise<PodijaEvent[]> {
+    const response = await apiClient.get('/api/v1/podija/events/week');
+    return response.data;
+  },
+
+  /**
+   * Mark event as done
+   */
+  async markDone(id: number): Promise<PodijaEvent> {
+    const response = await apiClient.post(`/api/v1/podija/events/${id}/done`);
+    return response.data;
+  },
+
+  /**
+   * Cancel an event
+   */
+  async markCancel(id: number): Promise<PodijaEvent> {
+    const response = await apiClient.post(`/api/v1/podija/events/${id}/cancel`);
+    return response.data;
   },
 };
 

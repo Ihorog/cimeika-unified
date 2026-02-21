@@ -14,6 +14,7 @@ class PodijaEventBase(BaseModel):
     event_date: Optional[datetime] = None
     event_type: Optional[str] = None
     is_completed: bool = False
+    status: str = 'planned'  # planned/done/cancelled
     participants: Optional[List[str]] = None
     location: Optional[str] = None
     tags: List[str] = Field(default_factory=list)
@@ -32,6 +33,7 @@ class PodijaEventUpdate(BaseModel):
     event_date: Optional[datetime] = None
     event_type: Optional[str] = None
     is_completed: Optional[bool] = None
+    status: Optional[str] = None  # planned/done/cancelled
     participants: Optional[List[str]] = None
     location: Optional[str] = None
     tags: Optional[List[str]] = None

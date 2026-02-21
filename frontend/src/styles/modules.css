@@ -345,14 +345,76 @@
   font-size: 0.9rem;
 }
 
-.event-tags {
+.event-card.cancelled {
+  opacity: 0.5;
+  background: var(--bg-secondary, #f5f5f5);
+  text-decoration: line-through;
+}
+
+.event-actions {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   margin-top: 1rem;
 }
 
-/* Ideas Grid (Malya) */
+.btn-cancel {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: #e65100;
+  border: 2px solid #e65100;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #e65100;
+  color: white;
+}
+
+.btn-delete {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: #c33;
+  border: 2px solid #fcc;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  background: #fee;
+}
+
+@media (max-width: 600px) {
+  .event-actions {
+    flex-direction: column;
+  }
+
+  .event-actions button {
+    width: 100%;
+  }
+}
+
+/* Event modal overlay */
+.event-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
 .ideas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

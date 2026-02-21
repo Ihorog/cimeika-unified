@@ -46,6 +46,11 @@ function App() {
               <Route path="calendar" element={<CalendarView />} />
               <Route path="gallery" element={<GalleryView />} />
             </Route>
+
+            {/* /podiya top-level route */}
+            <Route path="/podiya" element={<MainLayout />}>
+              <Route index element={<PodijaView />} />
+            </Route>
             
             {/* Redirects for old legend URLs */}
             <Route path="/ci/legend" element={<Navigate to="/app/legends" replace />} />

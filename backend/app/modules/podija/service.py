@@ -3,6 +3,7 @@ Podija module service layer
 Business logic goes here
 """
 from typing import Dict, Any, List, Optional
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from app.core.interfaces import ModuleInterface, ServiceInterface
 from app.modules.podija.model import PodijaEvent
@@ -102,4 +103,49 @@ class PodijaService(ModuleInterface, ServiceInterface):
         db.delete(db_event)
         db.commit()
         return True
+
+    def get_events_today(self, db: Session) -> List[PodijaEvent]:
+        """Get events scheduled for today"""
+        today = datetime.utcnow().date()
+        start = datetime(today.year, today.month, today.day)
+        end = start + timedelta(days=1)
+        return (
+            db.query(PodijaEvent)
+            .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
+            .order_by(PodijaEvent.event_date)
+            .all()
+        )
+
+    def get_events_week(self, db: Session) -> List[PodijaEvent]:
+        """Get events scheduled for the current week (today + 6 days)"""
+        today = datetime.utcnow().date()
+        start = datetime(today.year, today.month, today.day)
+        end = start + timedelta(days=7)
+        return (
+            db.query(PodijaEvent)
+            .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
+            .order_by(PodijaEvent.event_date)
+            .all()
+        )
+
+    def mark_done(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """Mark event as done"""
+        db_event = self.get_event(db, event_id)
+        if not db_event:
+            return None
+        db_event.status = 'done'
+        db_event.is_completed = True
+        db.commit()
+        db.refresh(db_event)
+        return db_event
+
+    def mark_cancel(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """Mark event as cancelled"""
+        db_event = self.get_event(db, event_id)
+        if not db_event:
+            return None
+        db_event.status = 'cancelled'
+        db.commit()
+        db.refresh(db_event)
+        return db_event
 
