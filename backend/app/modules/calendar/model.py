@@ -30,7 +30,7 @@ class CalendarEntry(Base):
     location = Column(String, nullable=True)
     participants = Column(JSON, nullable=True)
     reminder_settings = Column(JSON, nullable=True)
-    external_id = Column(String, nullable=True, unique=True)  # google_event_id stored ONLY here
+    external_id = Column(String, nullable=True, index=True)  # External calendar ID (e.g. Google Calendar)
     
     # Entity metadata
     tags = Column(JSON, nullable=True, default=list)

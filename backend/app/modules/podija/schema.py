@@ -2,8 +2,8 @@
 Podija module Pydantic schemas
 """
 from datetime import datetime
-from typing import List, Optional
-from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Literal, Optional
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from app.config.canon import CANON_BUNDLE_ID
 
 
@@ -13,7 +13,7 @@ class PodijaEventBase(BaseModel):
     description: Optional[str] = None
     event_date: Optional[datetime] = None
     event_type: Optional[str] = None
-    status: str = Field(default='planned')  # planned, done, cancelled
+    status: Literal["active", "done", "cancelled"] = "active"
     is_completed: bool = False
     participants: Optional[List[str]] = None
     location: Optional[str] = None
@@ -27,12 +27,12 @@ class PodijaEventCreate(PodijaEventBase):
 
 
 class PodijaEventUpdate(BaseModel):
-    """Schema for updating Podija event"""
+    """Schema for partially updating Podija event (PATCH)"""
     title: Optional[str] = None
     description: Optional[str] = None
     event_date: Optional[datetime] = None
     event_type: Optional[str] = None
-    status: Optional[str] = None  # planned, done, cancelled
+    status: Optional[Literal["active", "done", "cancelled"]] = None
     is_completed: Optional[bool] = None
     participants: Optional[List[str]] = None
     location: Optional[str] = None
