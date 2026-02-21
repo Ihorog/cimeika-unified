@@ -66,6 +66,7 @@ def init_db():
     from app.modules.ci.model import CiEntity
     from app.modules.kazkar.model import KazkarStory
     from app.modules.podija.model import PodijaEvent
+    from app.modules.podija.reminder_model import ReminderJob  # noqa: F401
     from app.modules.nastrij.model import NastrijEmotion
     from app.modules.malya.model import MalyaIdea
     from app.modules.gallery.model import GalleryItem
