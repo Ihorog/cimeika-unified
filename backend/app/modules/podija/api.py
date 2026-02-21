@@ -35,6 +35,18 @@ async def create_event(event: PodijaEventCreate, db: Session = Depends(get_db)):
     return service.create_event(db, event)
 
 
+@router.get("/events/today", response_model=List[PodijaEventSchema])
+async def get_today_events(db: Session = Depends(get_db)):
+    """Get events scheduled for today (UTC)"""
+    return service.get_today_events(db)
+
+
+@router.get("/events/week", response_model=List[PodijaEventSchema])
+async def get_week_events(db: Session = Depends(get_db)):
+    """Get events scheduled within the next 7 days (UTC)"""
+    return service.get_week_events(db)
+
+
 @router.get("/events", response_model=List[PodijaEventSchema])
 async def list_events(
     range: Optional[str] = Query(
