@@ -103,3 +103,105 @@ CREATE TRIGGER update_memory_entries_updated_at BEFORE UPDATE ON memory_entries
 
 CREATE TRIGGER update_system_states_updated_at BEFORE UPDATE ON system_states
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================
+-- Core module tables (SQLAlchemy manages these via ORM)
+-- ============================================================
+
+-- podija_events: PoDiya MVP — events, scenarios
+CREATE TABLE IF NOT EXISTS podija_events (
+    id SERIAL PRIMARY KEY,
+    module VARCHAR(64) NOT NULL DEFAULT 'podija',
+    time TIMESTAMP NOT NULL DEFAULT NOW(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_date TIMESTAMP,
+    event_type VARCHAR(64),
+    status VARCHAR(32) NOT NULL DEFAULT 'planned',  -- planned, done, cancelled
+    is_completed BOOLEAN DEFAULT FALSE,
+    participants JSONB,
+    location VARCHAR(255),
+    tags JSONB DEFAULT '[]',
+    source_trace VARCHAR(255),
+    canon_bundle_id VARCHAR(128) NOT NULL DEFAULT 'cimeika-v1'
+);
+
+CREATE INDEX IF NOT EXISTS idx_podija_events_event_date ON podija_events(event_date);
+CREATE INDEX IF NOT EXISTS idx_podija_events_status ON podija_events(status);
+
+-- calendar_entries: Calendar library with external sync support
+CREATE TABLE IF NOT EXISTS calendar_entries (
+    id SERIAL PRIMARY KEY,
+    module VARCHAR(64) NOT NULL DEFAULT 'calendar',
+    time TIMESTAMP NOT NULL DEFAULT NOW(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    scheduled_at TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+    entry_type VARCHAR(64),
+    is_recurring BOOLEAN DEFAULT FALSE,
+    recurrence_pattern JSONB,
+    location VARCHAR(255),
+    participants JSONB,
+    reminder_settings JSONB,
+    external_id VARCHAR(255),  -- google_event_id stored ONLY here
+    tags JSONB DEFAULT '[]',
+    source_trace VARCHAR(255),
+    canon_bundle_id VARCHAR(128) NOT NULL DEFAULT 'cimeika-v1'
+);
+
+CREATE INDEX IF NOT EXISTS idx_calendar_entries_scheduled_at ON calendar_entries(scheduled_at);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_calendar_entries_external_id ON calendar_entries(external_id)
+    WHERE external_id IS NOT NULL;
+
+-- gallery_items: Gallery library
+CREATE TABLE IF NOT EXISTS gallery_items (
+    id SERIAL PRIMARY KEY,
+    module VARCHAR(64) NOT NULL DEFAULT 'gallery',
+    time TIMESTAMP NOT NULL DEFAULT NOW(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    media_type VARCHAR(64) NOT NULL,
+    url TEXT NOT NULL,
+    thumbnail_url TEXT,
+    file_size INTEGER,
+    mime_type VARCHAR(128),
+    media_metadata JSONB,
+    tags JSONB DEFAULT '[]',
+    source_trace VARCHAR(255),
+    canon_bundle_id VARCHAR(128) NOT NULL DEFAULT 'cimeika-v1'
+);
+
+-- ci_signals: Ci orchestration bus signals
+CREATE TABLE IF NOT EXISTS ci_signals (
+    id SERIAL PRIMARY KEY,
+    signal_type VARCHAR(64) NOT NULL,   -- e.g. reminder_due, event_created, sync_request
+    source_module VARCHAR(64) NOT NULL,
+    target_module VARCHAR(64),
+    payload JSONB DEFAULT '{}',
+    status VARCHAR(32) NOT NULL DEFAULT 'pending',  -- pending, processed, failed
+    processed_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_ci_signals_signal_type ON ci_signals(signal_type);
+CREATE INDEX IF NOT EXISTS idx_ci_signals_status ON ci_signals(status);
+CREATE INDEX IF NOT EXISTS idx_ci_signals_created_at ON ci_signals(created_at);
+
+-- reminder_jobs: Scheduled reminder delivery (T-10m and custom offsets)
+CREATE TABLE IF NOT EXISTS reminder_jobs (
+    id SERIAL PRIMARY KEY,
+    entity_type VARCHAR(64) NOT NULL,   -- podija_event, calendar_entry
+    entity_id INTEGER NOT NULL,
+    remind_at TIMESTAMP NOT NULL,       -- exact UTC time to fire
+    offset_minutes INTEGER NOT NULL DEFAULT 10,
+    channel VARCHAR(32) NOT NULL DEFAULT 'telegram',  -- telegram, web, both
+    status VARCHAR(32) NOT NULL DEFAULT 'pending',    -- pending, sent, failed, cancelled
+    sent_at TIMESTAMP,
+    payload JSONB DEFAULT '{}',
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_reminder_jobs_remind_at ON reminder_jobs(remind_at);
+CREATE INDEX IF NOT EXISTS idx_reminder_jobs_status ON reminder_jobs(status);
+CREATE INDEX IF NOT EXISTS idx_reminder_jobs_entity ON reminder_jobs(entity_type, entity_id);
