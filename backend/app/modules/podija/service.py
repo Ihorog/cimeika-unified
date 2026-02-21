@@ -4,6 +4,7 @@ Business logic goes here
 """
 Gymfrom datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.core.interfaces import ModuleInterface, ServiceInterface
@@ -185,3 +186,44 @@ class PodijaService(ModuleInterface, ServiceInterface):
         db.commit()
         return True
 
+    def mark_done(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """Mark an event as completed"""
+        db_event = self.get_event(db, event_id)
+        if not db_event:
+            return None
+        db_event.is_completed = True
+        db.commit()
+        db.refresh(db_event)
+        return db_event
+
+    def get_today_events(self, db: Session) -> List[PodijaEvent]:
+        """Get all events scheduled for today (UTC)"""
+        now = datetime.utcnow()
+        start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        end = start + timedelta(days=1)
+        return (
+            db.query(PodijaEvent)
+            .filter(
+                PodijaEvent.event_date >= start,
+                PodijaEvent.event_date < end,
+                PodijaEvent.is_completed.is_(False),
+            )
+            .order_by(PodijaEvent.event_date)
+            .all()
+        )
+
+    def get_week_events(self, db: Session) -> List[PodijaEvent]:
+        """Get all events scheduled in the next 7 days (UTC)"""
+        now = datetime.utcnow()
+        start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        end = start + timedelta(days=7)
+        return (
+            db.query(PodijaEvent)
+            .filter(
+                PodijaEvent.event_date >= start,
+                PodijaEvent.event_date < end,
+                PodijaEvent.is_completed.is_(False),
+            )
+            .order_by(PodijaEvent.event_date)
+            .all()
+        )
