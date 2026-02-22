@@ -1,0 +1,30 @@
+#!/bin/bash
+BASE_DIR="$HOME/cimeika-unified"
+LOG_FILE="$BASE_DIR/logs/auto_ci.log"
+
+mkdir -p "$BASE_DIR/logs" "$BASE_DIR/exports"
+cd "$BASE_DIR" || exit
+
+echo "🛠️ [$(date)] Активація контуру Cimeika Unified..."
+
+# РЕМОНТ
+fuser -k 8000/tcp 2>/dev/null
+
+# ЗАПУСК (коригуємо шлях до вашого стартового скрипта)
+if [ -f "./start.sh" ]; then
+    ./start.sh > /dev/null 2>&1 &
+    sleep 7
+else
+    echo "❌ Помилка: start.sh не знайдено в $BASE_DIR"
+    exit 1
+fi
+
+# АУДИТ 6/6
+HEALTH=$(curl -s http://127.0.0.1:8000/status | python3 -c "import sys, json; d=json.load(sys.stdin); print(d['summary']['healthy'])" 2>/dev/null)
+
+if [ "$HEALTH" == "6" ]; then
+    echo "✅ Контур 6/6 Healthy (Unified Mode)"
+    git add . && git commit -m "✨ Unified Activation: 6/6 Healthy" && git push origin main
+else
+    echo "⚠️ Вузли: $HEALTH/6. Перевірте .env.android у $BASE_DIR"
+fi
