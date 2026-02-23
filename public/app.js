@@ -244,6 +244,23 @@ if (document.readyState === 'loading') {
     init();
 }
 
+// CI GitAPI Integration
+const CI_GITAPI_URL = localStorage.getItem('CI_GITAPI_URL') || 'http://localhost:8000';
+
+document.getElementById('ci-trigger')?.addEventListener('click', async () => {
+    try {
+        // Перевірка доступності ci_gitapi
+        const health = await fetch(`${CI_GITAPI_URL}/health`, { mode: 'cors' });
+        if (health.ok) {
+            window.location.href = `${CI_GITAPI_URL}/dashboard`;
+        }
+    } catch (e) {
+        // Fallback: показати локальний чат інтерфейс
+        console.log('ci_gitapi недоступний, використовуємо локальний режим');
+        toggleChatModal();
+    }
+});
+
 // Export for debugging
 window.cimeika = {
     navigate,
