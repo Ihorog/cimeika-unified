@@ -244,18 +244,20 @@ if (document.readyState === 'loading') {
     init();
 }
 
-// CI GitAPI Integration
-const CI_GITAPI_URL = localStorage.getItem('CI_GITAPI_URL') || 'http://localhost:8000';
-
+// CI GitAPI Integration — uses state module (ci_state.js)
 document.getElementById('ci-trigger')?.addEventListener('click', async () => {
+    const { runtime } = window.ci.getState();
+    const ciGitapiUrl = runtime.ci_gitapi_url;
     try {
         // Перевірка доступності ci_gitapi
-        const health = await fetch(`${CI_GITAPI_URL}/health`, { mode: 'cors' });
+        const health = await fetch(`${ciGitapiUrl}/health`, { mode: 'cors' });
         if (health.ok) {
-            window.location.href = `${CI_GITAPI_URL}/dashboard`;
+            window.ci.commitState({ runtime: { mode: 'remote' } });
+            window.location.href = `${ciGitapiUrl}/dashboard`;
         }
     } catch (e) {
         // Fallback: показати локальний чат інтерфейс
+        window.ci.commitState({ runtime: { mode: 'local' } });
         console.log('ci_gitapi недоступний, використовуємо локальний режим');
         toggleChatModal();
     }

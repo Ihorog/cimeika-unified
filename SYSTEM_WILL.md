@@ -842,14 +842,92 @@ See `docs/COPILOT_QUICKSTART.md` for complete user guide.
 
 ---
 
-**VERSION:** 1.1.0  
-**LAST UPDATED:** 2026-02-17  
+**VERSION:** 1.2.0  
+**LAST UPDATED:** 2026-02-23  
 **MAINTAINED BY:** Cimeika Core Team  
 **FOR:** AI Agents (GitHub Copilot, Claude, GPT, etc.)
 
 ---
 
 *"Copilot prepares. Human decides."*
+
+---
+
+## FRONTEND STATE ARCHITECTURE
+
+### Dual Manifests
+
+The frontend PWA uses two distinct manifests with different purposes:
+
+| File | Purpose |
+|------|---------|
+| `public/manifest.json` | **PWA manifest** — browser install metadata (icons, theme color, display mode). Static. |
+| `public/ci.manifest.json` | **Organism manifest** — runtime operational state snapshot. Derived dynamically from `CI_STATE`. |
+
+The organism manifest (`ci.manifest.json`) reflects the current runtime state and includes:
+```json
+{
+  "schema_version": "1.0.0",
+  "updated_at": "<ISO timestamp>",
+  "runtime": {
+    "mode": "local | remote",
+    "ci_gitapi_url": "<url>"
+  },
+  "ui": {
+    "fab_enabled": true
+  }
+}
+```
+
+### State Module (`public/ci_state.js`)
+
+All frontend runtime state flows through `public/ci_state.js`.
+
+**Persistence:** State is stored in `localStorage` under a single key `CI_STATE` as a JSON object.
+
+**Legacy migration:** If the legacy key `CI_GITAPI_URL` (from PR#104) exists in `localStorage`, it is automatically migrated into `CI_STATE.runtime.ci_gitapi_url` on first load and the legacy key is removed.
+
+**API exposed on `window.ci`:**
+
+| Function | Description |
+|----------|-------------|
+| `getState()` | Returns a deep copy of the current state. |
+| `commitState(partial)` | Merges partial update, persists to `localStorage`, dispatches `ci:state_changed` event. |
+| `getManifestSnapshot()` | Returns a derived `ci.manifest` object from current state. |
+
+**CI_STATE structure:**
+```json
+{
+  "runtime": {
+    "mode": "local | remote",
+    "ci_gitapi_url": "http://localhost:8000"
+  },
+  "ui": {
+    "fab_enabled": true
+  }
+}
+```
+
+### Event Bus
+
+Every call to `commitState(partial)` dispatches a `CustomEvent` on `window`:
+
+```js
+window.addEventListener('ci:state_changed', (e) => {
+  console.log(e.detail); // full state snapshot
+});
+```
+
+- **Event name:** `ci:state_changed`
+- **Event detail:** full state snapshot (deep copy)
+- **Fired on:** every `commitState` call regardless of what changed
+
+### FAB Behavior
+
+The CI FAB (`#ci-trigger`) in `public/app.js`:
+1. Reads `ci_gitapi_url` from `window.ci.getState().runtime`.
+2. On successful `/health` reachability → `commitState({ runtime: { mode: 'remote' } })` then redirects to dashboard.
+3. On failure → `commitState({ runtime: { mode: 'local' } })` then falls back to local chat.
 
 ---
 
