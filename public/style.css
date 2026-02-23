@@ -377,6 +377,33 @@ body {
     }
 }
 
+/* ===== CI FAB ===== */
+.ci-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #0b0b0b;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+.ci-fab:hover {
+  transform: scale(1.1);
+}
+.ci-fab img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
 /* ===== Loading State ===== */
 .loading {
     display: flex;
