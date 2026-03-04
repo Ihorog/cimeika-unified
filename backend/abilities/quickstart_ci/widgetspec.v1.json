@@ -1,0 +1,48 @@
+{
+  "version": "1",
+  "name": "quickstart_ci",
+  "template_engine": "jinja2",
+  "template": "{\n  \"type\": \"widget\",\n  \"name\": \"quickstart_ci\",\n  \"children\": [\n    {% for item in quick_items %}\n    {\n      \"type\": \"button\",\n      \"label\": \"{{ item.label }}\",\n      \"action\": {\"type\": \"ci.quick\", \"payload\": {\"id\": \"{{ item.id }}\"}}\n    }{% if not loop.last %},{% endif %}\n    {% endfor %}\n  ]\n}",
+  "jsonSchema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "QuickstartCI Widget Model",
+    "type": "object",
+    "required": ["quick_items"],
+    "properties": {
+      "quick_items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["id", "label"],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputJsonPreview": {
+    "type": "widget",
+    "name": "quickstart_ci",
+    "children": [
+      {
+        "type": "button",
+        "label": "Запустити CI",
+        "action": {"type": "ci.quick", "payload": {"id": "run_ci"}}
+      },
+      {
+        "type": "button",
+        "label": "Перевірити статус",
+        "action": {"type": "ci.quick", "payload": {"id": "check_status"}}
+      }
+    ]
+  }
+}

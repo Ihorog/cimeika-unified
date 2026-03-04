@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "abilities": {
     "notes": {
-      "enabled": false,
+      "enabled": true,
       "version": "0.1.0",
       "description": "Note-taking and knowledge capture",
       "dependencies": []
@@ -17,6 +17,12 @@
       "enabled": false,
       "version": "0.1.0",
       "description": "User intent pattern detection",
+      "dependencies": []
+    },
+    "quickstart_ci": {
+      "enabled": false,
+      "version": "0.1.0",
+      "description": "Normalized Quickstart CI WidgetSpec (template + JSON schema + defaults)",
       "dependencies": []
     }
   }
