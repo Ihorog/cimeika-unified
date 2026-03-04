@@ -404,6 +404,56 @@ body {
   border-radius: 50%;
 }
 
+/* ===== CI Chat Modal ===== */
+.ci-chat-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 10000;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.ci-chat-modal.ci-chat-modal--open {
+    display: flex;
+}
+
+.ci-chat-modal-content {
+    width: 100%;
+    max-width: 480px;
+    background: #1a1a2e;
+    border-radius: 16px 16px 0 0;
+    padding: 20px;
+}
+
+.ci-chat-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.ci-chat-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.ci-chat-modal-close:focus-visible {
+    outline: 2px solid var(--accent);
+    border-radius: 4px;
+}
+
+.ci-chat-modal-body {
+    color: var(--text-dim);
+    font-size: 14px;
+}
+
 /* ===== Loading State ===== */
 .loading {
     display: flex;

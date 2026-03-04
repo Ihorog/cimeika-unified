@@ -244,6 +244,35 @@ if (document.readyState === 'loading') {
     init();
 }
 
+/**
+ * Toggle local chat modal (fallback when ci_gitapi is unavailable)
+ */
+function toggleChatModal() {
+    let modal = document.getElementById('ci-chat-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'ci-chat-modal';
+        modal.className = 'ci-chat-modal';
+        modal.innerHTML = `
+            <div class="ci-chat-modal-content">
+                <div class="ci-chat-modal-header">
+                    <span>ci — локальний режим</span>
+                    <button class="ci-chat-modal-close">&times;</button>
+                </div>
+                <div class="ci-chat-modal-body">
+                    <p>ci_gitapi недоступний. Локальний режим активовано.</p>
+                </div>
+            </div>
+        `;
+        modal.querySelector('.ci-chat-modal-close').addEventListener('click', toggleChatModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) toggleChatModal();
+        });
+        document.body.appendChild(modal);
+    }
+    modal.classList.toggle('ci-chat-modal--open');
+}
+
 // CI GitAPI Integration — uses state module (ci_state.js)
 document.getElementById('ci-trigger')?.addEventListener('click', async () => {
     const { runtime } = window.ci.getState();
