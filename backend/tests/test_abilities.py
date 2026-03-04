@@ -14,6 +14,7 @@ from abilities import registry, Ability, AbilityRegistry
 from abilities.notes import NotesAbility
 from abilities.scheduler import SchedulerAbility
 from abilities.intent_observer import IntentObserverAbility
+from abilities.quickstart_ci import QuickstartCiAbility
 
 
 class TestAbilityBase:
@@ -522,3 +523,150 @@ class TestAbilityRegistryIntegration:
         })
         
         assert result is None
+
+
+class TestQuickstartCiAbility:
+    """Test QuickstartCiAbility implementation"""
+
+    @pytest.mark.asyncio
+    async def test_quickstart_ci_initial_state(self):
+        """Ability is dormant by default"""
+        ability = QuickstartCiAbility()
+        assert ability.name == "quickstart_ci"
+        assert ability.version == "0.1.0"
+        assert ability.is_active is False
+
+    @pytest.mark.asyncio
+    async def test_quickstart_ci_activation(self):
+        """Ability transitions to active state"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        assert ability.is_active is True
+
+    @pytest.mark.asyncio
+    async def test_quickstart_ci_deactivation(self):
+        """Ability returns to dormant state"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        await ability.deactivate()
+        assert ability.is_active is False
+
+    @pytest.mark.asyncio
+    async def test_execute_while_inactive_returns_error(self):
+        """Executing while dormant returns an error dict"""
+        ability = QuickstartCiAbility()
+        result = await ability.execute({"action": "get_spec"})
+        assert "error" in result
+
+    @pytest.mark.asyncio
+    async def test_get_spec_returns_widgetspec(self):
+        """get_spec returns the full WidgetSpec"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        result = await ability.execute({"action": "get_spec"})
+        assert result["status"] == "success"
+        spec = result["spec"]
+        assert spec["name"] == "quickstart_ci"
+        assert spec["template_engine"] == "jinja2"
+        assert "jsonSchema" in spec
+        assert "template" in spec
+        assert "outputJsonPreview" in spec
+
+    @pytest.mark.asyncio
+    async def test_list_quick_returns_items(self):
+        """list_quick returns buttons from outputJsonPreview"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        result = await ability.execute({"action": "list_quick"})
+        assert result["status"] == "success"
+        items = result["quick_items"]
+        assert isinstance(items, list)
+        assert len(items) > 0
+        for item in items:
+            assert "id" in item
+            assert "label" in item
+
+    @pytest.mark.asyncio
+    async def test_validate_valid_model(self):
+        """validate returns valid=True for a conforming model"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        result = await ability.execute({
+            "action": "validate",
+            "model": {
+                "quick_items": [
+                    {"id": "run_ci", "label": "Run CI"}
+                ]
+            }
+        })
+        assert result["valid"] is True
+        assert result["errors"] == []
+
+    @pytest.mark.asyncio
+    async def test_validate_missing_required_field(self):
+        """validate returns errors when required field is absent"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        result = await ability.execute({
+            "action": "validate",
+            "model": {}
+        })
+        assert result["valid"] is False
+        assert any("quick_items" in e for e in result["errors"])
+
+    @pytest.mark.asyncio
+    async def test_validate_missing_item_required_field(self):
+        """validate returns errors when a quick item is missing required field"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        result = await ability.execute({
+            "action": "validate",
+            "model": {
+                "quick_items": [
+                    {"id": "run_ci"}  # missing 'label'
+                ]
+            }
+        })
+        assert result["valid"] is False
+        assert any("label" in e for e in result["errors"])
+
+    @pytest.mark.asyncio
+    async def test_validate_without_model_key_returns_error(self):
+        """validate without 'model' key returns an error dict"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        result = await ability.execute({"action": "validate"})
+        assert "error" in result
+
+    @pytest.mark.asyncio
+    async def test_unknown_action_returns_error(self):
+        """Unknown action returns an error dict"""
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        result = await ability.execute({"action": "nonexistent"})
+        assert "error" in result
+
+    @pytest.mark.asyncio
+    async def test_spec_template_is_valid_jinja2(self):
+        """Template in the spec is valid Jinja2 syntax"""
+        try:
+            from jinja2 import Environment
+        except ImportError:
+            pytest.skip("jinja2 not installed")
+
+        ability = QuickstartCiAbility()
+        await ability.activate()
+        spec_result = await ability.execute({"action": "get_spec"})
+        template_str = spec_result["spec"]["template"]
+
+        env = Environment()
+        # Should not raise
+        tmpl = env.from_string(template_str)
+        output = tmpl.render(quick_items=[{"id": "run_ci", "label": "Run CI"}])
+        # Output should be parseable as JSON
+        parsed = json.loads(output)
+        assert parsed["type"] == "widget"
+        children = parsed["children"]
+        assert len(children) == 1
+        assert children[0]["action"]["type"] == "ci.quick"
+        assert children[0]["action"]["payload"]["id"] == "run_ci"

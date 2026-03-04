@@ -163,6 +163,7 @@ registry = AbilityRegistry()
 from .notes import NotesAbility
 from .scheduler import SchedulerAbility
 from .intent_observer import IntentObserverAbility
+from .quickstart_ci import QuickstartCiAbility
 
 __all__ = [
     'Ability', 
@@ -170,5 +171,6 @@ __all__ = [
     'registry',
     'NotesAbility',
     'SchedulerAbility',
-    'IntentObserverAbility'
+    'IntentObserverAbility',
+    'QuickstartCiAbility'
 ]
