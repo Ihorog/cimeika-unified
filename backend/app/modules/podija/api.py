@@ -12,6 +12,7 @@ from app.modules.podija.schema import (
     PodijaEventUpdate
 )
 from app.modules.podija.service import PodijaService
+from app.modules.podija.categories import get_all_categories, get_category, CategorySchema
 
 router = APIRouter(prefix="/podiya", tags=["podiya"])
 service = PodijaService()
@@ -27,6 +28,21 @@ async def get_podija_status():
         "description": "Події, майбутнє, сценарії",
         "status": "active"
     }
+
+
+@router.get("/categories", response_model=List[CategorySchema])
+async def list_categories():
+    """Return all PoDiya categories with their subcategories"""
+    return get_all_categories()
+
+
+@router.get("/categories/{slug}", response_model=CategorySchema)
+async def get_category_by_slug(slug: str):
+    """Return a single PoDiya category by slug"""
+    cat = get_category(slug)
+    if not cat:
+        raise HTTPException(status_code=404, detail=f"Category '{slug}' not found")
+    return cat
 
 
 @router.post("/events", response_model=PodijaEventSchema, status_code=201)

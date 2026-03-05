@@ -205,26 +205,26 @@ client = TestClient(app)
 
 
 def test_podija_today_endpoint_exists():
-    """GET /api/v1/podija/events/today returns 200."""
-    response = client.get("/api/v1/podija/events/today")
+    """GET /api/v1/podiya/events/today returns 200."""
+    response = client.get("/api/v1/podiya/events/today")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
 def test_podija_week_endpoint_exists():
-    """GET /api/v1/podija/events/week returns 200."""
-    response = client.get("/api/v1/podija/events/week")
+    """GET /api/v1/podiya/events/week returns 200."""
+    response = client.get("/api/v1/podiya/events/week")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 
 def test_podija_done_endpoint_404_for_missing():
-    """POST /api/v1/podija/events/9999/done returns 404."""
-    response = client.post("/api/v1/podija/events/9999/done")
+    """POST /api/v1/podiya/events/9999/done returns 404."""
+    response = client.post("/api/v1/podiya/events/9999/done")
     assert response.status_code == 404
 
 
 def test_podija_cancel_endpoint_404_for_missing():
-    """POST /api/v1/podija/events/9999/cancel returns 404."""
-    response = client.post("/api/v1/podija/events/9999/cancel")
+    """POST /api/v1/podiya/events/9999/cancel returns 404."""
+    response = client.post("/api/v1/podiya/events/9999/cancel")
     assert response.status_code == 404

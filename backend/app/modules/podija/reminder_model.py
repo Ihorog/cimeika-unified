@@ -2,8 +2,7 @@
 Нагадування для подій (T-10m Telegram reminders)
 """
 import uuid
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Uuid
 from datetime import datetime, timezone
 from app.config.database import Base
 
@@ -26,7 +25,7 @@ class ReminderJob(Base):
     __tablename__ = "reminder_jobs"
 
     id = Column(
-        UUID(as_uuid=True),
+        Uuid(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
         nullable=False,
@@ -38,9 +37,8 @@ class ReminderJob(Base):
         index=True,
     )
     user_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("users.id", ondelete="CASCADE"),
-        nullable=False,
+        Uuid(as_uuid=True),
+        nullable=True,
         index=True,
     )
     remind_at = Column(DateTime(timezone=True), nullable=False, index=True)
