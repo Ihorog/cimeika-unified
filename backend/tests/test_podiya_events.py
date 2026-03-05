@@ -82,7 +82,7 @@ def test_create_event_returns_correct_payload():
     resp = _create_event("Моя ПоДія")
     data = resp.json()
     assert data["title"] == "Моя ПоДія"
-    assert data["status"] == "active"
+    assert data["status"] == "planned"
     assert data["module"] == "podija"
     assert "id" in data
 

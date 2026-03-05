@@ -142,6 +142,7 @@ def _make_event(id_: int, title: str, event_date: datetime, is_completed: bool =
     ev.title = title
     ev.event_date = event_date
     ev.is_completed = is_completed
+    ev.status = 'planned'
     return ev
 
 

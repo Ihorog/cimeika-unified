@@ -24,11 +24,11 @@ class PodijaEvent(Base):
     description = Column(Text, nullable=True)
     event_date = Column(DateTime, nullable=True)  # When the event is/was scheduled
     event_type = Column(String, nullable=True)  # past, future, planned, scenario
-    status = Column(String, nullable=False, default='planned', index=True)  # planned, done, cancelled
+    status = Column(String, nullable=False, default='planned', index=True)  # planned/done/cancelled
     is_completed = Column(Boolean, default=False)
-    status = Column(String, nullable=False, default='planned')  # planned/done/cancelled
     participants = Column(JSON, nullable=True)  # List of participants
     location = Column(String, nullable=True)
+    category = Column(String, nullable=True, index=True)  # PoDiya category (e.g. events, weather, games)
     # Note: external calendar IDs go in calendar_entries.external_id, not here
     
     # Entity metadata

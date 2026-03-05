@@ -13,11 +13,11 @@ class PodijaEventBase(BaseModel):
     description: Optional[str] = None
     event_date: Optional[datetime] = None
     event_type: Optional[str] = None
-    status: str = 'planned'
-    is_completed: bool = False
     status: str = 'planned'  # planned/done/cancelled
+    is_completed: bool = False
     participants: Optional[List[str]] = None
     location: Optional[str] = None
+    category: Optional[str] = None  # PoDiya category
     tags: List[str] = Field(default_factory=list)
     source_trace: Optional[str] = None
 
@@ -33,11 +33,11 @@ class PodijaEventUpdate(BaseModel):
     description: Optional[str] = None
     event_date: Optional[datetime] = None
     event_type: Optional[str] = None
-    status: Optional[str] = None
-    is_completed: Optional[bool] = None
     status: Optional[str] = None  # planned/done/cancelled
+    is_completed: Optional[bool] = None
     participants: Optional[List[str]] = None
     location: Optional[str] = None
+    category: Optional[str] = None
     tags: Optional[List[str]] = None
     source_trace: Optional[str] = None
 

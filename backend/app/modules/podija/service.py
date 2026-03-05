@@ -12,7 +12,7 @@ from app.modules.podija.schema import PodijaEventCreate, PodijaEventUpdate
 
 # Valid status transitions
 STATUS_TRANSITIONS = {
-    "active": {"done", "cancelled"},
+    "planned": {"done", "cancelled"},
     "done": set(),
     "cancelled": set(),
 }
@@ -204,7 +204,6 @@ class PodijaService(ModuleInterface, ServiceInterface):
         return (
             db.query(PodijaEvent)
             .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
-            .order_by(PodijaEvent.event_date)
             .all()
         )
 
@@ -216,7 +215,6 @@ class PodijaService(ModuleInterface, ServiceInterface):
         return (
             db.query(PodijaEvent)
             .filter(PodijaEvent.event_date >= start, PodijaEvent.event_date < end)
-            .order_by(PodijaEvent.event_date)
             .all()
         )
 
@@ -225,6 +223,12 @@ class PodijaService(ModuleInterface, ServiceInterface):
         db_event = self.get_event(db, event_id)
         if not db_event:
             return None
+        allowed = STATUS_TRANSITIONS.get(db_event.status, set())
+        if "done" not in allowed:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Cannot transition from '{db_event.status}' to 'done'."
+            )
         db_event.status = 'done'
         db_event.is_completed = True
         db.commit()
@@ -236,8 +240,27 @@ class PodijaService(ModuleInterface, ServiceInterface):
         db_event = self.get_event(db, event_id)
         if not db_event:
             return None
+        allowed = STATUS_TRANSITIONS.get(db_event.status, set())
+        if "cancelled" not in allowed:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Cannot transition from '{db_event.status}' to 'cancelled'."
+            )
         db_event.status = 'cancelled'
         db.commit()
         db.refresh(db_event)
         return db_event
+
+    # Aliases for consistent naming
+    def get_today_events(self, db: Session) -> List[PodijaEvent]:
+        """Alias for get_events_today"""
+        return self.get_events_today(db)
+
+    def get_week_events(self, db: Session) -> List[PodijaEvent]:
+        """Alias for get_events_week"""
+        return self.get_events_week(db)
+
+    def mark_cancelled(self, db: Session, event_id: int) -> Optional[PodijaEvent]:
+        """Alias for mark_cancel"""
+        return self.mark_cancel(db, event_id)
 
