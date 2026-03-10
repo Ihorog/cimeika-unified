@@ -1,5 +1,17 @@
 """
 Nastrij module API routes
+Емоційні стани, контекст
+
+Nastrij є модулем для відстеження емоційних станів та контексту.
+Дозволяє фіксувати настрої, емоції та їх зміни у часі.
+
+Endpoints:
+- GET /nastrij/ - Статус модуля
+- GET /nastrij/emotions - Список всіх емоційних записів
+- POST /nastrij/emotions - Створити новий емоційний запис
+- GET /nastrij/emotions/{id} - Отримати запис за ID
+- PUT /nastrij/emotions/{id} - Оновити запис
+- DELETE /nastrij/emotions/{id} - Видалити запис
 """
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException

@@ -3,6 +3,7 @@ Module initialization and registration for backend
 Central setup for all Cimeika modules
 """
 from app.core import registry
+from app.core.logging import get_logger
 from app.modules.ci.service import CiService
 from app.modules.kazkar.service import KazkarService
 from app.modules.podija.service import PodijaService
@@ -10,6 +11,8 @@ from app.modules.nastrij.service import NastrijService
 from app.modules.malya.service import MalyaService
 from app.modules.gallery.service import GalleryService
 from app.modules.calendar.service import CalendarService
+
+logger = get_logger(__name__)
 
 
 # Global service instances
@@ -59,18 +62,18 @@ def setup_modules():
     """
     Setup and initialize all modules
     Call this on app startup
-    
+
     Returns:
         Dict with initialization results
     """
     register_modules()
     results = initialize_modules()
-    
-    print('Module initialization results:', results)
-    
+
+    logger.info('Module initialization results: %s', results)
+
     failed_modules = [name for name, success in results.items() if not success]
-    
+
     if failed_modules:
-        print(f'Failed to initialize modules: {failed_modules}')
-    
+        logger.error('Failed to initialize modules: %s', failed_modules)
+
     return results

@@ -237,13 +237,13 @@ Deviation is not allowed.
 
 ## 9. ACCEPTANCE CHECKLIST (BINARY)
 
-- [ ] FastAPI is the only backend
-- [ ] Flask code is archived
-- [ ] All 7 modules render UI
-- [ ] Ci overlay works globally
-- [ ] Theme is deterministic
-- [ ] docker-compose is minimal
-- [ ] README reflects reality
+- [x] FastAPI is the only backend
+- [x] Flask code is archived
+- [x] All 7 modules render UI
+- [x] Ci overlay works globally
+- [x] Theme is deterministic
+- [x] docker-compose is minimal
+- [x] README reflects reality
 
 If any item is false → task is NOT complete.
 

@@ -1,5 +1,17 @@
 """
 Gallery module API routes
+Візуальний архів, медіа
+
+Gallery є модулем для зберігання та організації медіа-контенту.
+Підтримує зображення, відео та інші візуальні матеріали.
+
+Endpoints:
+- GET /gallery/ - Статус модуля
+- GET /gallery/items - Список всіх медіа-елементів
+- POST /gallery/items - Завантажити новий елемент
+- GET /gallery/items/{id} - Отримати елемент за ID
+- PUT /gallery/items/{id} - Оновити метадані елемента
+- DELETE /gallery/items/{id} - Видалити елемент
 """
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
