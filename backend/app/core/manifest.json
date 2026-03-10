@@ -24,7 +24,11 @@
       "category": "module",
       "endpoints": [
         "/api/v1/kazkar/stories",
-        "/api/v1/kazkar/legends"
+        "/api/v1/kazkar/legends",
+        "/api/v1/kazkar/legend/activate",
+        "/api/v1/kazkar/legend/node/{id}",
+        "/api/v1/kazkar/legend/search",
+        "/api/v1/kazkar/legend/export"
       ],
       "dependencies": ["ci_core"]
     },

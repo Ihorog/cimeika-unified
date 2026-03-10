@@ -1,8 +1,10 @@
 """
 Kazkar module API routes
 """
-from typing import List
+from typing import List, Optional
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from app.config.database import get_db
 from app.modules.kazkar.schema import (
@@ -12,6 +14,9 @@ from app.modules.kazkar.schema import (
 )
 from app.modules.kazkar.service import KazkarService
 from app.modules.kazkar.websocket import kazkar_ws_manager, broadcast_legend_event
+from app.modules.kazkar.semantic.prostir_legendy import get_node, get_all_nodes
+from app.modules.kazkar.semantic.semantychnyi_graf import build_graph
+from app.modules.kazkar.semantic.state import legend_state
 
 router = APIRouter(prefix="/kazkar", tags=["kazkar"])
 service = KazkarService()
@@ -129,6 +134,165 @@ async def broadcast_event(event: dict):
     """
     await kazkar_ws_manager.broadcast(event)
     return {"status": "success", "message": "Event broadcasted to all clients"}
+
+
+# ---------------------------------------------------------------------------
+# Semantic Legend Endpoints (strict mode)
+# ---------------------------------------------------------------------------
+
+def _now_ts() -> int:
+    return int(datetime.now().timestamp())
+
+
+def _node_dict(node: dict) -> dict:
+    return {
+        "id": node["id"],
+        "nazva": node["nazva"],
+        "opys": node["opys"],
+        "hlybyna": node["hlybyna"],
+        "zv_yazani_vuzly": node["zv_yazani_vuzly"],
+        "rezonansni_sensy": node["rezonansni_sensy"],
+        "arkhetyp": node["arkhetyp"],
+    }
+
+
+@router.get("/legend/activate")
+async def legend_activate():
+    """Activate the legend session starting at prysutnist (resets history)."""
+    legend_state.activate("prysutnist")
+    node = get_node("prysutnist")
+    all_nodes = get_all_nodes()
+    graph = build_graph()
+    await broadcast_legend_event(event_type="legend_activated", sense="prysutnist")
+    return {
+        "ok": True,
+        "result": {
+            "type": "legend_activated",
+            "current_node": _node_dict(node),
+            "history": legend_state.history,
+            "available_nodes": [n["id"] for n in all_nodes],
+            "stats": {
+                "nodes": len(all_nodes),
+                "edges": graph["count_edges"],
+            },
+            "timestamp": _now_ts(),
+        },
+    }
+
+
+@router.get("/legend/node/{node_id}")
+async def legend_navigate(node_id: str):
+    """Navigate to a semantic node. Strict: requires active legend session."""
+    if not legend_state.active:
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "ok": False,
+                "error": {
+                    "code": "LEGEND_NOT_ACTIVE",
+                    "message": "Legend session is not active. Call /legend/activate first.",
+                    "details": {},
+                },
+            },
+        )
+    node = get_node(node_id)
+    if node is None:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "ok": False,
+                "error": {
+                    "code": "NODE_NOT_FOUND",
+                    "message": f"Node '{node_id}' does not exist in the legend space.",
+                    "details": {},
+                },
+            },
+        )
+    legend_state.navigate(node_id)
+    linked = [
+        {"id": n["id"], "nazva": n["nazva"], "hlybyna": n["hlybyna"]}
+        for linked_id in node["zv_yazani_vuzly"]
+        if (n := get_node(linked_id)) is not None
+    ]
+    await broadcast_legend_event(event_type="legend_navigated", sense=node_id)
+    return {
+        "ok": True,
+        "result": {
+            "type": "legend_navigated",
+            "current_node": _node_dict(node),
+            "linked": linked,
+            "history_tail": legend_state.history_tail,
+            "timestamp": _now_ts(),
+        },
+    }
+
+
+class LegendSearchRequest(BaseModel):
+    query: str = Field(..., min_length=1)
+    limit: int = Field(default=20, ge=1, le=100)
+
+
+@router.post("/legend/search")
+async def legend_search(request: LegendSearchRequest):
+    """Search semantic nodes by name, description, or resonant senses."""
+    q = request.query.strip().lower()
+    all_nodes = get_all_nodes()
+    matches = []
+    for node in all_nodes:
+        haystack = (
+            node["nazva"].lower()
+            + " "
+            + node["opys"].lower()
+            + " "
+            + " ".join(s.lower() for s in node.get("rezonansni_sensy", []))
+        )
+        if q in haystack:
+            matches.append(node)
+    matches.sort(key=lambda n: (n["hlybyna"], n["id"]))
+    matches = matches[: request.limit]
+    return {
+        "ok": True,
+        "result": {
+            "type": "legend_search",
+            "query": request.query.strip(),
+            "matches": [_node_dict(n) for n in matches],
+            "count": len(matches),
+            "timestamp": _now_ts(),
+        },
+    }
+
+
+@router.get("/legend/export")
+async def legend_export():
+    """Export full legend graph. Strict: requires active legend session."""
+    if not legend_state.active:
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "ok": False,
+                "error": {
+                    "code": "LEGEND_NOT_ACTIVE",
+                    "message": "Legend session is not active. Call /legend/activate first.",
+                    "details": {},
+                },
+            },
+        )
+    all_nodes = get_all_nodes()
+    graph = build_graph()
+    return {
+        "ok": True,
+        "result": {
+            "type": "legend_export",
+            "legend": {
+                "nodes": [_node_dict(n) for n in all_nodes],
+                "count_nodes": len(all_nodes),
+                "current_node_id": legend_state.current_node_id,
+                "history": legend_state.history,
+            },
+            "graph": graph,
+            "timestamp": _now_ts(),
+        },
+    }
 
 
 @router.websocket("/ws")
