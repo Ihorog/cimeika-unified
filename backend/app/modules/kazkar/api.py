@@ -1,5 +1,20 @@
 """
 Kazkar module API routes
+Пам'ять, історії, легенди
+
+Kazkar є модулем для зберігання та управління історіями, спогадами та легендами.
+Підтримує WebSocket для real-time оновлень та семантичний граф легенд.
+
+Endpoints:
+- GET /kazkar/ - Статус модуля
+- GET /kazkar/stories - Список всіх історій
+- POST /kazkar/stories - Створити нову історію
+- GET /kazkar/stories/{id} - Отримати історію за ID
+- PUT /kazkar/stories/{id} - Оновити історію
+- DELETE /kazkar/stories/{id} - Видалити історію
+- WebSocket /kazkar/ws - Real-time оновлення
+- GET /kazkar/semantic/nodes - Семантичні вузли легенд
+- GET /kazkar/semantic/graph - Побудувати граф легенд
 """
 from typing import List, Optional
 from datetime import datetime

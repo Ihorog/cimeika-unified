@@ -1,5 +1,17 @@
 """
 Malya module API routes
+Ідеї, творчість, інновації
+
+Malya є модулем для зберігання та розвитку ідей.
+Призначений для фіксації творчих думок, інсайтів та інноваційних концепцій.
+
+Endpoints:
+- GET /malya/ - Статус модуля
+- GET /malya/ideas - Список всіх ідей
+- POST /malya/ideas - Створити нову ідею
+- GET /malya/ideas/{id} - Отримати ідею за ID
+- PUT /malya/ideas/{id} - Оновити ідею
+- DELETE /malya/ideas/{id} - Видалити ідею
 """
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException

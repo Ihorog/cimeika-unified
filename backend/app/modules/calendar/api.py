@@ -1,5 +1,20 @@
 """
 Calendar module API routes
+Час, ритми, планування
+
+Calendar є модулем для управління часом та плануванням.
+Підтримує синхронізацію з Google Calendar та інтеграцію з іншими модулями.
+
+Endpoints:
+- GET /calendar/ - Статус модуля
+- GET /calendar/entries - Список всіх календарних записів
+- GET /calendar/entries/today - Записи на сьогодні
+- GET /calendar/entries/week - Записи на тиждень
+- POST /calendar/entries - Створити новий запис
+- GET /calendar/entries/{id} - Отримати запис за ID
+- PUT /calendar/entries/{id} - Оновити запис
+- DELETE /calendar/entries/{id} - Видалити запис
+- POST /calendar/sync - Синхронізувати з Google Calendar
 """
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException

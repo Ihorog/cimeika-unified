@@ -1,6 +1,24 @@
 """
 Podija module API routes
-URL prefix: /podiya  (code name: podiya / podija)
+Події, майбутнє, сценарії
+
+PoDiya є модулем для управління подіями з підтримкою категорій,
+статусів lifecycle (planned/done/cancelled), та інтеграції з календарем.
+
+URL prefix: /podiya (Ukrainian spelling)
+Internal code: podija (transliteration)
+
+Endpoints:
+- GET /podiya/ - Статус модуля
+- GET /podiya/events - Список всіх подій
+- GET /podiya/events/today - Події на сьогодні
+- GET /podiya/events/week - Події на тиждень
+- POST /podiya/events - Створити нову подію
+- PUT /podiya/events/{id} - Оновити подію
+- DELETE /podiya/events/{id} - Видалити подію
+- POST /podiya/events/{id}/done - Відмітити як виконану
+- POST /podiya/events/{id}/cancel - Скасувати подію
+- GET /podiya/categories - Всі категорії (7 типів)
 """
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
