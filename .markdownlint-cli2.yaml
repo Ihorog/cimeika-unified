@@ -1,0 +1,3 @@
+globs: ['**/*.md'];
+ignores: node_modules, .venv, site, dist, build, .next, .vercel, coverage;
+config: MD013 false, MD033 false, MD041 false.
