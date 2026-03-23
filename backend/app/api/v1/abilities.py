@@ -11,7 +11,7 @@ from pathlib import Path
 # Add abilities module to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "abilities"))
 
-from abilities import registry, NotesAbility, SchedulerAbility, IntentObserverAbility
+from abilities import registry, NotesAbility, SchedulerAbility, IntentObserverAbility  # noqa: E402
 
 # Initialize router
 router = APIRouter(prefix="/abilities", tags=["abilities"])

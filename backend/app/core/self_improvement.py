@@ -148,7 +148,7 @@ The self-improvement mechanism has detected that the tool **{tool_name}** (`{too
         
         # Add reason-specific information
         if reason == "missing":
-            issue_body += f"""### Missing Tool
+            issue_body += """### Missing Tool
 This tool is marked as required in `manifest.json` but is not present in the tools registry.
 
 **Required Actions:**
@@ -161,7 +161,7 @@ This tool is marked as required in `manifest.json` but is not present in the too
 """
         
         elif reason == "inactive":
-            issue_body += f"""### Inactive Tool
+            issue_body += """### Inactive Tool
 This tool exists in the manifest but is marked as inactive.
 
 **Required Actions:**
