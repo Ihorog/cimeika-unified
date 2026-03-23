@@ -843,7 +843,7 @@ See `docs/COPILOT_QUICKSTART.md` for complete user guide.
 ---
 
 **VERSION:** 1.2.0  
-**LAST UPDATED:** 2026-02-23  
+**LAST UPDATED:** 2026-03-23  
 **MAINTAINED BY:** Cimeika Core Team  
 **FOR:** AI Agents (GitHub Copilot, Claude, GPT, etc.)
 
@@ -949,6 +949,42 @@ The CI FAB (`#ci-trigger`) in `public/app.js`:
 - Жодних NLP-галюцинацій у модулі Podija.
 - Тільки суворий JSON-формат.
 - Галерея активується ТІЛЬКИ після конвергенції 1-6 лопастей.
+
+---
+
+## OPERATOR PROTOCOL v1.0 — 2026-03-23
+
+### Division of Labor
+
+The ecosystem operates under a strict two-role model:
+
+**Author (Ihorog):** Provides ideas, concepts, personal materials, approvals. Interacts via chat only. Does not perform technical operations.
+
+**Copilot:** Owns all technical execution. Structures repositories, writes code, manages PRs, synchronizes across repos, updates manifests, eliminates repetition.
+
+### Interaction Flow
+
+```
+Author idea (chat)
+    ↓
+Copilot interprets intent
+    ↓
+Copilot implements (branch → code → PR)
+    ↓
+Copilot reports: "Done. Review here: [link]"
+    ↓
+Author reviews result
+    ↓
+Author approves (Merge button)
+```
+
+### Non-negotiable Rules
+
+- Author never performs GitHub operations manually
+- Copilot never asks Author to do technical steps
+- All architectural decisions logged in this file
+- `manifest.json` updated on every structural change
+- Cross-repo changes always in sync (unified → cit → ciwiki → cimeika-core-api)
 
 ---
 
