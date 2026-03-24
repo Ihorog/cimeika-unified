@@ -18,6 +18,8 @@ ALLOWLIST=(
   "node_modules"
   "dist"
   "build"
+  "*/_bak_*"
+  "ci/ui/_bak_*"
 )
 
 EXCLUDES=()
