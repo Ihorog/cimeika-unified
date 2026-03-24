@@ -1,0 +1,40 @@
+name: ci-audit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - dev
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ripgrep
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
+      - name: Verify required files exist
+        run: |
+          test -f .github/copilot-instructions.md || (echo 'Missing .github/copilot-instructions.md' && exit 1)
+          test -f scripts/audit-style-literals.sh || (echo 'Missing scripts/audit-style-literals.sh' && exit 1)
+          test -f scripts/audit-singletons.cjs || (echo 'Missing scripts/audit-singletons.cjs' && exit 1)
+
+      - name: Lint forbidden style literals
+        run: bash scripts/audit-style-literals.sh
+
+      - name: Static singleton audit
+        run: node scripts/audit-singletons.cjs
