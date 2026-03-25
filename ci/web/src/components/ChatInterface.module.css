@@ -3,8 +3,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-height: calc(100vh - 60px);
-  background-color: #0b0b0b;
+  max-height: calc(100vh - var(--topbar-height));
+  background-color: var(--color-surface-0);
 }
 
 /* Chat Header */
@@ -12,37 +12,37 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: var(--border-width-1) solid var(--color-border-default);
 }
 
 .chatTitle {
-  font-size: 24px;
+  font-size: var(--font-size-3xl);
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-accent);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .clearButton {
-  padding: 8px 12px;
+  padding: var(--space-2) var(--space-3);
   border: none;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-size: 18px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--motion-fast) ease;
 }
 
 .clearButton:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--color-surface-active-2);
 }
 
 .clearButton:active {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--color-surface-active-3);
 }
 
 /* Error Banner */
@@ -50,22 +50,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
-  background-color: rgba(239, 68, 68, 0.2);
-  border-bottom: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
-  font-size: 14px;
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--color-danger-bg);
+  border-bottom: var(--border-width-1) solid var(--color-danger-border);
+  color: var(--color-danger-text);
+  font-size: var(--font-size-body);
 }
 
 .errorClose {
-  padding: 4px 8px;
+  padding: var(--space-1) var(--space-2);
   border: none;
   background: none;
-  color: #fca5a5;
-  font-size: 18px;
+  color: var(--color-danger-text);
+  font-size: var(--font-size-xl);
   cursor: pointer;
   opacity: 0.8;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--motion-fast) ease;
 }
 
 .errorClose:hover {
@@ -76,10 +76,10 @@
 .messagesArea {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 /* Empty State */
@@ -89,24 +89,24 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-dim);
   text-align: center;
-  padding: 40px 20px;
+  padding: var(--space-10) var(--space-5);
 }
 
 .emptyIcon {
-  font-size: 64px;
-  margin-bottom: 16px;
+  font-size: var(--font-size-icon);
+  margin-bottom: var(--space-4);
   opacity: 0.3;
 }
 
 .emptyState p {
-  margin: 4px 0;
-  font-size: 16px;
+  margin: var(--space-1) 0;
+  font-size: var(--font-size-lg);
 }
 
 .emptyHint {
-  font-size: 14px;
+  font-size: var(--font-size-body);
   opacity: 0.7;
 }
 
@@ -115,11 +115,11 @@
   display: flex;
   flex-direction: column;
   max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 16px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
   position: relative;
   word-wrap: break-word;
-  animation: slideUp 0.3s ease;
+  animation: slideUp var(--motion-normal) ease;
 }
 
 @keyframes slideUp {
@@ -135,54 +135,54 @@
 
 .message.user {
   align-self: flex-end;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
-  border-bottom-right-radius: 4px;
+  background: var(--gradient-accent);
+  color: var(--color-text-primary);
+  border-bottom-right-radius: var(--radius-xs);
 }
 
 .message.assistant {
   align-self: flex-start;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border-bottom-left-radius: 4px;
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  border-bottom-left-radius: var(--radius-xs);
 }
 
 .messageContent {
-  font-size: 15px;
+  font-size: var(--font-size-md);
   line-height: 1.5;
   white-space: pre-wrap;
-  margin-bottom: 4px;
+  margin-bottom: var(--space-1);
 }
 
 .messageTime {
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   opacity: 0.6;
   align-self: flex-end;
-  margin-top: 4px;
+  margin-top: var(--space-1);
 }
 
 .speakButton {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 32px;
-  height: 32px;
+  top: -var(--space-2);
+  right: -var(--space-2);
+  width: var(--speak-button-size);
+  height: var(--speak-button-size);
   border: none;
-  border-radius: 50%;
-  background-color: rgba(102, 126, 234, 0.9);
-  color: #ffffff;
-  font-size: 14px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-strong);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform var(--motion-fast) ease, background-color var(--motion-fast) ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .speakButton:hover {
   transform: scale(1.1);
-  background-color: rgba(102, 126, 234, 1);
+  background-color: var(--color-accent);
 }
 
 .speakButton:active {
@@ -191,38 +191,38 @@
 
 /* Input Area */
 .inputArea {
-  padding: 16px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(11, 11, 11, 0.9);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: var(--space-4) var(--space-5);
+  border-top: var(--border-width-1) solid var(--color-border-default);
+  background-color: var(--color-surface-topbar);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
 }
 
 .inputWrapper {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 800px;
+  gap: var(--space-3);
+  max-width: var(--input-max-width);
   margin: 0 auto;
 }
 
 .textInput {
   width: 100%;
-  padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  font-size: 15px;
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width-1) solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  background-color: var(--color-input-bg);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
   font-family: inherit;
   resize: none;
   outline: none;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: border-color var(--motion-fast) ease, background-color var(--motion-fast) ease;
 }
 
 .messageInput:focus {
-  border-color: rgba(102, 126, 234, 0.5);
-  background-color: rgba(0, 0, 0, 0.5);
+  border-color: var(--color-accent-border);
+  background-color: var(--color-input-focus);
 }
 
 .messageInput:disabled {
@@ -231,31 +231,31 @@
 }
 
 .messageInput::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--color-text-dim);
 }
 
 .buttonGroup {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   align-items: center;
 }
 
 .button {
-  padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  font-size: 14px;
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width-1) solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-button);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-body);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--motion-fast) ease;
   white-space: nowrap;
 }
 
 .button:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
+  background-color: var(--color-surface-button-hover);
+  border-color: var(--color-border-strong);
   transform: translateY(-1px);
 }
 
@@ -269,7 +269,7 @@
 }
 
 .button.listening {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: var(--gradient-danger);
   animation: pulse 1.5s infinite;
 }
 
@@ -283,15 +283,15 @@
 }
 
 .sendButton {
-  width: 44px;
-  height: 44px;
+  width: var(--button-size-md);
+  height: var(--button-size-md);
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
-  font-size: 20px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-accent);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-2xl);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -300,7 +300,7 @@
 
 .sendButton:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: var(--shadow-accent);
 }
 
 .sendButton:active:not(:disabled) {
@@ -327,21 +327,21 @@
 
 /* Scrollbar Styling */
 .messagesArea::-webkit-scrollbar {
-  width: 6px;
+  width: var(--scrollbar-width);
 }
 
 .messagesArea::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 3px;
+  background: var(--color-scrollbar-track);
+  border-radius: var(--scrollbar-radius);
 }
 
 .messagesArea::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+  background: var(--color-scrollbar-thumb);
+  border-radius: var(--scrollbar-radius);
 }
 
 .messagesArea::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--color-scrollbar-hover);
 }
 
 /* Responsive Design */
@@ -351,21 +351,21 @@
   }
 
   .chatHeader {
-    padding: 12px 16px;
+    padding: var(--space-3) var(--space-4);
   }
 
   .messagesArea {
-    padding: 16px;
+    padding: var(--space-4);
   }
 
   .inputArea {
-    padding: 12px 16px;
+    padding: var(--space-3) var(--space-4);
   }
 }
 
 /* Safe area for iOS */
 @supports (-webkit-touch-callout: none) {
   .inputArea {
-    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
   }
 }

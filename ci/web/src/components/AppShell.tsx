@@ -158,7 +158,7 @@ export default function AppShell() {
                     }`}
                     onClick={() => handleMenuItemClick(item.id, item.label)}
                   >
-                    {item.icon && <span style={{ marginRight: '8px' }}>{item.icon}</span>}
+                    {item.icon && <span className={styles.itemIcon}>{item.icon}</span>}
                     {item.label}
                   </button>
                 </li>

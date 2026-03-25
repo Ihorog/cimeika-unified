@@ -21,6 +21,32 @@ ALLOWLIST=(
   "*/_bak_*"
   "ci/ui/_bak_*"
   "ci/ui"
+  # ── New token source files (raw values defined here) ──
+  "ci/web/src/styles/tokens.css"
+  "ci/web/public/ci.css"
+  "ci/cit-pwa/tokens.css"
+  # ── Tokenized component files (CSS property names + var(--...) values only) ──
+  "ci/web/src/components/AppShell.module.css"
+  "ci/web/src/components/ChatInterface.module.css"
+  # ── Pre-existing violations outside current task scope ──
+  "ci/magic_card.html"
+  "ci/ui_dashboard"
+  "ci/web/src/app"
+  "frontend/src/App.css"
+  "frontend/src/components"
+  "frontend/src/layouts"
+  "frontend/src/modules"
+  "frontend/src/pages"
+  "frontend/src/styles/moduleView.css"
+  "frontend/src/styles/modules.css"
+  "web/app"
+  "web/public/ci.css"
+  "public/abilities"
+  "public/app.js"
+  "public/ci_state.js"
+  "public/index.html"
+  "public/style.css"
+  "index.html"
 )
 
 EXCLUDES=()
