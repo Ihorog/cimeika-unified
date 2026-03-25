@@ -33,6 +33,7 @@
   --space-sm: 4px;
   --space-md: 8px;
   --space-lg: 16px;
+  --space-2xl: 2rem;
   /* ── Radius ── */
   --radius-xs: 4px;
   --radius-sm: 6px;
@@ -62,6 +63,7 @@
   --font-xl: 1.125rem;
   --font-2xl: 1.25rem;
   --font-3xl: 1.5rem;
+  --font-icon-lg: 2.5rem;
 }
 
 * {
@@ -514,7 +516,7 @@ body {
   justify-content: center;
   height: 100%;
   text-align: center;
-  padding: 2rem;
+  padding: var(--space-2xl);
 }
 
 .welcome-icon {
@@ -526,7 +528,7 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: var(--space-lg);
-  font-size: 2.5rem;
+  font-size: var(--font-icon-lg);
 }
 
 .welcome-title {
@@ -910,7 +912,7 @@ body {
 /* Empty state */
 .empty-state {
   text-align: center;
-  padding: 2rem 1rem;
+  padding: var(--space-2xl) var(--space-lg);
   color: var(--text-muted);
   font-size: var(--font-base);
 }

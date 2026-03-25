@@ -52,7 +52,7 @@
 .ciLogo {
   font-size: var(--font-size-xl);
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .ciIcon {
@@ -74,7 +74,7 @@
 .brand {
   font-size: var(--font-size-2xl);
   font-weight: 600;
-  letter-spacing: -0.5px;
+  letter-spacing: var(--letter-spacing-tight);
   margin: 0;
   color: var(--color-text-primary);
 }

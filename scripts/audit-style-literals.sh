@@ -25,7 +25,7 @@ ALLOWLIST=(
   "ci/web/src/styles/tokens.css"
   "ci/web/public/ci.css"
   "ci/cit-pwa/tokens.css"
-  # ── Tokenized component files (use only var(--...) values) ──
+  # ── Tokenized component files (CSS property names + var(--...) values only) ──
   "ci/web/src/components/AppShell.module.css"
   "ci/web/src/components/ChatInterface.module.css"
   # ── Pre-existing violations outside current task scope ──
