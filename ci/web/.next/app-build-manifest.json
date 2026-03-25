@@ -1,0 +1,75 @@
+{
+  "pages": {
+    "/_not-found": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/chunks/app/_not-found-fc22d044308557a4.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/css/34af1f06a640981d.css",
+      "static/chunks/app/layout-17ed0b521cfeb027.js"
+    ],
+    "/calendar/page": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/chunks/102-943db6e7da8cb557.js",
+      "static/chunks/app/calendar/page-18538f5e143dc92b.js"
+    ],
+    "/gallery/page": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/chunks/102-943db6e7da8cb557.js",
+      "static/chunks/app/gallery/page-6b9f194e725f84e0.js"
+    ],
+    "/nastrij/page": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/chunks/102-943db6e7da8cb557.js",
+      "static/chunks/app/nastrij/page-5872d1e491311017.js"
+    ],
+    "/malya/page": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/chunks/102-943db6e7da8cb557.js",
+      "static/chunks/app/malya/page-8822c6e65804642b.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/css/5ef42bab327f43ec.css",
+      "static/chunks/app/page-dfe55bf22ffc8698.js"
+    ],
+    "/podija/page": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/chunks/102-943db6e7da8cb557.js",
+      "static/chunks/app/podija/page-efde5ce1b35ed1ba.js"
+    ],
+    "/profile/page": [
+      "static/chunks/webpack-e26e4d74686936d9.js",
+      "static/chunks/fd9d1056-9e625e8be9cf6216.js",
+      "static/chunks/69-3049e10feafd5c33.js",
+      "static/chunks/main-app-c66b11a8d9718617.js",
+      "static/chunks/102-943db6e7da8cb557.js",
+      "static/chunks/app/profile/page-c9b444d34c1ad124.js"
+    ]
+  }
+}
