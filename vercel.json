@@ -1,6 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "cd web && npm ci && npm run build",
+  "installCommand": "cd web && npm ci",
+  "buildCommand": "cd web && npm run build",
   "outputDirectory": "web/.next",
   "framework": "nextjs",
   "rewrites": [
