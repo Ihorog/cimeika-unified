@@ -268,7 +268,7 @@
   cursor: not-allowed;
 }
 
-.actionButton.listening {
+.button.listening {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   animation: pulse 1.5s infinite;
 }

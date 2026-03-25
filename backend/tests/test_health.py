@@ -41,7 +41,7 @@ def test_ready_endpoint():
     assert response.status_code == 200
     data = response.json()
     
-    assert data["status"] in ["ok", "not_ready"]
+    assert data["status"] in ["ready", "not_ready"]
     assert "deps" in data
     
     # Verify deps structure
