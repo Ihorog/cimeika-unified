@@ -1,24 +1,23 @@
-import type { Metadata, Viewport } from 'next'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Navigation } from '@/components/Navigation';
+import './globals.css';
+import './styles/modules.css';
 
 export const metadata: Metadata = {
-  title: 'CIMEIKA - Українська персональна система',
-  description: 'Система управління знаннями та подіями',
-  manifest: '/manifest.json',
-}
+  title: 'Cimeika',
+  description: 'Екосистема творчості та управління',
+};
 
-export const viewport: Viewport = {
-  themeColor: '#0b0f14',
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uk">
-      <body>{children}</body>
+      <body>
+        <Navigation />
+        <main className="main-content">{children}</main>
+        <footer className="footer">
+          Cimeika © 2026 · Екосистема творчості та управління контентом
+        </footer>
+      </body>
     </html>
-  )
+  );
 }
