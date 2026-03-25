@@ -4,13 +4,13 @@
  */
 
 import { registry } from '../core';
-import { ciModule } from '../modules/Ci';
-import { kazkarModule } from '../modules/Kazkar';
-import { podijaModule } from '../modules/Podija';
-import { nastrijModule } from '../modules/Nastrij';
-import { malyaModule } from '../modules/Malya';
-import { galleryModule } from '../modules/Gallery';
-import { calendarModule } from '../modules/Calendar';
+import { ciModule } from '../modules/ci';
+import { kazkarModule } from '../modules/kazkar';
+import { podijaModule } from '../modules/podija';
+import { nastrijModule } from '../modules/nastrij';
+import { malyaModule } from '../modules/malya';
+import { galleryModule } from '../modules/gallery';
+import { calendarModule } from '../modules/calendar';
 
 /**
  * Register all modules with the orchestrator

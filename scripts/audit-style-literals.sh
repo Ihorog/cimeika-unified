@@ -20,6 +20,7 @@ ALLOWLIST=(
   "build"
   "*/_bak_*"
   "ci/ui/_bak_*"
+  "ci/ui"
 )
 
 EXCLUDES=()
