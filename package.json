@@ -1,13 +1,22 @@
 {
-  "name": "cimeika-unified-root",
-  "version": "1.0.0",
-  "type": "module",
-  "description": "Cimeika Unified — Root package for governance scripts",
+  "name": "cimeika-unified",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "seo:health": "node scripts/seo/seo_health_report.mjs"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "yaml": "^2.3.4"
+    "next": "14.2.0",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
   }
 }

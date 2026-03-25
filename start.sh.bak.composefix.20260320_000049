@@ -40,7 +40,7 @@ echo "🚀 Starting CIMEIKA ecosystem..."
 echo ""
 
 # Start services
-/data/data/com.termux/files/usr/share/doc/ImageMagick-7/www/compose.html up -d
+/data/data/com.termux/files/usr/libexec/docker-compose up -d
 
 echo ""
 echo "========================================="
@@ -52,6 +52,6 @@ echo "  • Frontend:  http://localhost:3000"
 echo "  • Backend:   http://localhost:5000"
 echo "  • Health:    http://localhost:5000/health"
 echo ""
-echo "To view logs: /data/data/com.termux/files/usr/share/doc/ImageMagick-7/www/compose.html logs -f"
-echo "To stop:      /data/data/com.termux/files/usr/share/doc/ImageMagick-7/www/compose.html down"
+echo "To view logs: /data/data/com.termux/files/usr/libexec/docker-compose logs -f"
+echo "To stop:      /data/data/com.termux/files/usr/libexec/docker-compose down"
 echo ""

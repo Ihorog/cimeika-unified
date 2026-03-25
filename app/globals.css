@@ -1,0 +1,35 @@
+/* CIMEIKA — Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Onest:wght@300;400;500&display=swap');
+
+:root {
+  --bg-primary:     #080910;
+  --bg-secondary:   #0f1018;
+  --bg-card:        #13151f;
+  --bg-hover:       #1a1d2e;
+  --accent-gold:    #C8A84B;
+  --accent-gold-dim:#9e7e35;
+  --text-primary:   #e8e4d9;
+  --text-secondary: #8a8599;
+  --text-muted:     #4a4760;
+  --border:         #1e2035;
+  --border-accent:  #2a2d45;
+  --font-serif:     'Cormorant Garamond', serif;
+  --font-sans:      'Onest', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--font-serif); font-weight: 300; letter-spacing: 0.02em; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: var(--font-sans); }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 2px; }
