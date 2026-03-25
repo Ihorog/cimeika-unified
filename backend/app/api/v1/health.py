@@ -36,6 +36,7 @@ async def ready() -> Dict[str, Any]:
         dict: Readiness status with dependency and monitoring checks
     """
     deps = {}
+    checks = {}
     all_ready = True
 
     # Check required environment variables (MUST exist)
