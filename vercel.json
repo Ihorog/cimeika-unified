@@ -1,8 +1,9 @@
 {
   "version": 2,
-  "installCommand": "cd web && npm ci",
-  "buildCommand": "cd web && npm run build",
-  "outputDirectory": "web/.next",
+  "rootDirectory": "web",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
   "framework": "nextjs",
   "rewrites": [
     {
@@ -17,7 +18,7 @@
   },
   "regions": ["bru"],
   "functions": {
-    "web/app/**/*": {
+    "app/**/*": {
       "memory": 1024,
       "maxDuration": 60
     }
