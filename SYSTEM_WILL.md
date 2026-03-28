@@ -989,3 +989,32 @@ Author approves (Merge button)
 ---
 
 END OF SYSTEM_WILL.md
+
+---
+
+## Ci Agent System v1 — Activation Record (2026-03-28)
+
+### Status: ACTIVATED
+
+### Components Deployed
+- **Orchestrator** (`ci/orchestrator.py`): Routes all user requests via intent detection; validates status flags; writes every response to ActiveMemory.
+- **IntentClassifier** (`ci/intent_classifier.py`): Keyword-based mapping for 6 domain modules; returns `"unknown"` on no match.
+- **Grok Engine** (`grok/engine.py`): LLM wrapper with `reason`, `classify`, `summarise` methods. Stub mode by default; real OpenAI async client auto-initialises when `OPENAI_API_KEY` is present in environment.
+- **Memory — 3 layers**:
+  - `memory/active.py` — session-level in-memory list
+  - `memory/long_term.py` — JSON file persistence at `~/.cimeika/memory.json`
+  - `memory/structural.py` — immutable invariants (Ci role, binary logic, module registry, simulation markers)
+- **6 Domain Modules** (`modules/`): kazkar (narrative/mythology), podija (event prediction), nastrij (mood analysis), malya (creative/visual), calendar (temporal/schedule), gallery (media archive). All dormant until triggered by Orchestrator.
+- **FastAPI Endpoint** (`api/server.py`): `GET /health` → `{"status":"ok","system":"ci-agent-v1"}`; `POST /ci` → `CiResponse` (intent, source, status, result, next_action).
+- **Tests** (`tests/test_system.py`): 20+ pytest unit tests covering IntentClassifier, Orchestrator, all 3 memory layers, and KazkarModule with stub engine. No external deps.
+
+### Architectural Decision
+- **LLM**: Stub by default (`[stub] <prompt[:80]>`). Real client injected via `OPENAI_API_KEY` environment variable (OpenAI async API). No secrets in code.
+- **One entry point**: `POST /ci` — single input, single structured output.
+- **Module isolation**: Modules never call each other; all AI work delegated to GrokEngine.
+
+### Next Evolution
+- Connect real LLM via `OPENAI_API_KEY` for production reasoning.
+- Add CRDT-based sync to memory layers for multi-device persistence.
+- Implement `LongTermMemory` integration into Orchestrator for cross-session context.
+- Add streaming support to `/ci` endpoint for real-time responses.
