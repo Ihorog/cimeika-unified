@@ -13,6 +13,7 @@ from app.modules.gallery import api as gallery_api
 from app.modules.calendar import api as calendar_api
 from app.api import modules as modules_api
 from app.api.v1 import abilities
+from app.api.v1 import agent as agent_api
 from app.core.config import settings
 from app.core.metrics import get_full_metrics
 
@@ -33,6 +34,9 @@ api_router.include_router(calendar_api.router, tags=["calendar"])
 
 # Include abilities router
 api_router.include_router(abilities.router, tags=["abilities"])
+
+# Include agent router
+api_router.include_router(agent_api.router, tags=["ci-agent"])
 
 
 @api_router.get("/health", tags=["system"])
