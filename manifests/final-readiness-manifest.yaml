@@ -1,0 +1,46 @@
+version: "1.0"
+system: "Cimeika"
+updated_at: "20260402_052215"
+mode: "local_snapshot_automation"
+
+readiness:
+  core:
+    repo: "cimeika-unified-main"
+    manifests: 8
+    workflows: 14
+    status: "automation_scaffold_ready"
+
+  infra:
+    repo: "ci_gitapi-main"
+    manifests: 2
+    workflows: 17
+    status: "automation_scaffold_ready"
+
+  edge:
+    repo: "cimeika-backend-main"
+    manifests: 2
+    workflows: 6
+    status: "automation_scaffold_ready"
+
+  sidecars:
+    - repo: "cit-main"
+      status: "present_not_normalized"
+    - repo: "ci-memory-main"
+      status: "present_pending_verify"
+
+  assets:
+    - repo: "media-main"
+      status: "present_pending_verify"
+
+constraints:
+  git_mode: false
+  snapshot_mode: true
+  remote_push_ready: false
+  local_automation_ready: true
+
+next_actions:
+  - "normalize cit-main"
+  - "verify ci-memory-main"
+  - "verify media-main"
+  - "restore git metadata or re-clone from origin"
+  - "run local autodoctor after dependency install if needed"

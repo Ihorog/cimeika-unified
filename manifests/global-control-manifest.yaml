@@ -1,0 +1,40 @@
+version: "1.0"
+system: "Cimeika"
+updated_at: "20260402_052405"
+mode: "local_snapshot_automation"
+
+global_control:
+  repos:
+    core: "cimeika-unified-main"
+    infra: "ci_gitapi-main"
+    edge: "cimeika-backend-main"
+    local_sidecar: "cit-main"
+    memory: "ci-memory-main"
+    assets: "media-main"
+
+  execution_order:
+    - "core"
+    - "infra"
+    - "edge"
+    - "local_sidecar"
+    - "memory"
+    - "assets"
+
+  truths:
+    frontend: "cimeika-unified-main/app"
+    product_backend: "cimeika-unified-main/backend"
+    infra_control_plane: "ci_gitapi-main/app"
+    registry: "ci_gitapi-main/registry"
+    edge_runtime: "cimeika-backend-main/src"
+    local_sidecar: "cit-main/server"
+    memory_service: "ci-memory-main"
+    assets_source: "media-main"
+
+  rules:
+    - "one_product_core"
+    - "one_infra_core"
+    - "one_edge_runtime"
+    - "one_registry_truth"
+    - "cit_is_sidecar_only"
+    - "memory_is_service_only"
+    - "media_is_assets_only"

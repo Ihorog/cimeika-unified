@@ -1,0 +1,116 @@
+version: "1.0"
+system: "Cimeika"
+updated_at: "2026-04-02"
+
+ownership:
+  cimeika-unified-main:
+    own:
+      - ui
+      - product_routes
+      - product_backend
+      - module_integration
+    consume:
+      - registry_from_ci_gitapi
+      - memory_api
+      - edge_events
+      - media_assets
+    publish:
+      - user_flows
+      - module_views
+      - product_api_usage
+      - integration_requirements
+    forbid:
+      - infra_registry_source
+      - failover_core
+      - duplicate_ui_roots
+
+  ci_gitapi-main:
+    own:
+      - registry
+      - contracts
+      - automation
+      - audit
+      - failover
+      - system_health
+    consume:
+      - repo_manifests
+      - deployment_status
+      - health_results
+    publish:
+      - registry_state
+      - orchestration_events
+      - automation_results
+      - control_plane_status
+    forbid:
+      - product_ui
+      - product_module_logic
+
+  cimeika-backend-main:
+    own:
+      - edge_runtime
+      - agents
+      - worker_execution
+      - external_event_processing
+    consume:
+      - orchestration_commands
+      - runtime_contracts
+      - deployment_settings
+    publish:
+      - edge_health
+      - agent_events
+      - runtime_results
+    forbid:
+      - canonical_product_backend
+      - canonical_registry_ownership
+
+  cit-main:
+    own:
+      - local_orchestrator
+      - termux_control
+      - local_artifacts
+      - device_sidecar
+    consume:
+      - product_state
+      - registry_snapshot
+      - local_runtime_state
+    publish:
+      - local_health
+      - sidecar_events
+      - local_artifacts_index
+    forbid:
+      - product_core_claims
+      - infra_core_claims
+      - canonical_frontend_claims
+
+  ci-memory-main:
+    own:
+      - memory_engine
+      - retrieval
+      - indexing
+      - persistence
+    consume:
+      - product_inputs
+      - registry_links
+      - runtime_events
+    publish:
+      - memory_records
+      - retrieval_results
+      - memory_status
+    forbid:
+      - product_ui
+      - infra_control_plane
+
+  media-main:
+    own:
+      - source_assets
+      - asset_registry_binding
+      - publication_assets
+    consume:
+      - registry_links
+      - publication_requests
+    publish:
+      - asset_exports
+      - asset_metadata
+    forbid:
+      - runtime_logic
+      - orchestration

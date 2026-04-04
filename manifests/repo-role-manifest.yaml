@@ -1,0 +1,99 @@
+version: "1.0"
+system: "Cimeika"
+state: "multi_repo_topology_defined"
+source: "local_repo_scan"
+updated_at: "2026-04-02"
+
+repos:
+  cimeika-unified-main:
+    layer: "core"
+    role: "primary_product"
+    status: "canonical"
+    canonical_paths:
+      - "app"
+      - "components"
+      - "backend"
+      - "android-webview"
+      - "docs"
+      - ".github/workflows"
+      - "package.json"
+      - "next.config.js"
+      - "tsconfig.json"
+      - "docker-compose.yml"
+      - "Makefile"
+    sidecar_paths:
+      - "ci"
+      - "memory"
+      - "api"
+      - "core"
+      - "modules"
+    freeze_candidates:
+      - "frontend"
+      - "web"
+      - "ci/web"
+      - "ci/ui"
+      - "ci/cit-pwa"
+      - "ci/ui_dashboard"
+    archive_candidates:
+      - "archive"
+      - "cimeika-unified"
+
+  ci_gitapi-main:
+    layer: "infra"
+    role: "api_control_plane_and_registry"
+    visibility: "private"
+    status: "canonical"
+    canonical_paths:
+      - "app"
+      - "registry"
+      - "content"
+      - "packages/failover-core"
+      - "config"
+      - "scripts"
+      - "tests"
+      - "docs"
+      - ".github/workflows"
+    sidecar_paths:
+      - "api"
+      - "apps/gateway"
+      - "ops"
+      - "logs"
+
+  cimeika-backend-main:
+    layer: "edge"
+    role: "workers_agents_runtime"
+    status: "canonical"
+    canonical_paths:
+      - "src"
+      - ".github/workflows"
+      - "wrangler.jsonc"
+      - "package.json"
+      - "README.md"
+
+  cit-main:
+    layer: "sidecar"
+    role: "local_termux_orchestrator"
+    status: "restricted_sidecar"
+    canonical_paths:
+      - "server"
+      - "core"
+      - "registry"
+      - "scripts/termux_boot"
+      - "docs"
+      - "AGENTS.md"
+
+  ci-memory-main:
+    layer: "sidecar"
+    role: "memory_service"
+    status: "pending_verify"
+
+  media-main:
+    layer: "assets"
+    role: "asset_storage"
+    status: "pending_verify"
+
+global_rules:
+  one_primary_product_repo: "cimeika-unified-main"
+  one_primary_infra_repo: "ci_gitapi-main"
+  one_primary_edge_runtime: "cimeika-backend-main"
+  cit_is_not_core: true

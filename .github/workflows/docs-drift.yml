@@ -1,0 +1,17 @@
+name: docs-drift
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check canonical docs presence
+        run: |
+          test -f manifests/repo-role-manifest.yaml
+          test -f manifests/path-status-manifest.yaml
+          test -f manifests/repo-conflict-manifest.yaml
+          test -f docs/processes/canonical-decision-record.md

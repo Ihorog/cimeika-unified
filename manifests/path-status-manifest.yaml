@@ -1,0 +1,50 @@
+version: "1.0"
+system: "Cimeika"
+state: "path_classification_defined"
+updated_at: "2026-04-02"
+
+path_status:
+  cimeika-unified-main:
+    canonical:
+      app: { role: "frontend_route_layer", status: "active" }
+      components: { role: "shared_ui", status: "active" }
+      backend: { role: "primary_backend", status: "active" }
+      android-webview: { role: "mobile_shell", status: "active" }
+      docs: { role: "product_docs", status: "active" }
+      .github/workflows: { role: "ci_governance", status: "active" }
+    sidecar:
+      ci: { role: "internal_control_contour", status: "sidecar" }
+      memory: { role: "memory_layer", status: "sidecar" }
+      api: { role: "adapter_or_legacy_api", status: "sidecar" }
+      core: { role: "auxiliary_python_core", status: "sidecar" }
+      modules: { role: "parallel_domain_layer", status: "sidecar" }
+    freeze:
+      frontend: { role: "legacy_vite_frontend", status: "freeze_candidate" }
+      web: { role: "parallel_next_web_contour", status: "freeze_candidate" }
+      ci/web: { role: "duplicate_web_contour", status: "freeze_candidate" }
+      ci/ui: { role: "duplicate_ui_contour", status: "freeze_candidate" }
+      ci/cit-pwa: { role: "legacy_pwa_contour", status: "freeze_candidate" }
+      ci/ui_dashboard: { role: "internal_dashboard_only", status: "freeze_candidate" }
+
+  ci_gitapi-main:
+    canonical:
+      app: { role: "primary_runtime", status: "active" }
+      registry: { role: "canonical_registry", status: "active" }
+      content: { role: "content_state_source", status: "active" }
+      packages/failover-core: { role: "failover_runtime_core", status: "active" }
+      config: { role: "runtime_and_policy_config", status: "active" }
+      scripts: { role: "ops_scripts", status: "active" }
+      tests: { role: "verification", status: "active" }
+      docs: { role: "infra_docs", status: "active" }
+    sidecar:
+      api: { role: "entry_shim_or_adapter", status: "sidecar" }
+      apps/gateway: { role: "gateway_subcontour", status: "pending_verify" }
+      ops: { role: "ops_support", status: "sidecar" }
+      logs: { role: "runtime_artifacts", status: "generated" }
+
+resolution_rules:
+  frontend_source_of_truth: "cimeika-unified-main/app"
+  backend_source_of_truth: "cimeika-unified-main/backend"
+  infra_source_of_truth: "ci_gitapi-main/app"
+  registry_source_of_truth: "ci_gitapi-main/registry"
+  edge_runtime_source_of_truth: "cimeika-backend-main/src"

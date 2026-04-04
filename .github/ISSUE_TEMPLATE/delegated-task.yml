@@ -1,0 +1,76 @@
+name: Delegated Task
+description: Unified delegated execution task
+title: "[task] "
+labels:
+  - delegated
+body:
+  - type: input
+    id: task_id
+    attributes:
+      label: task_id
+      placeholder: CI-2026-04-02-001
+    validations:
+      required: true
+
+  - type: input
+    id: feature_id
+    attributes:
+      label: feature_id
+      placeholder: ci-overlay-singleton
+
+  - type: dropdown
+    id: intent
+    attributes:
+      label: intent
+      options:
+        - fix
+        - refactor
+        - document
+        - sync
+        - run_tests
+        - make_pr
+    validations:
+      required: true
+
+  - type: dropdown
+    id: owner_repo
+    attributes:
+      label: owner_repo
+      options:
+        - cimeika-unified-main
+        - ci_gitapi-main
+        - cimeika-backend-main
+        - cit-main
+        - ci-memory-main
+        - media-main
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependent_repos
+    attributes:
+      label: dependent_repos
+      placeholder: one per line
+
+  - type: textarea
+    id: expected_outputs
+    attributes:
+      label: expected_outputs
+      placeholder: one per line
+
+  - type: textarea
+    id: verification_chain
+    attributes:
+      label: verification_chain
+      value: |
+        repo_checks
+        integration_checks
+        dev_deploy
+        health_check
+
+  - type: textarea
+    id: description
+    attributes:
+      label: description
+    validations:
+      required: true
