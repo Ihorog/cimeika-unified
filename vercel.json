@@ -1,36 +1,5 @@
 {
-  "version": 2,
-  "rootDirectory": "web",
-  "installCommand": "npm ci",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
   "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://api.cimeika.com.ua/api/:path*"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-      ]
-    }
-  ],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@next-public-api-url",
-    "NEXT_PUBLIC_AGENTS_BASE_URL": "@next-public-agents-base-url",
-    "NEXT_PUBLIC_GITAPI_BASE_URL": "@next-public-gitapi-base-url"
-  },
-  "regions": ["bru"],
-  "functions": {
-    "src/app/**/*": {
-      "memory": 1024,
-      "maxDuration": 60
-    }
-  }
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
