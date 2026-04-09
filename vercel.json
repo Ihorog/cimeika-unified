@@ -8,7 +8,17 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://cimeika-backend.workers.dev/api/:path*"
+      "destination": "https://api.cimeika.com.ua/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
     }
   ],
   "env": {
@@ -18,7 +28,7 @@
   },
   "regions": ["bru"],
   "functions": {
-    "app/**/*": {
+    "src/app/**/*": {
       "memory": 1024,
       "maxDuration": 60
     }
