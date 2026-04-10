@@ -1,0 +1,52 @@
+version: "1.0"
+system: "Cimeika"
+state: "conflict_map_defined"
+updated_at: "2026-04-02"
+
+conflicts:
+  - id: "ui_root_conflict"
+    severity: "critical"
+    source_of_truth: "cimeika-unified-main/app"
+    keep: ["app", "components"]
+    freeze: ["frontend", "web", "ci/web", "ci/ui", "ci/cit-pwa"]
+    conditional: ["ci/ui_dashboard"]
+
+  - id: "product_backend_conflict"
+    severity: "critical"
+    source_of_truth: "cimeika-unified-main/backend"
+    keep: ["cimeika-unified-main/backend"]
+    reclassify:
+      - "cimeika-backend-main/src -> edge_runtime"
+      - "cit-main/server -> local_sidecar_gateway"
+      - "ci_gitapi-main/app -> infra_gateway"
+
+  - id: "orchestration_center_conflict"
+    severity: "critical"
+    source_of_truth: "ci_gitapi-main/app"
+    keep: ["ci_gitapi-main/app"]
+    reclassify:
+      - "cit-main -> local_orchestrator_sidecar"
+      - "cimeika-unified-main/ci -> internal_sidecar"
+
+  - id: "registry_truth_conflict"
+    severity: "high"
+    source_of_truth: "ci_gitapi-main/registry"
+    keep: ["ci_gitapi-main/registry"]
+    reclassify:
+      - "cit-main/registry -> local cache"
+      - "cimeika-unified-main/registry.json -> product snapshot"
+      - "cimeika-unified-main/ci/registry -> internal registry"
+
+global_decisions:
+  product_core_repo: "cimeika-unified-main"
+  infra_core_repo: "ci_gitapi-main"
+  edge_runtime_repo: "cimeika-backend-main"
+  local_sidecar_repo: "cit-main"
+  memory_repo: "ci-memory-main"
+  assets_repo: "media-main"
+
+blocking_rules:
+  - "No new UI development outside cimeika-unified-main/app and components"
+  - "No new product backend logic outside cimeika-unified-main/backend"
+  - "No infra control-plane duplication outside ci_gitapi-main/app"
+  - "No registry source-of-truth duplication outside ci_gitapi-main/registry"

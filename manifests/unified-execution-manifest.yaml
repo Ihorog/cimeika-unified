@@ -1,0 +1,38 @@
+version: "1.0"
+system: "Cimeika"
+updated_at: "2026-04-02"
+
+unified_execution_process:
+  intake_repo: cimeika-unified-main
+  control_plane_repo: ci_gitapi-main
+  edge_repo: cimeika-backend-main
+  memory_repo: ci-memory-main
+  assets_repo: media-main
+  local_sidecar_repo: cit-main
+
+  routing:
+    product: cimeika-unified-main
+    infra: ci_gitapi-main
+    edge: cimeika-backend-main
+    memory: ci-memory-main
+    media: media-main
+    local_sidecar: cit-main
+
+  execution_chain:
+    - classify_task
+    - assign_owner_repo
+    - compute_dependent_repos
+    - execute_repo_local
+    - run_repo_checks
+    - sync_registry
+    - run_cross_repo_checks
+    - deploy_development
+    - run_health_checks
+    - approve_or_iterate
+
+  hard_rules:
+    - one_product_core
+    - one_infra_core
+    - one_registry_truth
+    - one_canonical_frontend
+    - no_duplicate_runtime_roles

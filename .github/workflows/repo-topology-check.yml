@@ -1,0 +1,29 @@
+name: repo-topology-check
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 2 * * *"
+
+jobs:
+  topology:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check topology manifests
+        run: |
+          test -f manifests/repo-role-manifest.yaml
+          test -f manifests/path-status-manifest.yaml
+          test -f manifests/repo-conflict-manifest.yaml
+          test -f manifests/freeze-plan.yaml
+          test -f manifests/repo-sync-policy.yaml
+          test -f manifests/unified-execution-manifest.yaml
+          test -f manifests/repo-ownership-manifest.yaml
+
+      - name: Check delegated execution docs
+        run: |
+          test -f docs/processes/canonical-decision-record.md
+          test -f docs/processes/github-dev-contour.md
+          test -f docs/processes/delegated-execution.md

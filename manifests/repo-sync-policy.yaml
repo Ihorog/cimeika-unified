@@ -1,0 +1,26 @@
+version: "1.0"
+system: "Cimeika"
+updated_at: "2026-04-02"
+
+sync_policy:
+  intake_repo: "cimeika-unified-main"
+  control_plane_repo: "ci_gitapi-main"
+
+  routing:
+    product: "cimeika-unified-main"
+    infra: "ci_gitapi-main"
+    edge: "cimeika-backend-main"
+    memory: "ci-memory-main"
+    media: "media-main"
+    local_sidecar: "cit-main"
+
+  chain:
+    - "classify_task"
+    - "assign_owner_repo"
+    - "execute_repo_local"
+    - "run_repo_checks"
+    - "sync_registry"
+    - "run_cross_repo_checks"
+    - "deploy_development"
+    - "run_health_checks"
+    - "approve_or_iterate"

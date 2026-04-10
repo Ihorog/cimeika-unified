@@ -1,0 +1,26 @@
+name: nightly-health-governance
+
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Governance files
+        run: |
+          test -f .github/dependabot.yml
+          test -f .github/workflows/_reusable-ci.yml
+          test -f .github/workflows/dev-contour.yml
+          test -f .github/workflows/docs-drift.yml
+          test -f .github/workflows/repo-topology-check.yml
+
+      - name: Canonical paths
+        run: |
+          test -d app
+          test -d components
+          test -d backend

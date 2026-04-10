@@ -1,0 +1,17 @@
+version: "1.0"
+system: "Cimeika"
+updated_at: "2026-04-02"
+
+freeze_plan:
+  cimeika-unified-main:
+    paths:
+      - "frontend"
+      - "web"
+      - "ci/web"
+      - "ci/ui"
+      - "ci/cit-pwa"
+      - "ci/ui_dashboard"
+    rules:
+      - "no new development"
+      - "read-only until reclassification"
+      - "bugfix only if blocking canonical path"

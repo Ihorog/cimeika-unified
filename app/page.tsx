@@ -18,7 +18,7 @@ export default function HomePage() {
         <p className="hero-eyebrow">Ласкаво просимо до Cimeika</p>
         <h1 className="hero-title">Екосистема творчості та управління</h1>
         <p className="hero-desc">
-          Cimeika об'єднує сім модулів для управління історіями, подіями,
+          Cimeika об&#39;єднує сім модулів для управління історіями, подіями,
           настроєм, ідеями та медіа в одній елегантній платформі.
         </p>
       </section>
