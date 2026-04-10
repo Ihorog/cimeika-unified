@@ -1,26 +1,5 @@
 {
-  "version": 2,
-  "rootDirectory": "web",
-  "installCommand": "npm ci",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://cimeika-backend.workers.dev/api/:path*"
-    }
-  ],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@next-public-api-url",
-    "NEXT_PUBLIC_AGENTS_BASE_URL": "@next-public-agents-base-url",
-    "NEXT_PUBLIC_GITAPI_BASE_URL": "@next-public-gitapi-base-url"
-  },
-  "regions": ["bru"],
-  "functions": {
-    "app/**/*": {
-      "memory": 1024,
-      "maxDuration": 60
-    }
-  }
+  "buildCommand": "cd web && npm ci && npm run build",
+  "outputDirectory": "web/.next",
+  "framework": "nextjs"
 }

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  output: 'standalone',
 }
 
 export default nextConfig
+// deploy: 2026-04-10
