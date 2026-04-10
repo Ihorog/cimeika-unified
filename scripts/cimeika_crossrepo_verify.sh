@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-BASE="${1:-/storage/emulated/0/1/repo}"
+BASE="${1:-"$PWD"}"
 
 CORE="$BASE/cimeika-unified-main"
 INFRA="$BASE/ci_gitapi-main"
