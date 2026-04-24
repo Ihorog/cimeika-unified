@@ -139,3 +139,41 @@ In Termux/Android, `.bin/jest` may be a shell wrapper and Node will parse it as 
 Linux CI is the source of truth for runtime validation.
 Termux may run only partial-safe workflows.
 Treat Next.js native SWC and similar platform-specific build dependencies as linux-only if Termux blocks.
+
+---
+
+## CI SYMBOL MANIFEST CONTRACT
+
+The repository uses a strict three-layer naming model:
+
+- `Ci` = semantic center, symbolic core, Ci Moment, user-facing concept
+- `ci` = technical namespace, ids, files, runtime keys, internal identifiers
+- `CI` = continuous integration, CI/CD, workflow, build/test/deploy context
+
+Never mix these layers.
+
+Canonical symbolic layer:
+
+Ci 1 0 = + - / × • ○ | — ∧ ∨ ~ Y ↺ 🜂 🜄 🜁 🜃 ⟁
+
+Symbolic glyphs are allowed only in:
+- docs
+- manifests
+- artifact systems
+- Ci Moment
+- semantic UI overlays
+- perception layer
+- Legend Ci / Kazkar content
+
+Symbolic glyphs are forbidden by default in:
+- filenames
+- env variables
+- database columns
+- low-level API params
+- workflow ids
+- package names
+
+Source of truth:
+- docs/ci_symbol_manifest.md
+
+Before adding new symbolic logic, update the manifest first.
