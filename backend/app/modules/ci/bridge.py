@@ -33,4 +33,4 @@ def ask():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, host='0.0.0.0')
+    app.run(port=int(os.getenv("PORT", 5000)), host=os.getenv("HOST", "0.0.0.0"))
