@@ -10,7 +10,7 @@ CORS(app)
 
 @app.route('/health', methods=['GET'])
 def health():
-    return jsonify({"status": "online", "node": "Android-Ihorog"})
+    return jsonify({"status": "online", "node": os.getenv("NODE_NAME", "Android-Ihorog")})
 
 
 @app.route('/get-calendar', methods=['GET'])
