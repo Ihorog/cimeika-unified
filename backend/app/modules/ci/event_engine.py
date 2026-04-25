@@ -1,4 +1,7 @@
-import json, os
+import json
+import os
+
+
 def process_raw_text(ai_json_response):
     try:
         data = json.loads(ai_json_response)
