@@ -27,7 +27,7 @@ google-auth==2.49.2
 # Utilities
 python-dotenv==1.2.2
 python-dateutil==2.9.0.post0
-PyYAML==6.0.1
+PyYAML==6.0.3
 
 # Monitoring
 sentry-sdk==1.39.1
