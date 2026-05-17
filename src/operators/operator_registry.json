@@ -1,0 +1,23 @@
+{
+  "version": "0.1",
+  "name": "Operator Coordinate System",
+  "status": "MODEL",
+  "operators": [
+    {"id":"VOID","symbol":"0","function":"absence_of_local_fact","geometry":"empty_space","natural_forms":["darkness","vacuum","silence"],"role":"undefined_field"},
+    {"id":"POINT","symbol":"•","function":"localize_potential","geometry":"minimal_concentration","natural_forms":["seed","drop","spark","cell"],"role":"initiation"},
+    {"id":"CENTER","symbol":"○","function":"stabilize_around_node","geometry":"closed_symmetry","natural_forms":["eye","sun","orbit","vortex"],"role":"coordination"},
+    {"id":"AXIS","symbol":"|","function":"connect_levels","geometry":"vertical_axis","natural_forms":["tree","spine","trunk","lightning"],"role":"structure"},
+    {"id":"FIELD","symbol":"—","function":"create_environment","geometry":"horizontal_plane","natural_forms":["horizon","ground","water_surface"],"role":"distribution"},
+    {"id":"FLOW","symbol":"~","function":"transfer_interaction","geometry":"wave","natural_forms":["water","wind","sound","smoke"],"role":"adaptation"},
+    {"id":"VECTOR","symbol":"→","function":"set_direction","geometry":"directed_line","natural_forms":["arrow","riverbed","growth_path"],"role":"transition"},
+    {"id":"LOOP","symbol":"↺","function":"return_with_change","geometry":"spiral_cycle","natural_forms":["season","orbit","shell","vortex"],"role":"evolution"},
+    {"id":"PEAK","symbol":"∧","function":"concentrate_force","geometry":"apex","natural_forms":["horn","mountain","tooth","flame"],"role":"breakthrough"},
+    {"id":"ROOT","symbol":"∨","function":"ground_and_hold","geometry":"downward_distribution","natural_forms":["root","valley","base"],"role":"grounding"},
+    {"id":"SPLIT","symbol":"Y","function":"branch_flow","geometry":"axis_division","natural_forms":["tree","horns","nerves","river_delta"],"role":"development"},
+    {"id":"CROSS","symbol":"×","function":"intersect_forces","geometry":"vector_overlay","natural_forms":["collision","node","impact"],"role":"decision_conflict"},
+    {"id":"BALANCE","symbol":"=","function":"compensate_difference","geometry":"parallel_equivalence","natural_forms":["still_water","symmetry"],"role":"stabilization"},
+    {"id":"TENSION","symbol":"-","function":"open_contour","geometry":"gap","natural_forms":["crack","lack","wound"],"role":"change_trigger"},
+    {"id":"CONFIRM","symbol":"+","function":"close_contour","geometry":"fixed_intersection","natural_forms":["contact","closure","seal"],"role":"result_stabilization"},
+    {"id":"FACT","symbol":"1","function":"verified_realization","geometry":"stable_unit","natural_forms":["formed_object","fixed_node"],"role":"verified_presence"}
+  ]
+}
