@@ -20,7 +20,7 @@ export class OperatorEngine {
   }
 
   parseSequence(input: string): OperatorNode[] {
-    return [...input]
+    return Array.from(input)
       .map((symbol) => this.getBySymbol(symbol))
       .filter((op): op is OperatorNode => Boolean(op));
   }

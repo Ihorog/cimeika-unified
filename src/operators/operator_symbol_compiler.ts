@@ -42,7 +42,7 @@ export function compileSymbol(input: string): CompiledSymbol {
   const warnings: string[] = [];
   const operators: OperatorId[] = [];
 
-  for (const char of [...input]) {
+  for (const char of Array.from(input)) {
     const op = SYMBOL_TO_OPERATOR[char];
 
     if (!op) {
