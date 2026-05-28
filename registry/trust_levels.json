@@ -1,0 +1,8 @@
+[
+  { "level": "L0", "meaning": "read-only / explanation" },
+  { "level": "L1", "meaning": "local draft / no external action" },
+  { "level": "L2", "meaning": "write local file" },
+  { "level": "L3", "meaning": "modify repository" },
+  { "level": "L4", "meaning": "external API action" },
+  { "level": "L5", "meaning": "deploy / send / public irreversible action" }
+]
