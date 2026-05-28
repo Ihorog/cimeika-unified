@@ -1,0 +1,42 @@
+[
+  {
+    "id": "health_checker",
+    "name": "Health Checker",
+    "type": "diagnostic",
+    "input": "node_id",
+    "output": "health_status",
+    "permission_level": "L0",
+    "verification": "ping/self-check",
+    "risk": "medium"
+  },
+  {
+    "id": "file_writer",
+    "name": "File Writer",
+    "type": "io",
+    "input": "filepath+content",
+    "output": "write_result",
+    "permission_level": "L2",
+    "verification": "file_checksum",
+    "risk": "low"
+  },
+  {
+    "id": "github_file_writer",
+    "name": "GitHub File Writer",
+    "type": "io",
+    "input": "filepath+content+repo_ref",
+    "output": "write_result",
+    "permission_level": "L3",
+    "verification": "api_commit_check",
+    "risk": "high"
+  },
+  {
+    "id": "chat_surface",
+    "name": "Chat Surface",
+    "type": "ui",
+    "input": "message",
+    "output": "chat_log",
+    "permission_level": "L0",
+    "verification": "user_feedback",
+    "risk": "low"
+  }
+]
