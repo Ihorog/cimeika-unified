@@ -1,0 +1,10 @@
+[
+  { "id": "physical", "name": "Physical Environment" },
+  { "id": "digital", "name": "Digital Environment" },
+  { "id": "semantic", "name": "Semantic Environment" },
+  { "id": "technological", "name": "Technological Environment" },
+  { "id": "social", "name": "Social Environment" },
+  { "id": "administrative", "name": "Administrative Environment" },
+  { "id": "informational", "name": "Informational Environment" },
+  { "id": "emotional", "name": "Emotional Environment" }
+]
