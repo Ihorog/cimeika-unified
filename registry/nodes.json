@@ -1,0 +1,47 @@
+[
+  {
+    "id": "user",
+    "name": "User Operator",
+    "type": "human",
+    "environment": "social",
+    "status": "UNKNOWN",
+    "verification_method": "manual_confirmation",
+    "risk": "medium"
+  },
+  {
+    "id": "gpt",
+    "name": "GPT Copilot",
+    "type": "ai",
+    "environment": "digital",
+    "status": "UNKNOWN",
+    "verification_method": "ai_self_check",
+    "risk": "high"
+  },
+  {
+    "id": "orange_pi",
+    "name": "Orange Pi Node",
+    "type": "device",
+    "environment": "physical",
+    "status": "UNKNOWN",
+    "verification_method": "health_checker",
+    "risk": "high"
+  },
+  {
+    "id": "github",
+    "name": "GitHub API",
+    "type": "service",
+    "environment": "technological",
+    "status": "UNKNOWN",
+    "verification_method": "api_ping",
+    "risk": "medium"
+  },
+  {
+    "id": "local_vault",
+    "name": "Local Vault",
+    "type": "vault",
+    "environment": "informational",
+    "status": "UNKNOWN",
+    "verification_method": "checksum_validation",
+    "risk": "medium"
+  }
+]
