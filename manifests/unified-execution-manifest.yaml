@@ -1,10 +1,11 @@
-version: "1.0"
-system: "Cimeika"
-updated_at: "2026-04-02"
+version: "1.1"
+system: "Cimeika / Ci+"
+updated_at: "2026-09-01"
 
 unified_execution_process:
   intake_repo: cimeika-unified-main
-  control_plane_repo: ci_gitapi-main
+  control_plane_repo: Ci-Contact-Kernel-main
+  supporting_infra_repo: ci_gitapi-main
   edge_repo: cimeika-backend-main
   memory_repo: ci-memory-main
   assets_repo: media-main
@@ -12,7 +13,8 @@ unified_execution_process:
 
   routing:
     product: cimeika-unified-main
-    infra: ci_gitapi-main
+    control: Ci-Contact-Kernel-main
+    infra_support: ci_gitapi-main
     edge: cimeika-backend-main
     memory: ci-memory-main
     media: media-main
@@ -32,7 +34,9 @@ unified_execution_process:
 
   hard_rules:
     - one_product_core
-    - one_infra_core
+    - one_execution_control_plane
     - one_registry_truth
     - one_canonical_frontend
     - no_duplicate_runtime_roles
+    - cimeika_unified_consumes_control_state
+    - ci_gitapi_is_not_execution_authority

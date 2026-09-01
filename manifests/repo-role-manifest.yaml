@@ -1,14 +1,15 @@
-version: "1.0"
-system: "Cimeika"
+version: "1.1"
+system: "Cimeika / Ci+"
 state: "multi_repo_topology_defined"
 source: "local_repo_scan"
-updated_at: "2026-04-02"
+updated_at: "2026-09-01"
 
 repos:
   cimeika-unified-main:
     layer: "core"
     role: "primary_product"
     status: "canonical"
+    control_relation: "consumer_of_Ci-Contact-Kernel"
     canonical_paths:
       - "app"
       - "components"
@@ -38,9 +39,21 @@ repos:
       - "archive"
       - "cimeika-unified"
 
+  Ci-Contact-Kernel-main:
+    layer: "control"
+    role: "canonical_execution_control_plane_and_evidence"
+    visibility: "public"
+    status: "canonical"
+    authority:
+      - "execution_coordination"
+      - "policy_gate"
+      - "evidence"
+      - "responsibility_graph"
+      - "protected_contours"
+
   ci_gitapi-main:
     layer: "infra"
-    role: "api_control_plane_and_registry"
+    role: "supporting_infra_api_and_registry"
     visibility: "private"
     status: "canonical"
     canonical_paths:
@@ -94,6 +107,9 @@ repos:
 
 global_rules:
   one_primary_product_repo: "cimeika-unified-main"
-  one_primary_infra_repo: "ci_gitapi-main"
+  one_execution_control_plane: "Ci-Contact-Kernel-main"
+  supporting_infra_repo: "ci_gitapi-main"
   one_primary_edge_runtime: "cimeika-backend-main"
+  cimeika_unified_is_control_consumer: true
+  ci_gitapi_is_not_execution_authority: true
   cit_is_not_core: true

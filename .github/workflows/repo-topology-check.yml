@@ -6,6 +6,9 @@ on:
   schedule:
     - cron: "15 2 * * *"
 
+permissions:
+  contents: read
+
 jobs:
   topology:
     runs-on: ubuntu-latest
@@ -27,3 +30,17 @@ jobs:
           test -f docs/processes/canonical-decision-record.md
           test -f docs/processes/github-dev-contour.md
           test -f docs/processes/delegated-execution.md
+
+      - name: Verify Ci+ execution authority
+        run: |
+          grep -q 'control_plane_repo: Ci-Contact-Kernel-main' manifests/unified-execution-manifest.yaml
+          grep -q 'one_execution_control_plane: "Ci-Contact-Kernel-main"' manifests/repo-role-manifest.yaml
+          grep -q 'cimeika_unified_is_control_consumer: true' manifests/repo-role-manifest.yaml
+          grep -q 'ci_gitapi_is_not_execution_authority: true' manifests/repo-role-manifest.yaml
+          ! grep -q 'role: "api_control_plane_and_registry"' manifests/repo-role-manifest.yaml
+
+      - name: Verify canonical kernel contract
+        shell: bash
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Ihorog/Ci-Contact-Kernel/main/config/protected-contours.json -o /tmp/ci-protected-contours.json
+          node -e "const m=require('/tmp/ci-protected-contours.json'); if(m.authority.control_plane_repo!=='Ihorog/Ci-Contact-Kernel'||m.authority.consumer_repo!=='Ihorog/cimeika-unified') process.exit(1);"
