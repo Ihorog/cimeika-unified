@@ -1,0 +1,418 @@
+.surface {
+  --pointer-x: 50%;
+  --pointer-y: 45%;
+  --drift-x: 0px;
+  --drift-y: 0px;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 100svh;
+  color: #f4f0e6;
+  background:
+    radial-gradient(ellipse 74% 54% at 50% -4%, rgba(139, 188, 224, 0.13), transparent 64%),
+    radial-gradient(ellipse 72% 48% at 50% 106%, rgba(220, 153, 65, 0.13), transparent 65%),
+    linear-gradient(180deg, #10151c 0%, #0a0d12 42%, #090a0d 63%, #0c0907 100%);
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.surface::before {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  z-index: -4;
+  opacity: 0.72;
+  transform: translate3d(calc(var(--drift-x) * -0.35), calc(var(--drift-y) * -0.35), 0);
+  background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255,255,255,0.052) 0, transparent 18%),
+    linear-gradient(108deg, transparent 17%, rgba(189, 216, 234, 0.026) 42%, transparent 59%),
+    linear-gradient(72deg, transparent 28%, rgba(255, 226, 184, 0.022) 54%, transparent 73%);
+  transition: opacity 700ms ease, transform 1200ms cubic-bezier(.2,.7,.2,1);
+}
+
+.surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  background: radial-gradient(ellipse 82% 76% at 50% 48%, transparent 46%, rgba(0,0,0,0.16) 100%);
+}
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  opacity: 0.78;
+  background:
+    linear-gradient(90deg, transparent 0 7%, rgba(255,255,255,.025) 7.05%, transparent 7.12% 92.88%, rgba(255,255,255,.02) 92.95%, transparent 93%),
+    radial-gradient(ellipse 26% 11% at 50% 61%, rgba(255, 217, 154, 0.065), transparent 72%);
+}
+
+.opticalField {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  transform: translate3d(var(--drift-x), var(--drift-y), 0);
+  transition: transform 900ms cubic-bezier(.2,.7,.2,1);
+}
+
+.coldField,
+.warmField {
+  position: absolute;
+  left: 50%;
+  width: min(112vw, 1680px);
+  height: min(68vw, 920px);
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(10px);
+  will-change: transform, opacity;
+}
+
+.coldField {
+  bottom: 48%;
+  transform: translate(-50%, 36%) scale(.12,.06);
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(221, 241, 255, .19), transparent 15%),
+    radial-gradient(ellipse at 50% 100%, transparent 21%, rgba(114, 189, 239, .13) 23%, transparent 26%),
+    radial-gradient(ellipse at 50% 100%, transparent 36%, rgba(205, 233, 251, .085) 38%, transparent 42%);
+}
+
+.warmField {
+  top: 48%;
+  transform: translate(-50%, -36%) scale(.12,.06);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 235, 191, .20), transparent 15%),
+    radial-gradient(ellipse at 50% 0%, transparent 21%, rgba(221, 151, 59, .14) 23%, transparent 26%),
+    radial-gradient(ellipse at 50% 0%, transparent 36%, rgba(255, 205, 123, .09) 38%, transparent 42%);
+}
+
+.axis {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  bottom: 9%;
+  width: 1px;
+  opacity: .13;
+  transform: translateX(-50%) scaleY(.78);
+  transform-origin: 50% 52%;
+  background: linear-gradient(180deg, transparent, rgba(205, 231, 248, .6) 38%, rgba(255,255,255,.7) 49%, rgba(237, 188, 112, .56) 62%, transparent);
+  transition: opacity 700ms ease, transform 1000ms cubic-bezier(.2,.7,.2,1);
+}
+
+.arc {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: min(72vw, 980px);
+  aspect-ratio: 2.7 / 1;
+  border: 1px solid rgba(238, 244, 247, 0.08);
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 50%;
+  opacity: .18;
+  filter: blur(.15px);
+  transform-origin: center;
+  transition:
+    opacity 900ms ease,
+    transform 1200ms cubic-bezier(.16,.78,.23,1),
+    border-color 800ms ease;
+}
+
+.arcOne { transform: translate(-50%, -50%) rotate(-4deg) scale(.52,.38); }
+.arcTwo { transform: translate(-50%, -50%) rotate(5deg) scale(.74,.54); opacity: .11; }
+.arcThree { transform: translate(-50%, -50%) rotate(-2deg) scale(.95,.66); opacity: .065; }
+
+.memoryTrace {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: 2px;
+  height: 2px;
+  border-radius: 999px;
+  opacity: 0;
+  box-shadow:
+    0 -28vh 72px 12px rgba(165, 216, 248, .18),
+    0 28vh 72px 12px rgba(239, 172, 79, .18);
+  transform: translate(-50%, -50%);
+}
+
+.identity {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  display: grid;
+  justify-items: center;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 4;
+}
+
+.markButton {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(154px, 13vw, 196px);
+  height: clamp(154px, 13vw, 196px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  outline: none;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.markButton::before {
+  content: '';
+  position: absolute;
+  inset: 17%;
+  border: 1px solid rgba(255,255,255,.085);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(.7);
+  transition: opacity 500ms ease, transform 650ms cubic-bezier(.2,.75,.2,1);
+}
+
+.markButton:focus-visible::before {
+  opacity: .85;
+  transform: scale(1.12);
+  border-color: rgba(245, 224, 183, .55);
+}
+
+.markHalo {
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  opacity: .26;
+  background:
+    radial-gradient(circle at 48% 38%, rgba(226, 242, 255, .17), transparent 43%),
+    radial-gradient(circle at 52% 72%, rgba(232, 170, 83, .12), transparent 49%);
+  filter: blur(17px);
+  transform: scale(.82);
+  transition: opacity 650ms ease, transform 900ms cubic-bezier(.2,.7,.2,1);
+}
+
+.mark {
+  display: block;
+  width: clamp(106px, 8.2vw, 132px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  mix-blend-mode: screen;
+  filter: saturate(.92) contrast(1.02) drop-shadow(0 18px 30px rgba(0,0,0,.26));
+  transform: translateZ(0) scale(1);
+  transition:
+    transform 620ms cubic-bezier(.2,.75,.2,1),
+    filter 700ms ease;
+  will-change: transform, filter;
+}
+
+.wordmark {
+  margin-top: clamp(18px, 2.4vh, 28px);
+  color: rgba(244, 240, 230, .89);
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: .095em;
+  text-indent: .095em;
+  text-shadow: 0 10px 34px rgba(0,0,0,.34);
+  transition: opacity 800ms ease, letter-spacing 1000ms cubic-bezier(.2,.7,.2,1), transform 1000ms cubic-bezier(.2,.7,.2,1);
+}
+
+.edgeSignature {
+  position: absolute;
+  left: 50%;
+  bottom: max(26px, env(safe-area-inset-bottom));
+  width: 54px;
+  height: 12px;
+  transform: translateX(-50%);
+  opacity: .26;
+}
+
+.edgeSignature span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 1px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(90deg, transparent, rgba(232, 218, 192, .8), transparent);
+}
+
+.surface[data-phase='approach'] .mark {
+  transform: scale(1.025);
+  filter: saturate(1) contrast(1.045) drop-shadow(0 20px 34px rgba(0,0,0,.28));
+}
+
+.surface[data-phase='approach'] .markHalo {
+  opacity: .42;
+  transform: scale(1.02);
+}
+
+.surface[data-phase='approach'] .arcOne { transform: translate(-50%, -50%) rotate(-3deg) scale(.58,.42); opacity: .25; }
+.surface[data-phase='approach'] .arcTwo { transform: translate(-50%, -50%) rotate(4deg) scale(.78,.58); opacity: .15; }
+
+.surface[data-phase='contact'] .mark {
+  transform: scale(.976);
+  transition-duration: 90ms;
+}
+
+.surface[data-phase='contact'] .markHalo {
+  opacity: .62;
+  transform: scale(.78);
+  transition-duration: 100ms;
+}
+
+.surface[data-phase='resonance'] .mark,
+.surface[data-phase='open'] .mark {
+  transform: scale(1.035);
+  filter: saturate(1.04) contrast(1.055) drop-shadow(0 24px 42px rgba(0,0,0,.3));
+}
+
+.surface[data-phase='resonance'] .markHalo {
+  opacity: .72;
+  transform: scale(1.35);
+}
+
+.surface[data-phase='resonance'] .coldField {
+  animation: coldResonance 980ms cubic-bezier(.12,.76,.22,1) both;
+}
+
+.surface[data-phase='resonance'] .warmField {
+  animation: warmResonance 920ms cubic-bezier(.12,.76,.22,1) 35ms both;
+}
+
+.surface[data-phase='resonance'] .axis {
+  opacity: .48;
+  transform: translateX(-50%) scaleY(1.05);
+}
+
+.surface[data-phase='resonance'] .arcOne {
+  opacity: .5;
+  border-color: rgba(207, 231, 247, .22) transparent rgba(237, 183, 104, .26);
+  transform: translate(-50%, -50%) rotate(-8deg) scale(1.04,.74);
+}
+
+.surface[data-phase='resonance'] .arcTwo {
+  opacity: .31;
+  border-color: rgba(202, 231, 250, .17) transparent rgba(243, 195, 126, .21);
+  transform: translate(-50%, -50%) rotate(9deg) scale(1.22,.88);
+}
+
+.surface[data-phase='resonance'] .arcThree {
+  opacity: .17;
+  border-color: rgba(222, 239, 249, .14) transparent rgba(239, 186, 108, .15);
+  transform: translate(-50%, -50%) rotate(-5deg) scale(1.42,1.02);
+}
+
+.surface[data-phase='resonance'] .memoryTrace {
+  animation: memoryTrace 1450ms ease-out 330ms both;
+}
+
+.surface[data-phase='open']::before {
+  opacity: .94;
+}
+
+.surface[data-phase='open'] .markHalo {
+  opacity: .38;
+  transform: scale(1.16);
+}
+
+.surface[data-phase='open'] .axis {
+  opacity: .2;
+  transform: translateX(-50%) scaleY(.96);
+}
+
+.surface[data-phase='open'] .arcOne { transform: translate(-50%, -50%) rotate(-7deg) scale(1.12,.82); opacity: .22; }
+.surface[data-phase='open'] .arcTwo { transform: translate(-50%, -50%) rotate(7deg) scale(1.28,.94); opacity: .14; }
+.surface[data-phase='open'] .arcThree { transform: translate(-50%, -50%) rotate(-3deg) scale(1.5,1.08); opacity: .08; }
+
+.surface[data-phase='open'] .wordmark {
+  letter-spacing: .13em;
+  transform: translateY(3px);
+  opacity: .94;
+}
+
+@keyframes coldResonance {
+  0% { opacity: 0; transform: translate(-50%, 36%) scale(.12,.06); }
+  34% { opacity: .72; }
+  100% { opacity: 0; transform: translate(-50%, 20%) scale(1.32,1.06); }
+}
+
+@keyframes warmResonance {
+  0% { opacity: 0; transform: translate(-50%, -36%) scale(.12,.06); }
+  34% { opacity: .76; }
+  100% { opacity: 0; transform: translate(-50%, -18%) scale(1.28,1.02); }
+}
+
+@keyframes memoryTrace {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.4); }
+  22% { opacity: .62; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
+}
+
+@media (max-width: 700px) {
+  .surface {
+    background:
+      radial-gradient(ellipse 105% 50% at 50% -2%, rgba(139, 188, 224, 0.14), transparent 68%),
+      radial-gradient(ellipse 105% 44% at 50% 103%, rgba(220, 153, 65, 0.14), transparent 66%),
+      linear-gradient(180deg, #10151c 0%, #0a0d12 43%, #090a0d 64%, #0c0907 100%);
+  }
+
+  .ambient {
+    background: radial-gradient(ellipse 52% 9% at 50% 59%, rgba(255, 217, 154, 0.055), transparent 74%);
+  }
+
+  .identity { top: 44%; }
+
+  .markButton {
+    width: 142px;
+    height: 142px;
+  }
+
+  .mark { width: 94px; }
+
+  .wordmark {
+    margin-top: 17px;
+    font-size: 2.18rem;
+    letter-spacing: .085em;
+    text-indent: .085em;
+  }
+
+  .arc { width: 155vw; }
+  .axis { top: 9%; bottom: 8%; }
+  .edgeSignature { bottom: max(20px, env(safe-area-inset-bottom)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface::before,
+  .opticalField,
+  .axis,
+  .arc,
+  .mark,
+  .markHalo,
+  .wordmark {
+    animation: none !important;
+    transition-duration: 180ms !important;
+  }
+
+  .coldField,
+  .warmField,
+  .memoryTrace {
+    display: none;
+  }
+
+  .surface[data-phase='resonance'] .mark,
+  .surface[data-phase='open'] .mark {
+    transform: scale(1.012);
+  }
+
+  .surface[data-phase='open'] .axis { opacity: .2; }
+}

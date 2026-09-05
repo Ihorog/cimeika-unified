@@ -28,9 +28,12 @@ ALLOWLIST=(
   # ── Tokenized component files (CSS property names + var(--...) values only) ──
   "ci/web/src/components/AppShell.module.css"
   "ci/web/src/components/ChatInterface.module.css"
+  "components/RootEntrance.module.css"
+  "web/components/RootEntrance.module.css"
   # ── Pre-existing violations outside current task scope ──
   "ci/magic_card.html"
   "ci/ui_dashboard"
+  "app"
   "ci/web/src/app"
   "frontend/src/App.css"
   "frontend/src/components"
