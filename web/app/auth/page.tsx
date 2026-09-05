@@ -10,9 +10,9 @@ export default function AuthPage() {
   const [msg, setMsg] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const sb = createClient()
 
   async function handle() {
+    const sb = createClient()
     setLoading(true)
     setMsg('')
     if (mode === 'login') {
