@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CiEntryScreen.css';
+import CiLogo from '../assets/ci-logo.png';
 
 interface CaptureEvent {
   id: string;
@@ -137,7 +138,7 @@ const CiEntryScreen: React.FC = () => {
   return (
     <div className="ci-entry-screen">
       <div className="ci-logo-container">
-        <div className="ci-logo">Ci</div>
+        <img className="ci-logo" src={CiLogo} alt="Ci" />
       </div>
       
       <div className="ci-action-container">

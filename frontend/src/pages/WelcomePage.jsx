@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import CimeikaLogo from '../assets/logo-cimeika.svg';
+import CimeikaLogo from '../assets/ci-logo.png';
 import './WelcomePage.css';
 
 export default function WelcomePage() {

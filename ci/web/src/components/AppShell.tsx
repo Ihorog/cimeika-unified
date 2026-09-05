@@ -108,15 +108,13 @@ export default function AppShell() {
           onClick={toggleMenu}
           aria-label="Відкрити меню Сімейка"
         >
-          {!iconError ? (
+          {!iconError && (
             <img 
               src="/icons/icon-192.png" 
               alt="Ci"
               className={styles.ciIcon}
               onError={() => setIconError(true)}
             />
-          ) : (
-            <span className={styles.ciLogo}>Ci</span>
           )}
         </button>
         <div className={styles.brandSection}>
