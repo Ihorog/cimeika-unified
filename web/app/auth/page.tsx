@@ -37,7 +37,7 @@ export default function AuthPage() {
         border: '1px solid #1F2333', borderRadius: 16
       }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <img src="https://raw.githubusercontent.com/Ihorog/media/main/Ci.png"
+          <img src="https://raw.githubusercontent.com/Ihorog/media/main/brand/ci/Ci-192.png"
                alt="Ci" style={{ width: 56, marginBottom: 12 }} />
           <h1 style={{ fontSize: 22, color: '#C8A84B', fontFamily: 'Cormorant Garamond, serif' }}>
             Cimeika

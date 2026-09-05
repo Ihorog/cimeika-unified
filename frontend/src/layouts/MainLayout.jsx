@@ -4,7 +4,7 @@
  */
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import CiFAB from '../components/CiFAB/CiFAB';
-import CimeikaLogo from '../assets/logo-cimeika.svg';
+import CimeikaLogo from '../assets/ci-logo.png';
 import './MainLayout.css';
 
 const MainLayout = () => {

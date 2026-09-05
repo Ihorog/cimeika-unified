@@ -5,7 +5,7 @@ import styles from './RootEntrance.module.css';
 
 type Phase = 'rest' | 'approach' | 'contact' | 'resonance' | 'open';
 
-const CI_MARK = 'https://raw.githubusercontent.com/Ihorog/media/main/Ci.png';
+const CI_MARK = 'https://raw.githubusercontent.com/Ihorog/media/main/brand/ci/Ci-192.png';
 
 export function RootEntrance() {
   const surfaceRef = useRef<HTMLElement>(null);
