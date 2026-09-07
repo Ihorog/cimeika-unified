@@ -22,7 +22,7 @@ httpx==0.28.1
 
 # Google Calendar integration (service account sync)
 google-api-python-client==2.194.0
-google-auth==2.50.0
+google-auth==2.52.0
 
 # Utilities
 python-dotenv==1.2.2
