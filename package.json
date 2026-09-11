@@ -9,7 +9,7 @@
     "lint": "tsc --noEmit --pretty false"
   },
   "dependencies": {
-    "next": "16.2.12",
+    "next": "16.3.4",
     "react": "^19",
     "react-dom": "^19"
   },
