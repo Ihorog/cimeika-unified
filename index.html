@@ -1,1 +1,69 @@
-placeholder
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#08090d" />
+<title>Cimeika · Ci</title>
+<style>
+:root{--bg:#07090d;--fg:#f6f2ea;--muted:rgba(246,242,234,.58);--glass:rgba(255,255,255,.075);--line:rgba(255,255,255,.12);--gold:#d9b56d;--r:22px}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+body{touch-action:none;user-select:none}
+.world{position:relative;width:100%;height:100%;isolation:isolate;background:radial-gradient(circle at 64% 58%,rgba(217,181,109,.09),transparent 23%),radial-gradient(circle at 20% 18%,rgba(117,145,255,.08),transparent 28%),linear-gradient(180deg,#090b10,#050609 70%)}
+.fog,.fog:before,.fog:after{position:absolute;inset:-25%;content:"";pointer-events:none;filter:blur(46px);opacity:.36;background:radial-gradient(ellipse at 30% 50%,rgba(255,255,255,.09),transparent 36%),radial-gradient(ellipse at 70% 45%,rgba(98,117,164,.12),transparent 35%);animation:fog 22s ease-in-out infinite alternate}
+.fog:before{transform:translate3d(8%,-4%,0) scale(1.05);animation-duration:28s}.fog:after{transform:translate3d(-8%,7%,0) scale(.92);animation-duration:34s}
+@keyframes fog{to{transform:translate3d(5%,3%,0) scale(1.08);opacity:.5}}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.75'/%3E%3C/svg%3E")}
+.hint{position:absolute;left:24px;top:max(24px,env(safe-area-inset-top));font-size:12px;letter-spacing:.08em;color:var(--muted);opacity:.7;transition:.4s}.hint strong{color:var(--fg);font-weight:500}
+.ci{position:absolute;left:68%;top:62%;width:88px;height:88px;transform:translate(-50%,-50%);z-index:20;cursor:grab;display:grid;place-items:center;border-radius:50%;filter:drop-shadow(0 18px 30px rgba(0,0,0,.38));transition:filter .3s ease}
+.ci:active{cursor:grabbing}.ci::before{content:"";position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(217,181,109,.16),transparent 63%);opacity:.35;animation:pulse 4s ease-in-out infinite}
+.ci img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;animation:float 5.4s ease-in-out infinite;filter:drop-shadow(0 7px 10px rgba(0,0,0,.35))}
+.ci .fallback{font-size:42px;font-weight:300;display:none}.ci.voice::before{opacity:.9;animation:pulse 1.1s ease-in-out infinite}.ci.voice img{animation:voice 1.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.16);opacity:.55}}@keyframes float{50%{transform:translate3d(0,-5px,0) rotateX(4deg) rotateY(-3deg)}}@keyframes voice{50%{transform:scale(1.06) translateY(-2px)}}
+.orbit{position:absolute;inset:0;pointer-events:none;z-index:10}.node{position:absolute;min-width:88px;max-width:150px;padding:11px 14px;border:1px solid var(--line);border-radius:18px;background:rgba(13,15,21,.58);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:var(--fg);font-size:13px;text-align:center;opacity:0;transform:translate(-50%,-50%) scale(.82);transition:.32s cubic-bezier(.2,.8,.2,1);pointer-events:none}.orbit.open .node{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}.node small{display:block;margin-top:4px;color:var(--muted);font-size:10px}.node[data-n="now"]{left:52%;top:37%}.node[data-n="people"]{left:82%;top:42%}.node[data-n="home"]{left:86%;top:69%}.node[data-n="memory"]{left:57%;top:79%}
+.surface{position:absolute;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%) translateY(18px);width:min(92vw,640px);padding:18px;border:1px solid var(--line);border-radius:24px;background:rgba(10,12,17,.66);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);opacity:0;pointer-events:none;transition:.32s ease;z-index:30}.surface.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}.surface h2{font-size:14px;font-weight:500;margin:0 0 7px}.surface p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}.surface .actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.surface button{appearance:none;border:1px solid var(--line);background:var(--glass);color:var(--fg);padding:9px 13px;border-radius:14px;font:inherit;font-size:12px}.voice-wave{display:none;align-items:center;gap:4px;height:28px;margin-top:12px}.voice-wave i{width:3px;height:7px;border-radius:3px;background:var(--gold);animation:bar .9s ease-in-out infinite alternate}.voice-wave i:nth-child(2){animation-delay:.1s}.voice-wave i:nth-child(3){animation-delay:.2s}.voice-wave i:nth-child(4){animation-delay:.3s}.voice-wave i:nth-child(5){animation-delay:.4s}.surface.voice .voice-wave{display:flex}@keyframes bar{to{height:24px}}
+.status{position:absolute;right:18px;top:max(18px,env(safe-area-inset-top));font-size:10px;color:var(--muted);letter-spacing:.08em;opacity:.55}
+@media(max-width:600px){.ci{left:70%;top:64%;width:80px;height:80px}.node[data-n="now"]{left:43%;top:39%}.node[data-n="people"]{left:78%;top:40%}.node[data-n="home"]{left:80%;top:75%}.node[data-n="memory"]{left:39%;top:76%}.node{min-width:76px;padding:10px 12px}.hint{left:18px}}
+</style>
+</head>
+<body>
+<main class="world" id="world">
+  <div class="fog"></div><div class="grain"></div>
+  <div class="hint" id="hint"><strong>Сі</strong> · дотик — контекст · подвійний — голос · перетягни — перемісти</div>
+  <div class="status" id="status">PASSIVE</div>
+  <div class="orbit" id="orbit">
+    <button class="node" data-n="now">Зараз<small>актуальне</small></button>
+    <button class="node" data-n="people">Люди<small>зв’язки</small></button>
+    <button class="node" data-n="home">Дім<small>середовище</small></button>
+    <button class="node" data-n="memory">Пам’ять<small>контекст</small></button>
+  </div>
+  <div class="ci" id="ci" aria-label="Сі" role="button" tabindex="0">
+    <img src="./frontend/src/assets/ci-logo.png" alt="Сі" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+    <span class="fallback">Ci</span>
+  </div>
+  <section class="surface" id="surface" aria-live="polite">
+    <h2 id="surfaceTitle">Сі</h2>
+    <p id="surfaceText">Контекст проявляється лише коли він потрібен.</p>
+    <div class="voice-wave"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="actions" id="actions"></div>
+  </section>
+</main>
+<script>
+const ci=document.getElementById('ci'),orbit=document.getElementById('orbit'),surface=document.getElementById('surface'),title=document.getElementById('surfaceTitle'),text=document.getElementById('surfaceText'),status=document.getElementById('status'),actions=document.getElementById('actions');
+let state='PASSIVE',drag=false,moved=false,sx=0,sy=0,cx=0,cy=0,lastTap=0,pressTimer;
+const setState=s=>{state=s;status.textContent=s;ci.classList.toggle('voice',s==='VOICE');surface.classList.toggle('voice',s==='VOICE')};
+function context(){orbit.classList.toggle('open');surface.classList.remove('show');setState(orbit.classList.contains('open')?'CONTEXT':'PASSIVE')}
+function showSurface(t,b,buttons=[]){title.textContent=t;text.textContent=b;actions.innerHTML='';buttons.forEach(x=>{const b=document.createElement('button');b.textContent=x.label;b.onclick=x.onClick;actions.appendChild(b)});surface.classList.add('show')}
+function voice(){orbit.classList.remove('open');setState('VOICE');showSurface('Сі слухає','Говори природно. Інтерфейс має проявлятися лише коли він потрібен.',[{label:'Завершити',onClick:()=>{surface.classList.remove('show');setState('PASSIVE')}}]);
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){text.textContent='Голосове розпізнавання браузером тут недоступне. Це прототип каналу, без симуляції виконання.';return}
+ const r=new SR();r.lang='uk-UA';r.interimResults=true;r.continuous=false;r.onresult=e=>{const phrase=[...e.results].map(x=>x[0].transcript).join(' ');text.textContent=phrase||'Слухаю…'};r.onerror=()=>text.textContent='Голосовий канал не отримав сигнал.';r.onend=()=>{if(state==='VOICE')setState('RESULT')};try{r.start()}catch(e){}
+}
+ci.addEventListener('pointerdown',e=>{drag=true;moved=false;sx=e.clientX;sy=e.clientY;const r=ci.getBoundingClientRect();cx=r.left+r.width/2;cy=r.top+r.height/2;ci.setPointerCapture(e.pointerId);clearTimeout(pressTimer);pressTimer=setTimeout(()=>{if(!moved){ci.style.opacity='.18';orbit.classList.remove('open');surface.classList.remove('show')}},850)});
+ci.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.hypot(dx,dy)>6){moved=true;clearTimeout(pressTimer)}ci.style.left=(cx+dx)+'px';ci.style.top=(cy+dy)+'px'});
+ci.addEventListener('pointerup',e=>{clearTimeout(pressTimer);drag=false;if(moved)return;ci.style.opacity='1';const now=Date.now();if(now-lastTap<330){lastTap=0;voice()}else{lastTap=now;setTimeout(()=>{if(Date.now()-lastTap>=300&&lastTap!==0){context();lastTap=0}},320)}});
+ci.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();context()}});
+document.querySelectorAll('.node').forEach(n=>n.onclick=()=>{const map={now:['Зараз','Тут з’являються лише події, зміни й рішення, що мають значення саме зараз.'],people:['Люди','Візуальна проєкція актуальних зв’язків, контактів і спільних дій.'],home:['Дім','Пристрої, середовище й стан дому проявляються як один живий контекст.'],memory:['Пам’ять','Фото, події, рішення та причинність відкриваються навколо поточного наміру.']};showSurface(map[n.dataset.n][0],map[n.dataset.n][1],[{label:'Закрити',onClick:()=>surface.classList.remove('show')}]);setState('RESULT')});
+fetch('status.json?'+Date.now()).then(r=>r.ok?r.json():null).then(d=>{if(!d)return;const s=d.summary;if(s&&s.down>0){showSurface('Є зміна',`Недоступних компонентів: ${s.down}. Сі показав би лише цю значущу зміну.`,[{label:'Закрити',onClick:()=>surface.classList.remove('show')}]);setState('CONTEXT')}}).catch(()=>{});
+</script>
+</body>
+</html>
