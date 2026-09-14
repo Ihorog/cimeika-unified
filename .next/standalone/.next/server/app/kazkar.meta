@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/kazkar/layout,_N_T_/kazkar/page,_N_T_/kazkar"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/kazkar/__PAGE__",
+    "/kazkar",
+    "/_index",
+    "/_head"
+  ]
+}

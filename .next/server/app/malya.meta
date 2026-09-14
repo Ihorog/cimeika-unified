@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/malya/layout,_N_T_/malya/page,_N_T_/malya"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/malya/__PAGE__",
+    "/malya",
+    "/_index",
+    "/_head"
+  ]
+}

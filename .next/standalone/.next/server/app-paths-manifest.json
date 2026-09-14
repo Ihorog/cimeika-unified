@@ -1,0 +1,11 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/gallery/page": "app/gallery/page.js",
+  "/kalendar/page": "app/kalendar/page.js",
+  "/kazkar/page": "app/kazkar/page.js",
+  "/malya/page": "app/malya/page.js",
+  "/nastrij/page": "app/nastrij/page.js",
+  "/page": "app/page.js",
+  "/podija/page": "app/podija/page.js"
+}

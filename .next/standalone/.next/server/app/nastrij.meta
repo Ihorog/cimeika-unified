@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/nastrij/layout,_N_T_/nastrij/page,_N_T_/nastrij"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/nastrij/__PAGE__",
+    "/nastrij",
+    "/_index",
+    "/_head"
+  ]
+}
